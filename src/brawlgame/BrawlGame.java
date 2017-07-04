@@ -22,7 +22,6 @@ public final class BrawlGame {
     public static void main(String args[]) {
         BrawlGame BG = new BrawlGame();
         BG.mainRoop();
-        return;
     }
 
     public BrawlGame() {

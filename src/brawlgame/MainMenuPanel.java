@@ -32,7 +32,7 @@ public class MainMenuPanel {
 
         //パネルの作成
         menuP = new JPanel();
-        menuP.setBounds(0, 0, 1000, 600);
+        menuP.setBounds(0, 0, 1024, 768);
         menuP.setLayout(null);
         mainF.add(menuP);
         menuP.setVisible(true);

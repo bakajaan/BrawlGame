@@ -24,57 +24,158 @@ import javax.swing.JPanel;
 /**
  * ゲームの内部処理
  * ゲームパネル、描画、サーバ処理をもつ
- * 
+ *
  * @author bakaj
  */
 public class GamePanel {
 
     /*ImageIcon back = new ImageIcon(new ImageIcon("C:\\\\Users\\\\bakaj\\\\Documents\\\\NetBeansProjects\\\\BrawlGame\\\\src\\\\img\\\\paper.png").
             getImage().getScaledInstance(1200, 1652, Image.SCALE_DEFAULT));*/
+    /**
+     * メインフレーム
+     */
     JFrame SmainF;
+    /**
+     * ゲーム表示用パネル
+     */
     JPanel gameP;
+    /**
+     * 自分キャラクター用ラベル
+     */
     JLabel Achar[];
+    /**
+     * 敵キャラクター用ラベル
+     */
     JLabel Bchar[];
-    JLabel bg;
+    /**
+     * キーリスナー追加用キーアダプター
+     */
     KeyAdapter ka;
+    /**
+     * サーバー接続用ソケット
+     */
     Socket sock;
+    /**
+     * サーバー送信用
+     */
     PrintWriter out;
+    /**
+     * サーバー受信用
+     */
     BufferedReader in;
+    /**
+     * サーバーアドレス
+     */
     //自宅Wi-Fi
     //String server = "192.168.3.17";
     //ポケットWi-Fi
     //String server = "192.168.179.3";
     //オフライン
     String server = "localhost";
+    /**
+     * ジャンプ時Y座標を格納
+     * Y座標が重なったときジャンプを終了
+     */
     int junpPlace = 0;
+    /**
+     * 重力
+     */
     int gra = 0;
+    /**
+     * 自分X座標
+     */
     int AX = 200;
+    /**
+     * 自分Y座標
+     */
     int AY = 300;
+    /**
+     * 敵X座標
+     */
     int BX;
+    /**
+     * 敵Y座標
+     */
     int BY;
+    /**
+     * 自分の動きのタイプ
+     */
     int AT = 0;
+    /**
+     * 敵の動きのタイプ
+     */
     int BT;
+    /**
+     * 自分の向き
+     */
     int AH = 0;
+    /**
+     * 敵の向き
+     */
     int BH;
+    /**
+     * 前フレームの敵X座標
+     *
+     */
     int afterBX = 0;
+    /**
+     * 徒歩カウント
+     * この値を利用して歩く動きを実現する
+     */
     int walkCount = 0;
+    /**
+     * 死亡カウント
+     * 死亡して一定時間するとリスポーンする
+     */
     int deathCount = 0;
+    /**
+     * キャラクター画像の高さ
+     */
     int charHeight;
+    /**
+     * キャラクター画像の幅
+     */
     int charWitdh;
+    /**
+     * 自分がどちらのチームかの判定
+     * 先にサーバーに入った方がaで後がb
+     */
     char mode;
+    /**
+     * Wキー押下判定
+     */
     boolean Wkey = false;
+    /**
+     * Aキー押下判定
+     */
     boolean Akey = false;
+    /**
+     * Sキー押下判定
+     */
     boolean Skey = false;
+    /**
+     * Dキー押下判定
+     */
     boolean Dkey = false;
+    /**
+     * 攻撃キー押下判定
+     */
     boolean Attkey = false;
+    /**
+     * 着地しているかの判定
+     */
     boolean setti = true;
-    boolean kougekiFlag = false;
+    /**
+     * パネルを変更していいかどうかの判定
+     */
     boolean changePanel = false;
-
+    /**
+     * 左上にテストで表示するラベル
+     */
     JLabel onlyDebug;
 
     /**
-     * ゲームパネル 
+     * ゲームパネル
      * ゲームの内部処理をもつ
      *
      * @param mainF
@@ -151,7 +252,6 @@ public class GamePanel {
                         break;
                     case "F":
                         Attkey = false;
-                        kougekiFlag = false;
                         break;
                     case "Escape":
                         break;
@@ -181,7 +281,7 @@ public class GamePanel {
 
     /**
      * レンダリング処理
-     * 
+     *
      * @return 処理の遷移先を示す
      */
     public String draw() {
@@ -285,11 +385,6 @@ public class GamePanel {
             walkCount++;
             AX += 8;
         }
-        if (Attkey) {
-            if (kougekiFlag == false) {
-                kougekiFlag = true;
-            }
-        }
         if (setti == false) {
             //ジャンプ中の処理
             /*if (AH == 1) {
@@ -344,7 +439,7 @@ public class GamePanel {
             AT = 5;
         } else if (setti == false) {
             AT = 4;
-        } else if (kougekiFlag == true) {
+        } else if (Attkey) {
             AT = 3;
         } else if (walkCount > 0 && AT >= 0 && AT <= 2) {
             switch ((walkCount / 5) % 4) {

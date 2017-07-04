@@ -18,14 +18,39 @@ import javax.swing.JPanel;
  */
 public class MainMenuPanel {
 
+    /**
+     * メインフレーム
+     */
     JFrame SmainF;
+    /**
+     * メニュー用パネル
+     */
     JPanel menuP;
+    /**
+     * スタートラベル
+     */
     JLabel start;
+    /**
+     * 終了ラベル
+     */
     JLabel end;
+    /**
+     * 選択項目
+     */
     int selectMenu = 0;
+    /**
+     * パネルを変更するかどうか
+     */
     boolean changePanel = false;
+    /**
+     * リスナー用キーアダプター
+     */
     KeyAdapter ka;
 
+    /**
+     *
+     * @param mainF
+     */
     public MainMenuPanel(JFrame mainF) {
         //フレームの所持
         SmainF = mainF;
@@ -77,6 +102,10 @@ public class MainMenuPanel {
         mainF.setVisible(true);
     }
 
+    /**
+     *
+     * @return
+     */
     public String draw() {
         //選択項目によってラベルの色を変更
         switch (selectMenu) {

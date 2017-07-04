@@ -14,16 +14,35 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
  */
 public final class BrawlGame {
 
+    /**
+     * 現在のパネルの名前
+     */
     String panelName;
+    /**
+     * メインフレーム
+     */
     JFrame mainF;
+    /**
+     * メニュークラス
+     */
     MainMenuPanel Menu;
+    /**
+     * ゲームクラス
+     */
     GamePanel Game;
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String args[]) {
         BrawlGame BG = new BrawlGame();
         BG.mainRoop();
     }
 
+    /**
+     *
+     */
     public BrawlGame() {
         //フレームの作成
         mainF = new JFrame();
@@ -37,6 +56,9 @@ public final class BrawlGame {
         panelChange(panelName);
     }
 
+    /**
+     *
+     */
     public void mainRoop() {
         while (true) {
             String kekka = "";
@@ -79,6 +101,10 @@ public final class BrawlGame {
         }
     }
 
+    /**
+     *
+     * @param panel
+     */
     public void panelChange(String panel) {
         //パネルのインスタンスを生成
         switch (panel) {

@@ -22,7 +22,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- *
+ * ゲームの内部処理
+ * ゲームパネル、描画、サーバ処理をもつ
+ * 
  * @author bakaj
  */
 public class GamePanel {
@@ -64,13 +66,19 @@ public class GamePanel {
     boolean Akey = false;
     boolean Skey = false;
     boolean Dkey = false;
-    boolean SPACEkey = false;
+    boolean Attkey = false;
     boolean setti = true;
     boolean kougekiFlag = false;
     boolean changePanel = false;
 
     JLabel onlyDebug;
 
+    /**
+     * ゲームパネル 
+     * ゲームの内部処理をもつ
+     *
+     * @param mainF
+     */
     public GamePanel(JFrame mainF) {
         //フレームの所持
         SmainF = mainF;
@@ -113,8 +121,8 @@ public class GamePanel {
                     case "D":
                         Dkey = true;
                         break;
-                    case "スペース":
-                        SPACEkey = true;
+                    case "F":
+                        Attkey = true;
                         break;
                     case "Esc":
                         end();
@@ -141,8 +149,8 @@ public class GamePanel {
                         walkCount = 0;
                         AH = 0;
                         break;
-                    case "スペース":
-                        SPACEkey = false;
+                    case "F":
+                        Attkey = false;
                         kougekiFlag = false;
                         break;
                     case "Escape":
@@ -171,6 +179,11 @@ public class GamePanel {
         mainF.setVisible(true);
     }
 
+    /**
+     * レンダリング処理
+     * 
+     * @return 処理の遷移先を示す
+     */
     public String draw() {
         myUpdate(); //自分のアップデート
         server();   //サーバーと通信
@@ -186,6 +199,9 @@ public class GamePanel {
         return "";
     }
 
+    /**
+     * 画像を読み込む
+     */
     public void loadImage() {
         //画像読み込み
         ImageIcon char1 = new ImageIcon(new ImageIcon("./src/img/1.png").
@@ -243,6 +259,9 @@ public class GamePanel {
         }
     }
 
+    /**
+     * キャラクターの処理
+     */
     private void myUpdate() {
         if (Wkey) {
             if (setti) {
@@ -253,20 +272,20 @@ public class GamePanel {
         }
         if (Skey) {
             if (setti == false) {
-                gra -= 6;
+                gra -= 3;
             }
         }
         if (Akey) {
             AH = 2;
             walkCount++;
-            AX -= 16;
+            AX -= 8;
         }
         if (Dkey) {
             AH = 1;
             walkCount++;
-            AX += 16;
+            AX += 8;
         }
-        if (SPACEkey) {
+        if (Attkey) {
             if (kougekiFlag == false) {
                 kougekiFlag = true;
             }
@@ -347,6 +366,9 @@ public class GamePanel {
         }
     }
 
+    /**
+     * サーバーの処理
+     */
     private void server() {
         try {
             //自分モーションタイプ送信
@@ -380,6 +402,9 @@ public class GamePanel {
         }
     }
 
+    /**
+     * キャラクターの位置を描画
+     */
     private void charactar() {
         //処理速度を上げる為、位置情報が違うときのみアップデート
         if (Achar[AT].getLocation().x != AX
@@ -409,6 +434,9 @@ public class GamePanel {
         }
     }
 
+    /**
+     * 終了処理
+     */
     private void end() {
         gameP.hide();
         SmainF.remove(gameP);

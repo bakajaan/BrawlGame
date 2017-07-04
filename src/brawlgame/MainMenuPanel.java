@@ -70,6 +70,7 @@ public class MainMenuPanel {
 
         //キーリスナーの追加
         ka = new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyText(e.getKeyCode())) {
                     case "上":

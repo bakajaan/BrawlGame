@@ -22,7 +22,7 @@ import javax.swing.JPanel;
  *
  * @author bakaj
  */
-public class GamePanel {
+public final class GamePanel {
 
     /*ImageIcon back = new ImageIcon(new ImageIcon("C:\\\\Users\\\\bakaj\\\\Documents\\\\NetBeansProjects\\\\BrawlGame\\\\src\\\\img\\\\paper.png").
             getImage().getScaledInstance(1200, 1652, Image.SCALE_DEFAULT));*/
@@ -58,6 +58,8 @@ public class GamePanel {
      * サーバー受信用
      */
     BufferedReader in;
+    ServerAccessThread SThread;
+    DrawThread DThread;
     /**
      * サーバーアドレス
      */
@@ -178,6 +180,9 @@ public class GamePanel {
     public GamePanel(JFrame mainF) {
         //フレームの所持
         SmainF = mainF;
+        
+        SThread=new ServerAccessThread(this);
+        DThread=new DrawThread(this);
 
         //パネルの作成
         gameP = new JPanel( /*//背景の描画
@@ -254,21 +259,11 @@ public class GamePanel {
             }
         };
         mainF.addKeyListener(ka);
-
-        //サーバーに接続
-        try {
-            InetAddress addr = InetAddress.getByName(server);
-            sock = new Socket(addr, 7788);
-            System.out.println("Connected");
-            out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()));
-            in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-            mode = in.readLine().charAt(0);
-        } catch (UnknownHostException e) {
-            System.err.println(e);
-        } catch (IOException e) {
-            System.err.println(e);
-        }
-
+        
+        mode=SThread.getMode();
+        SThread.start();
+        DThread.start();
+        
         //一応再描画
         gameP.repaint();
         mainF.setVisible(true);
@@ -281,8 +276,7 @@ public class GamePanel {
      */
     public String draw() {
         myUpdate(); //自分のアップデート
-        server();   //サーバーと通信
-        charactar();//キャラクターの描画
+        //charactar();//キャラクターの描画
 
         onlyDebug.setText("mode=" + mode + " AX=" + AX + " AY=" + AY
                 + " AT=" + AT + " JunpPlace=" + junpPlace);
@@ -367,7 +361,7 @@ public class GamePanel {
         }
         if (Skey) {
             if (setti == false) {
-                gra -= 3;
+                gra -= 4;
             }
         }
         if (Akey) {
@@ -381,32 +375,6 @@ public class GamePanel {
             AX += 8;
         }
         if (setti == false) {
-            //ジャンプ中の処理
-            /*if (AH == 1) {
-                //右を向いていたら
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                    AX += 2;
-                } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                    AX += 16;
-                } else {
-                    AX += 8;
-                }
-            } else if (AH == 2) {
-                //左を向いていたら
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                    AX -= 16;
-                } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                    AX -= 2;
-                } else {
-                    AX -= 8;
-                }
-            } else {
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                    AH = 2;
-                } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                    AH = 1;
-                }
-            }*/
             gra -= 2;
             AY = AY -= gra;
             if (AY > junpPlace) {
@@ -457,42 +425,6 @@ public class GamePanel {
     }
 
     /**
-     * サーバーの処理
-     */
-    private void server() {
-        try {
-            //自分モーションタイプ送信
-            out.println("T" + AT);
-            out.flush();
-            //敵モーションタイプ受信
-            BT = Integer.parseInt(in.readLine());
-
-            //自分方向送信
-            out.println("H" + AH);
-            out.flush();
-            //敵方向受信
-            BH = Integer.parseInt(in.readLine());
-
-            //自分X座標送信
-            out.println("X" + AX);
-            out.flush();
-            //敵X座標受信
-            BX = Integer.parseInt(in.readLine());
-            afterBX = BX;
-
-            //自分Y座標送信
-            out.println("Y" + AY);
-            out.flush();
-            //敵Y座標受信
-            BY = Integer.parseInt(in.readLine());
-        } catch (IOException e) {
-            System.err.println(e);
-        } catch (NumberFormatException e) {
-            System.err.println(e);
-        }
-    }
-
-    /**
      * キャラクターの位置を描画
      */
     private void charactar() {
@@ -528,6 +460,7 @@ public class GamePanel {
      * 終了処理
      */
     private void end() {
+        SThread.stop();
         gameP.hide();
         SmainF.remove(gameP);
         SmainF.removeKeyListener(ka);

@@ -82,7 +82,7 @@ public class GamePanel {
                 G.drawImage(haikei, 0, 0, this);
                 super.paint(G);
             }*/);
-        gameP.setBounds(0, 0, 1000, 600);
+        gameP.setBounds(0, 0, 1024, 768);
         gameP.setLayout(null);
         mainF.add(gameP);
         gameP.setVisible(true);

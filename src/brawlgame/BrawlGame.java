@@ -1,11 +1,13 @@
 package brawlgame;
 //test1
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 /**
+ * ゲームクライアント
  *
  * @author bakaj
  */
@@ -29,6 +31,7 @@ public final class BrawlGame {
     GamePanel Game;
 
     /**
+     * メインメソッド
      *
      * @param args
      */
@@ -38,7 +41,8 @@ public final class BrawlGame {
     }
 
     /**
-     *
+     * コンストラクタ
+     * フレームの作成
      */
     public BrawlGame() {
         //フレームの作成
@@ -54,7 +58,7 @@ public final class BrawlGame {
     }
 
     /**
-     *
+     * ループ
      */
     public void mainRoop() {
         while (true) {
@@ -69,7 +73,7 @@ public final class BrawlGame {
                     kekka = Game.draw();
                     break;
             }
-            
+
             //戻り値がパネル名だったときパネルの変更
             switch (kekka) {
                 case "menu":
@@ -99,8 +103,9 @@ public final class BrawlGame {
     }
 
     /**
+     * パネル変更
      *
-     * @param panel
+     * @param panel　変更先パネル名
      */
     public void panelChange(String panel) {
         //パネルのインスタンスを生成

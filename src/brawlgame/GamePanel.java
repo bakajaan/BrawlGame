@@ -58,7 +58,13 @@ public final class GamePanel {
      * サーバー受信用
      */
     BufferedReader in;
+    /**
+     * サーバーサクセス用のスレッド
+     */
     ServerAccessThread SThread;
+    /**
+     * 描画用のスレッド
+     */
     DrawThread DThread;
     /**
      * サーバーアドレス
@@ -180,9 +186,9 @@ public final class GamePanel {
     public GamePanel(JFrame mainF) {
         //フレームの所持
         SmainF = mainF;
-        
-        SThread=new ServerAccessThread(this);
-        DThread=new DrawThread(this);
+
+        SThread = new ServerAccessThread(this);
+        DThread = new DrawThread(this);
 
         //パネルの作成
         gameP = new JPanel( /*//背景の描画
@@ -259,11 +265,14 @@ public final class GamePanel {
             }
         };
         mainF.addKeyListener(ka);
-        
-        mode=SThread.getMode();
+
+        //自分のチームを取得
+        mode = SThread.getMode();
+
+        //それぞれのスレッドを開始
         SThread.start();
         DThread.start();
-        
+
         //一応再描画
         gameP.repaint();
         mainF.setVisible(true);
@@ -275,8 +284,7 @@ public final class GamePanel {
      * @return 処理の遷移先を示す
      */
     public String draw() {
-        myUpdate(); //自分のアップデート
-        //charactar();//キャラクターの描画
+        myUpdate();//自分のアップデート
 
         onlyDebug.setText("mode=" + mode + " AX=" + AX + " AY=" + AY
                 + " AT=" + AT + " JunpPlace=" + junpPlace);
@@ -286,66 +294,6 @@ public final class GamePanel {
             return "menu";
         }
         return "";
-    }
-
-    /**
-     * 画像を読み込む
-     */
-    public void loadImage() {
-        //画像読み込み
-        ImageIcon char1 = new ImageIcon(new ImageIcon("./src/img/1.png").
-                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
-        ImageIcon char2 = new ImageIcon(new ImageIcon("./src/img/2.png").
-                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
-        ImageIcon char3 = new ImageIcon(new ImageIcon("./src/img/3.png").
-                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
-        ImageIcon char4 = new ImageIcon(new ImageIcon("./src/img/4.png").
-                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
-        ImageIcon char5 = new ImageIcon(new ImageIcon("./src/img/5.png").
-                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
-        ImageIcon char6 = new ImageIcon(new ImageIcon("./src/img/6.png").
-                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
-        /*ImageIcon back = new ImageIcon(new ImageIcon("C:\\\\Users\\\\bakaj\\\\Documents\\\\NetBeansProjects\\\\BrawlGame\\\\src\\\\img\\\\paper.png").
-                getImage().getScaledInstance(1200, 1652, Image.SCALE_DEFAULT));
-         */
-        charHeight = char1.getIconHeight();
-        charWitdh = char1.getIconWidth();
-
-        //自分用キャララベル作成
-        Achar = new JLabel[6];
-        for (int i = 0; i < 6; i++) {
-            Achar[i] = new JLabel();
-        }
-        Achar[0].setIcon(char1);
-        Achar[1].setIcon(char2);
-        Achar[2].setIcon(char3);
-        Achar[3].setIcon(char4);
-        Achar[4].setIcon(char5);
-        Achar[5].setIcon(char6);
-        gameP.add(Achar[0]);
-        for (int i = 0; i < 6; i++) {
-            gameP.add(Achar[i]);
-            Achar[i].hide();
-            Achar[i].setBounds(AX, AY, char1.getIconWidth(), char1.getIconHeight());
-        }
-
-        //敵用キャララベル作成
-        Bchar = new JLabel[6];
-        for (int i = 0; i < 6; i++) {
-            Bchar[i] = new JLabel();
-        }
-        Bchar[0].setIcon(char1);
-        Bchar[1].setIcon(char2);
-        Bchar[2].setIcon(char3);
-        Bchar[3].setIcon(char4);
-        Bchar[4].setIcon(char5);
-        Bchar[5].setIcon(char6);
-        gameP.add(Bchar[0]);
-        for (int i = 0; i < 6; i++) {
-            gameP.add(Bchar[i]);
-            Bchar[i].hide();
-            Bchar[i].setBounds(BX, BY, char1.getIconWidth(), char1.getIconHeight());
-        }
     }
 
     /**
@@ -425,34 +373,62 @@ public final class GamePanel {
     }
 
     /**
-     * キャラクターの位置を描画
+     * 画像を読み込む
      */
-    private void charactar() {
-        //処理速度を上げる為、位置情報が違うときのみアップデート
-        if (Achar[AT].getLocation().x != AX
-                || Achar[AT].getLocation().y != AY) {
-            Achar[AT].setLocation(AX, AY);
+    public void loadImage() {
+        //画像読み込み
+        ImageIcon char1 = new ImageIcon(new ImageIcon("./src/img/1.png").
+                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
+        ImageIcon char2 = new ImageIcon(new ImageIcon("./src/img/2.png").
+                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
+        ImageIcon char3 = new ImageIcon(new ImageIcon("./src/img/3.png").
+                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
+        ImageIcon char4 = new ImageIcon(new ImageIcon("./src/img/4.png").
+                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
+        ImageIcon char5 = new ImageIcon(new ImageIcon("./src/img/5.png").
+                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
+        ImageIcon char6 = new ImageIcon(new ImageIcon("./src/img/6.png").
+                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
+        /*ImageIcon back = new ImageIcon(new ImageIcon("C:\\\\Users\\\\bakaj\\\\Documents\\\\NetBeansProjects\\\\BrawlGame\\\\src\\\\img\\\\paper.png").
+                getImage().getScaledInstance(1200, 1652, Image.SCALE_DEFAULT));
+         */
+        charHeight = char1.getIconHeight();
+        charWitdh = char1.getIconWidth();
+
+        //自分用キャララベル作成
+        Achar = new JLabel[6];
+        for (int i = 0; i < 6; i++) {
+            Achar[i] = new JLabel();
         }
-        if (Bchar[BT].getLocation().x != BX
-                || Bchar[BT].getLocation().y != BY) {
-            Bchar[BT].setLocation(BX, BY);
+        Achar[0].setIcon(char1);
+        Achar[1].setIcon(char2);
+        Achar[2].setIcon(char3);
+        Achar[3].setIcon(char4);
+        Achar[4].setIcon(char5);
+        Achar[5].setIcon(char6);
+        gameP.add(Achar[0]);
+        for (int i = 0; i < 6; i++) {
+            gameP.add(Achar[i]);
+            Achar[i].hide();
+            Achar[i].setBounds(AX, AY, char1.getIconWidth(), char1.getIconHeight());
         }
-        //対象の画像が表示されていない時は他を隠して対象を表示
-        if (Achar[AT].isVisible() == false) {
-            for (int i = 0; i < 6; i++) {
-                if (Achar[i].isVisible()) {
-                    Achar[i].hide();
-                }
-            }
-            Achar[AT].show();
+
+        //敵用キャララベル作成
+        Bchar = new JLabel[6];
+        for (int i = 0; i < 6; i++) {
+            Bchar[i] = new JLabel();
         }
-        if (Bchar[BT].isVisible() == false) {
-            for (int i = 0; i < 6; i++) {
-                if (Bchar[i].isVisible()) {
-                    Bchar[i].hide();
-                }
-            }
-            Bchar[BT].show();
+        Bchar[0].setIcon(char1);
+        Bchar[1].setIcon(char2);
+        Bchar[2].setIcon(char3);
+        Bchar[3].setIcon(char4);
+        Bchar[4].setIcon(char5);
+        Bchar[5].setIcon(char6);
+        gameP.add(Bchar[0]);
+        for (int i = 0; i < 6; i++) {
+            gameP.add(Bchar[i]);
+            Bchar[i].hide();
+            Bchar[i].setBounds(BX, BY, char1.getIconWidth(), char1.getIconHeight());
         }
     }
 

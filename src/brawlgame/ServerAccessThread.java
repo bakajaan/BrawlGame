@@ -43,6 +43,11 @@ public class ServerAccessThread extends Thread {
     String server = "localhost";
     GamePanel GP = null;
 
+    /**
+     * コンストラクタ
+     * サーバーにアクセスしてルートを確立
+     * @param gameP 
+     */
     public ServerAccessThread(GamePanel gameP) {
         GP = gameP;
         //サーバーに接続
@@ -59,6 +64,10 @@ public class ServerAccessThread extends Thread {
         }
     }
 
+    /**
+     * チームを取得
+     * @return チーム(a.b)
+     */
     public char getMode() {
         char mode = 0;
         try {

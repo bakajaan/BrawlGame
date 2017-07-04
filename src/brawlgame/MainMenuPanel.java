@@ -121,6 +121,9 @@ public class MainMenuPanel {
         return "";
     }
 
+    /**
+     * 終了処理
+     */
     private void end() {
         menuP.hide();
         SmainF.remove(menuP);

@@ -189,17 +189,17 @@ public class GamePanel {
     public void loadImage() {
         //画像読み込み
         ImageIcon char1 = new ImageIcon(new ImageIcon("./src/img/1.png").
-                getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
         ImageIcon char2 = new ImageIcon(new ImageIcon("./src/img/2.png").
-                getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
         ImageIcon char3 = new ImageIcon(new ImageIcon("./src/img/3.png").
-                getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
         ImageIcon char4 = new ImageIcon(new ImageIcon("./src/img/4.png").
-                getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
         ImageIcon char5 = new ImageIcon(new ImageIcon("./src/img/5.png").
-                getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
         ImageIcon char6 = new ImageIcon(new ImageIcon("./src/img/6.png").
-                getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+                getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
         /*ImageIcon back = new ImageIcon(new ImageIcon("C:\\\\Users\\\\bakaj\\\\Documents\\\\NetBeansProjects\\\\BrawlGame\\\\src\\\\img\\\\paper.png").
                 getImage().getScaledInstance(1200, 1652, Image.SCALE_DEFAULT));
          */

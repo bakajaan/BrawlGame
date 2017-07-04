@@ -50,6 +50,7 @@ public final class BrawlGame {
                     kekka = Game.draw();
                     break;
             }
+            
             //戻り値がパネル名だったときパネルの変更
             switch (kekka) {
                 case "menu":

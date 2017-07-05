@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package brawlgame;
 
 import java.io.BufferedReader;
@@ -20,6 +15,7 @@ import java.net.UnknownHostException;
  */
 public class ServerAccessThread extends Thread {
 
+    //<editor-fold defaultstate="collapsed" desc="メンバ">
     /**
      * サーバー接続用ソケット
      */
@@ -46,6 +42,7 @@ public class ServerAccessThread extends Thread {
      * 座標を取得するのに利用
      */
     GamePanel GP = null;
+//</editor-fold>
 
     /**
      * コンストラクタ
@@ -85,7 +82,7 @@ public class ServerAccessThread extends Thread {
         }
         return mode;
     }
-
+    
     @Override
     public void run() {
         try {

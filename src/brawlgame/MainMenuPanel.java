@@ -13,6 +13,7 @@ import javax.swing.JPanel;
  */
 public class MainMenuPanel {
 
+    //<editor-fold defaultstate="collapsed" desc="メンバ">
     /**
      * メインフレーム
      */
@@ -41,6 +42,7 @@ public class MainMenuPanel {
      * リスナー用キーアダプター
      */
     KeyAdapter ka;
+//</editor-fold>
 
     /**
      *

@@ -19,8 +19,9 @@ import javax.swing.JPanel;
  */
 public final class GamePanel {
 
+    //<editor-fold defaultstate="collapsed" desc="メンバ">
     /*ImageIcon back = new ImageIcon(new ImageIcon("C:\\\\Users\\\\bakaj\\\\Documents\\\\NetBeansProjects\\\\BrawlGame\\\\src\\\\img\\\\paper.png").
-            getImage().getScaledInstance(1200, 1652, Image.SCALE_DEFAULT));*/
+    getImage().getScaledInstance(1200, 1652, Image.SCALE_DEFAULT));*/
     /**
      * メインフレーム
      * キーリスナーとパネルの追加削除に利用
@@ -177,6 +178,7 @@ public final class GamePanel {
      * 左上にテストで表示するラベル
      */
     JLabel onlyDebug;
+//</editor-fold>
 
     /**
      * ゲームパネル
@@ -317,32 +319,32 @@ public final class GamePanel {
                 AX = 200;
             }
             return;
-        }else if (AX + 120 > BX && AX < BX + 120 && BT == 3) {
+        } else if (AX + 120 > BX && AX < BX + 120 && BT == 3) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             AT = 5;
             return;
         }
-        
+
         //キーによって移動
-        if (Wkey && !Skey && setti&&!Attkey) {
+        if (Wkey && !Skey && setti && !Attkey) {
             junpPlace = AY;
             setti = false;
             gra -= 32;
         }
-        if (Skey && !Wkey&&!setti&&!Attkey) {
-                gra += 4;
+        if (Skey && !Wkey && !setti && !Attkey) {
+            gra += 4;
         }
-        if (Akey&&!Dkey&&!Attkey) {
+        if (Akey && !Dkey && !Attkey) {
             AH = 2;
             walkCount++;
             AX -= 8;
         }
-        if (Dkey&&!Akey&&!Attkey) {
+        if (Dkey && !Akey && !Attkey) {
             AH = 1;
             walkCount++;
             AX += 8;
         }
-        
+
         //着地していない時は重力を座標に影響させる
         if (setti == false) {
             gra += 2;
@@ -355,7 +357,7 @@ public final class GamePanel {
                 setti = true;
             }
         }
-        
+
         //表示タイプの変更
         if (setti == false) {
             AT = 4;

@@ -1,8 +1,5 @@
 package brawlgame;
-//test1
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
@@ -13,6 +10,7 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
  */
 public final class BrawlGame {
 
+    //<editor-fold defaultstate="collapsed" desc="メンバ">
     /**
      * 現在のパネルの名前
      */
@@ -29,6 +27,7 @@ public final class BrawlGame {
      * ゲームクラス
      */
     GamePanel Game;
+//</editor-fold>
 
     /**
      * メインメソッド

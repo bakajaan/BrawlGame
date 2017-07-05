@@ -16,11 +16,6 @@ public class DrawThread extends Thread {
     public void run() {
         while (true) {
             long oldTime = System.currentTimeMillis();//描画前時間の取得
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                System.err.println(e);
-            }
             //処理速度を上げる為、位置情報が違うときのみアップデート
             if (GP.Achar[GP.AT].getLocation().x != GP.AX
                     || GP.Achar[GP.AT].getLocation().y != GP.AY) {
@@ -50,9 +45,7 @@ public class DrawThread extends Thread {
             long newTime = System.currentTimeMillis();//描画後時間の取得
             //フレームレートを安定させるためスリープさせる
             long sleepTime = 16 - (newTime - oldTime);
-            if (sleepTime < 0) {
-                sleepTime = 0;
-            } else {
+            if (sleepTime > 0) {
                 try {
                     Thread.sleep(sleepTime);
                 } catch (InterruptedException e) {

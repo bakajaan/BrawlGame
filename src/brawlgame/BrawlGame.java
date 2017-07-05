@@ -86,12 +86,11 @@ public final class BrawlGame {
                 default:
                     break;
             }
+
             long newTime = System.currentTimeMillis();//描画後時間の取得
             //フレームレートを安定させるためスリープさせる
             long sleepTime = 16 - (newTime - oldTime);
-            if (sleepTime < 0) {
-                sleepTime = 0;
-            } else {
+            if (sleepTime > 0) {
                 try {
                     Thread.sleep(sleepTime);
                 } catch (InterruptedException e) {
@@ -99,7 +98,7 @@ public final class BrawlGame {
                 }
             }
             if (newTime - oldTime > 16) {
-                System.out.println("ゲーム本体が重くなっています");
+                System.out.println("処理が重くなっています");
             }
         }
     }

@@ -437,7 +437,7 @@ public final class GamePanel {
      * 終了処理
      */
     private void end() {
-        SThread.stop();
+        SThread.disconect();
         gameP.hide();
         SmainF.remove(gameP);
         SmainF.removeComponentListener(cl);

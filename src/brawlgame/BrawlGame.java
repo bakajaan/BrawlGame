@@ -61,8 +61,8 @@ public final class BrawlGame {
      */
     public void mainRoop() {
         while (true) {
-            String kekka = "";
             long oldTime = System.currentTimeMillis();//描画前時間の取得
+            String kekka = "";
             //選択中パネルの描画
             switch (panelName) {
                 case "menu":
@@ -97,6 +97,9 @@ public final class BrawlGame {
                 } catch (InterruptedException e) {
                     System.err.println(e);
                 }
+            }
+            if (newTime - oldTime > 16) {
+                System.out.println("ゲーム本体が重くなっています");
             }
         }
     }

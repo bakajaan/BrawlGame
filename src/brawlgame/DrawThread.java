@@ -15,6 +15,7 @@ public class DrawThread extends Thread {
     @Override
     public void run() {
         while (true) {
+            long oldTime = System.currentTimeMillis();//描画前時間の取得
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {
@@ -45,6 +46,21 @@ public class DrawThread extends Thread {
                     }
                 }
                 GP.Bchar[GP.BT].show();
+            }
+            long newTime = System.currentTimeMillis();//描画後時間の取得
+            //フレームレートを安定させるためスリープさせる
+            long sleepTime = 16 - (newTime - oldTime);
+            if (sleepTime < 0) {
+                sleepTime = 0;
+            } else {
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    System.err.println(e);
+                }
+            }
+            if (newTime - oldTime > 16) {
+                System.out.println("DrawThreadが重くなっています");
             }
         }
     }

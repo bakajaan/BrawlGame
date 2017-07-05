@@ -32,11 +32,11 @@ public class ServerAccessThread extends Thread {
      * サーバーアドレス
      */
     //自宅Wi-Fi
-    //String server = "192.168.3.17";
+    String server = "192.168.3.17";
     //ポケットWi-Fi
     //String server = "192.168.179.3";
     //オフライン
-    String server = "localhost";
+    //String server = "localhost";
     /**
      * ゲームパネル
      * 座標を取得するのに利用
@@ -82,11 +82,12 @@ public class ServerAccessThread extends Thread {
         }
         return mode;
     }
-    
+
     @Override
     public void run() {
         try {
             while (true) {
+                long oldTime = System.currentTimeMillis();//描画前時間の取得
                 //自分モーションタイプ送信
                 out.println("T" + GP.AT);
                 out.flush();
@@ -110,6 +111,21 @@ public class ServerAccessThread extends Thread {
                 out.flush();
                 //敵Y座標受信
                 GP.BY = Integer.parseInt(in.readLine());
+                long newTime = System.currentTimeMillis();//描画後時間の取得
+                //フレームレートを安定させるためスリープさせる
+                long sleepTime = 4 - (newTime - oldTime);
+                if (sleepTime < 0) {
+                    sleepTime = 0;
+                } else {
+                    try {
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException e) {
+                        System.err.println(e);
+                    }
+                }
+                if (newTime - oldTime > 16) {
+                    System.out.println("ServerThreadが重くなっています");
+                }
             }
         } catch (IOException | NumberFormatException e) {
             System.err.println(e);

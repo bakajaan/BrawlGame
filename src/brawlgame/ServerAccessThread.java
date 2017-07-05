@@ -32,11 +32,11 @@ public class ServerAccessThread extends Thread {
      * サーバーアドレス
      */
     //自宅Wi-Fi
-    String server = "192.168.3.17";
+    //String server = "192.168.3.17";
     //ポケットWi-Fi
     //String server = "192.168.179.3";
     //オフライン
-    //String server = "localhost";
+    String server = "localhost";
     /**
      * ゲームパネル
      * 座標を取得するのに利用
@@ -88,29 +88,18 @@ public class ServerAccessThread extends Thread {
         try {
             while (true) {
                 long oldTime = System.currentTimeMillis();//描画前時間の取得
-                //自分モーションタイプ送信
-                out.println("T" + GP.AT);
+                String sendT=""
+                        + "T>" + GP.AT + ","
+                        + "H>" + GP.AH + ","
+                        + "X>" + GP.AX + ","
+                        + "Y>" + GP.AY + ",";
+                out.println(sendT);
                 out.flush();
-                //敵モーションタイプ受信
-                GP.BT = Integer.parseInt(in.readLine());
-
-                //自分方向送信
-                out.println("H" + GP.AH);
-                out.flush();
-                //敵方向受信
-                GP.BH = Integer.parseInt(in.readLine());
-
-                //自分X座標送信
-                out.println("X" + GP.AX);
-                out.flush();
-                //敵X座標受信
-                GP.BX = Integer.parseInt(in.readLine());
-
-                //自分Y座標送信
-                out.println("Y" + GP.AY);
-                out.flush();
-                //敵Y座標受信
-                GP.BY = Integer.parseInt(in.readLine());
+                String receiveT=in.readLine();
+                GP.BT = Integer.parseInt(receiveT.substring(receiveT.indexOf("T>") + 1, receiveT.indexOf(",")));
+                GP.BH = Integer.parseInt(receiveT.substring(receiveT.indexOf("H>") + 1, receiveT.indexOf(",")));
+                GP.BX = Integer.parseInt(receiveT.substring(receiveT.indexOf("X>") + 1, receiveT.indexOf(",")));
+                GP.BY = Integer.parseInt(receiveT.substring(receiveT.indexOf("Y>") + 1, receiveT.indexOf(",")));
                 long newTime = System.currentTimeMillis();//描画後時間の取得
                 //フレームレートを安定させるためスリープさせる
                 long sleepTime = 4 - (newTime - oldTime);
@@ -130,5 +119,10 @@ public class ServerAccessThread extends Thread {
         } catch (IOException | NumberFormatException e) {
             System.err.println(e);
         }
+    }
+
+    public void disconect() {
+        out.println("C");
+        this.stop();
     }
 }

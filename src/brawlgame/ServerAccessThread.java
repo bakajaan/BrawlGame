@@ -107,7 +107,6 @@ public class ServerAccessThread extends Thread {
                 out.flush();
                 //敵X座標受信
                 GP.BX = Integer.parseInt(in.readLine());
-                GP.afterBX = GP.BX;
 
                 //自分Y座標送信
                 out.println("Y" + GP.AY);

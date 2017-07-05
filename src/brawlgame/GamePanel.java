@@ -286,10 +286,10 @@ public final class GamePanel {
      */
     public String draw() {
         myUpdate();//自分のアップデート
-        
+
         onlyDebug.setText("mode=" + mode + " AX=" + AX + " AY=" + AY
                 + " AT=" + AT + " JunpPlace=" + junpPlace);
-        
+
         //フラグがたっていたらmenuを戻す
         if (changePanel == true) {
             return "menu";
@@ -302,42 +302,11 @@ public final class GamePanel {
      * 座標を変更させる
      */
     private void myUpdate() {
-        if (Wkey) {
-            if (setti) {
-                junpPlace = AY;
-                setti = false;
-                gra += 32;
-            }
-        }
-        if (Skey) {
-            if (setti == false) {
-                gra -= 4;
-            }
-        }
-        if (Akey) {
-            AH = 2;
-            walkCount++;
-            AX -= 8;
-        }
-        if (Dkey) {
-            AH = 1;
-            walkCount++;
-            AX += 8;
-        }
-        if (setti == false) {
-            gra -= 2;
-            AY = AY -= gra;
-            if (AY > junpPlace) {
-                AT = 0;
-                gra = 0;
-                AY = junpPlace;
-                setti = true;
-            }
-        }
-        //表示タイプの変更
+        //死亡中の処理
         if (AT == 5 && deathCount < 60) {
             //死亡モーション中は1秒間そのまま
             deathCount++;
+            return;
         } else if (deathCount == 60) {
             //死亡して１秒たったら座標とモーションタイプをリセット
             deathCount = 0;
@@ -347,10 +316,48 @@ public final class GamePanel {
             } else {
                 AX = 200;
             }
-        } else if (AX + 120 > BX && AX < BX + 120 && BT == 3) {
+            return;
+        }else if (AX + 120 > BX && AX < BX + 120 && BT == 3) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             AT = 5;
-        } else if (setti == false) {
+            return;
+        }
+        
+        //キーによって移動
+        if (Wkey && !Skey && setti&&!Attkey) {
+            junpPlace = AY;
+            setti = false;
+            gra -= 32;
+        }
+        if (Skey && !Wkey&&!setti&&!Attkey) {
+                gra += 4;
+        }
+        if (Akey&&!Dkey&&!Attkey) {
+            AH = 2;
+            walkCount++;
+            AX -= 8;
+        }
+        if (Dkey&&!Akey&&!Attkey) {
+            AH = 1;
+            walkCount++;
+            AX += 8;
+        }
+        
+        //着地していない時は重力を座標に影響させる
+        if (setti == false) {
+            gra += 2;
+            AY += gra;
+            //自分の座標がジャンプ地点より低くなったら着地状態に変更
+            if (AY > junpPlace) {
+                AT = 0;
+                gra = 0;
+                AY = junpPlace;
+                setti = true;
+            }
+        }
+        
+        //表示タイプの変更
+        if (setti == false) {
             AT = 4;
         } else if (Attkey) {
             AT = 3;

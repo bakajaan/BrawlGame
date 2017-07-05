@@ -90,17 +90,17 @@ public class ServerAccessThread extends Thread {
             while (true) {
                 long oldTime = System.currentTimeMillis();//描画前時間の取得
                 String sendT=""
-                        + "T>" + GP.AT + ","
-                        + "H>" + GP.AH + ","
-                        + "X>" + GP.AX + ","
-                        + "Y>" + GP.AY + ",";
+                        + "T" + GP.AT + "t"
+                        + "H" + GP.AH + "h"
+                        + "X" + GP.AX + "x"
+                        + "Y" + GP.AY + "y";
                 out.println(sendT);
                 out.flush();
                 String receiveT=in.readLine();
-                GP.BT = Integer.parseInt(receiveT.substring(receiveT.indexOf("T>") + 1, receiveT.indexOf(",")));
-                GP.BH = Integer.parseInt(receiveT.substring(receiveT.indexOf("H>") + 1, receiveT.indexOf(",")));
-                GP.BX = Integer.parseInt(receiveT.substring(receiveT.indexOf("X>") + 1, receiveT.indexOf(",")));
-                GP.BY = Integer.parseInt(receiveT.substring(receiveT.indexOf("Y>") + 1, receiveT.indexOf(",")));
+                GP.BT = Integer.parseInt(receiveT.substring(receiveT.indexOf("T") + 1, receiveT.indexOf("t")));
+                GP.BH = Integer.parseInt(receiveT.substring(receiveT.indexOf("H") + 1, receiveT.indexOf("h")));
+                GP.BX = Integer.parseInt(receiveT.substring(receiveT.indexOf("X") + 1, receiveT.indexOf("x")));
+                GP.BY = Integer.parseInt(receiveT.substring(receiveT.indexOf("Y") + 1, receiveT.indexOf("y")));
                 long newTime = System.currentTimeMillis();//描画後時間の取得
                 //フレームレートを安定させるためスリープさせる
                 long sleepTime = 4 - (newTime - oldTime);

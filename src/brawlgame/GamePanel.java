@@ -1,8 +1,11 @@
 package brawlgame;
 
 import java.awt.Image;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -42,10 +45,14 @@ public final class GamePanel {
      */
     JLabel Bchar[];
     /**
-     * キーリスナー追加用キーアダプター
+     * キー入力用キーリスナー
      * 終了処理でフレームから削除
      */
-    KeyAdapter ka;
+    KeyListener kl;
+    /**
+     * 画面サイズ変更用コンポーネント
+     */
+    ComponentListener cl;
     /**
      * サーバー接続用ソケット
      */
@@ -213,9 +220,13 @@ public final class GamePanel {
         onlyDebug = new JLabel();
         onlyDebug.setBounds(0, 0, 1000, 16);
         gameP.add(onlyDebug);
-
-        //フレームの読み込み
-        ka = new KeyAdapter() {
+        
+        //キーリスナーの追加
+        kl=new KeyListener(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+            
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyText(e.getKeyCode())) {
@@ -267,7 +278,28 @@ public final class GamePanel {
                 }
             }
         };
-        mainF.addKeyListener(ka);
+        mainF.addKeyListener(kl);
+        
+        //コンポーネントリスナーの追加
+        cl=new ComponentListener(){
+            @Override
+            public void componentResized(ComponentEvent e) {
+                gameP.setSize(e.getComponent().getWidth(),e.getComponent().getHeight());
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+            }
+        };
+        mainF.addComponentListener(cl);
 
         //自分のチームを取得
         mode = SThread.getMode();
@@ -450,7 +482,8 @@ public final class GamePanel {
         SThread.stop();
         gameP.hide();
         SmainF.remove(gameP);
-        SmainF.removeKeyListener(ka);
+        SmainF.removeComponentListener(cl);
+        SmainF.removeKeyListener(kl);
         changePanel = true;
     }
 }

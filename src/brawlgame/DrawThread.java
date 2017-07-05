@@ -12,7 +12,7 @@ package brawlgame;
 public class DrawThread extends Thread {
 
     GamePanel GP;
-
+    
     public DrawThread(GamePanel gameP) {
         GP = gameP;
     }

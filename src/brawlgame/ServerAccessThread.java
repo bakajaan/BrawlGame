@@ -41,12 +41,17 @@ public class ServerAccessThread extends Thread {
     //String server = "192.168.179.3";
     //オフライン
     String server = "localhost";
+    /**
+     * ゲームパネル
+     * 座標を取得するのに利用
+     */
     GamePanel GP = null;
 
     /**
      * コンストラクタ
      * サーバーにアクセスしてルートを確立
-     * @param gameP 
+     *
+     * @param gameP
      */
     public ServerAccessThread(GamePanel gameP) {
         GP = gameP;
@@ -66,6 +71,7 @@ public class ServerAccessThread extends Thread {
 
     /**
      * チームを取得
+     *
      * @return チーム(a.b)
      */
     public char getMode() {
@@ -82,8 +88,8 @@ public class ServerAccessThread extends Thread {
 
     @Override
     public void run() {
-        while (true) {
-            try {
+        try {
+            while (true) {
                 //自分モーションタイプ送信
                 out.println("T" + GP.AT);
                 out.flush();
@@ -108,9 +114,9 @@ public class ServerAccessThread extends Thread {
                 out.flush();
                 //敵Y座標受信
                 GP.BY = Integer.parseInt(in.readLine());
-            } catch (IOException | NumberFormatException e) {
-                System.err.println(e);
             }
+        } catch (IOException | NumberFormatException e) {
+            System.err.println(e);
         }
     }
 }

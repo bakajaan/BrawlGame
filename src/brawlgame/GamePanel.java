@@ -4,13 +4,8 @@ import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,6 +23,7 @@ public final class GamePanel {
             getImage().getScaledInstance(1200, 1652, Image.SCALE_DEFAULT));*/
     /**
      * メインフレーム
+     * キーリスナーとパネルの追加削除に利用
      */
     JFrame SmainF;
     /**
@@ -36,14 +32,17 @@ public final class GamePanel {
     JPanel gameP;
     /**
      * 自分キャラクター用ラベル
+     * それぞれの動きのアイコンを格納
      */
     JLabel Achar[];
     /**
      * 敵キャラクター用ラベル
+     * それぞれの動きのアイコンを格納
      */
     JLabel Bchar[];
     /**
      * キーリスナー追加用キーアダプター
+     * 終了処理でフレームから削除
      */
     KeyAdapter ka;
     /**
@@ -60,10 +59,12 @@ public final class GamePanel {
     BufferedReader in;
     /**
      * サーバーサクセス用のスレッド
+     * サーバーとデータの送受信を行う。
      */
     ServerAccessThread SThread;
     /**
      * 描画用のスレッド
+     * キャラクターの座標更新、描画を行う
      */
     DrawThread DThread;
     /**
@@ -77,27 +78,32 @@ public final class GamePanel {
     String server = "localhost";
     /**
      * ジャンプ時Y座標を格納
-     * Y座標が重なったときジャンプを終了
+     * Y座標が重なったときジャンプを終了(仮)
      */
     int junpPlace = 0;
     /**
      * 重力
+     * 着地していない時座標から引かれる
      */
     int gra = 0;
     /**
      * 自分X座標
+     * 左上が(0.0)
      */
     int AX = 200;
     /**
      * 自分Y座標
+     * 左上が(0.0)
      */
     int AY = 300;
     /**
      * 敵X座標
+     * 左上が(0.0)
      */
     int BX;
     /**
      * 敵Y座標
+     * 左上が(0.0)
      */
     int BY;
     /**
@@ -116,11 +122,6 @@ public final class GamePanel {
      * 敵の向き
      */
     int BH;
-    /**
-     * 前フレームの敵X座標
-     *
-     */
-    int afterBX = 0;
     /**
      * 徒歩カウント
      * この値を利用して歩く動きを実現する
@@ -281,14 +282,14 @@ public final class GamePanel {
     /**
      * レンダリング処理
      *
-     * @return 処理の遷移先を示す
+     * @return 画面遷移先
      */
     public String draw() {
         myUpdate();//自分のアップデート
-
+        
         onlyDebug.setText("mode=" + mode + " AX=" + AX + " AY=" + AY
                 + " AT=" + AT + " JunpPlace=" + junpPlace);
-
+        
         //フラグがたっていたらmenuを戻す
         if (changePanel == true) {
             return "menu";
@@ -298,6 +299,7 @@ public final class GamePanel {
 
     /**
      * キャラクターの処理
+     * 座標を変更させる
      */
     private void myUpdate() {
         if (Wkey) {
@@ -334,7 +336,7 @@ public final class GamePanel {
         }
         //表示タイプの変更
         if (AT == 5 && deathCount < 60) {
-            //死亡モーション中は	1秒間そのまま
+            //死亡モーション中は1秒間そのまま
             deathCount++;
         } else if (deathCount == 60) {
             //死亡して１秒たったら座標とモーションタイプをリセット

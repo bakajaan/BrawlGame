@@ -32,7 +32,7 @@ public class ServerAccessThread extends Thread {
      * サーバーアドレス
      */
     //自宅Wi-Fi
-    String server = "192.168.3.17";
+    String server = "192.168.3.10";
     //ポケットWi-Fi
     //String server = "192.168.179.3";
     //オフライン

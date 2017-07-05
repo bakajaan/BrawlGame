@@ -1,5 +1,6 @@
 package brawlgame;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -13,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 
 /**
  * ゲームの内部処理
@@ -212,6 +214,8 @@ public final class GamePanel {
         mainF.add(gameP);
         gameP.setVisible(true);
         gameP.show();
+        gameP.setBackground(Color.WHITE);
+        gameP.setBorder(new BevelBorder(BevelBorder.RAISED));
 
         //画像の読み込み
         loadImage();
@@ -220,13 +224,13 @@ public final class GamePanel {
         onlyDebug = new JLabel();
         onlyDebug.setBounds(0, 0, 1000, 16);
         gameP.add(onlyDebug);
-        
+
         //キーリスナーの追加
-        kl=new KeyListener(){
+        kl = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
             }
-            
+
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyText(e.getKeyCode())) {
@@ -279,12 +283,21 @@ public final class GamePanel {
             }
         };
         mainF.addKeyListener(kl);
-        
+
         //コンポーネントリスナーの追加
-        cl=new ComponentListener(){
+        cl = new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                gameP.setSize(e.getComponent().getWidth(),e.getComponent().getHeight());
+                if (e.getComponent().getWidth()/4
+                        > e.getComponent().getHeight()/3) {
+                    //横長の時縦の大きさのみ変更
+                    gameP.setSize((e.getComponent().getHeight()/3)*4,
+                            e.getComponent().getHeight());
+                } else {
+                    //縦長の時横の大きさのみ変更
+                    gameP.setSize(e.getComponent().getWidth(),
+                            (e.getComponent().getWidth()/4)*3);
+                }
             }
 
             @Override

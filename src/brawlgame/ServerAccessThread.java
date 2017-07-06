@@ -33,11 +33,11 @@ public class ServerAccessThread extends Thread {
      */
     //自宅Wi-Fi
     //String server = "192.168.3.17";
-    String server = "192.168.3.10";
+    //String server = "192.168.3.10";
     //ポケットWi-Fi
     //String server = "192.168.179.3";
     //オフライン
-    //String server = "localhost";
+    String server = "localhost";
     /**
      * ゲームパネル
      * 座標を取得するのに利用
@@ -73,6 +73,9 @@ public class ServerAccessThread extends Thread {
      * @return チーム(a.b)
      */
     public char getMode() {
+        if (in == null) {
+            return 'N';
+        }
         char mode = 0;
         try {
             mode = in.readLine().charAt(0);
@@ -88,7 +91,7 @@ public class ServerAccessThread extends Thread {
     public void run() {
         try {
             while (true) {
-                long oldTime = System.currentTimeMillis();//描画前時間の取得
+                long oldTime = System.currentTimeMillis();//通信前時間の取得
                 String sendT = ""
                         + "T" + GP.AT + "t"
                         + "H" + GP.AH + "h"
@@ -105,8 +108,8 @@ public class ServerAccessThread extends Thread {
                         receiveT.indexOf("X") + 1, receiveT.indexOf("x")));
                 GP.BY = Integer.parseInt(receiveT.substring(
                         receiveT.indexOf("Y") + 1, receiveT.indexOf("y")));
-                long newTime = System.currentTimeMillis();//描画後時間の取得
-                //フレームレートを安定させるためスリープさせる
+                long newTime = System.currentTimeMillis();//通信後時間の取得
+                //描画の半分の速さでループするようにスリープさせる
                 long sleepTime = 8 - (newTime - oldTime);
                 if (newTime - oldTime > 16) {
                     System.out.println("ServerThreadが重くなっています");

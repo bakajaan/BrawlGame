@@ -1,16 +1,11 @@
 package brawlgame;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -35,6 +30,7 @@ public final class GamePanel {
      * ゲーム表示用パネル
      */
     JPanel gameP;
+    JLabel back;
     /**
      * 自分キャラクター用ラベル
      * それぞれの動きのアイコンを格納
@@ -110,6 +106,8 @@ public final class GamePanel {
      * 敵の向き
      */
     int BH;
+    int stageX=0;
+    int stageY=0;
     /**
      * 徒歩カウント
      * この値を利用して歩く動きを実現する
@@ -286,6 +284,10 @@ public final class GamePanel {
 
         //自分のチームを取得
         mode = SThread.getMode();
+        if (mode == 'N') {
+            end();
+            return;
+        }
 
         //それぞれのスレッドを開始
         SThread.start();
@@ -303,6 +305,7 @@ public final class GamePanel {
      */
     public String draw() {
         myUpdate();//自分のアップデート
+        camera();
 
         onlyDebug.setText("mode=" + mode + " AX=" + AX + " AY=" + AY
                 + " AT=" + AT + " JunpPlace=" + junpPlace);
@@ -397,11 +400,21 @@ public final class GamePanel {
             AT = 0;
         }
     }
+    
+    private void camera(){
+        if(AX+stageX>600){
+            stageX=-(AX-600);
+        }
+        if(AX+stageX<200){
+            stageX=-(AX-200);
+        }
+    }
 
     /**
      * 画像を読み込む
      */
     public void loadImage() {
+        //イメージの読み込み
         ImageIcon charactar[] = new ImageIcon[6];
         for (int i = 0; i < 6; i++) {
             charactar[i] = new ImageIcon(new ImageIcon(
@@ -409,6 +422,11 @@ public final class GamePanel {
                     getImage().getScaledInstance(setCharaSize, setCharaSize,
                             Image.SCALE_DEFAULT));
         }
+        ImageIcon backI = new ImageIcon();
+        backI = new ImageIcon(new ImageIcon(
+                "./src/img/paper.png").
+                getImage().getScaledInstance(1200, 1652,
+                        Image.SCALE_DEFAULT));
 
         //自分用キャララベル作成
         Achar = new JLabel[6];
@@ -431,13 +449,20 @@ public final class GamePanel {
             Bchar[i].hide();
             Bchar[i].setBounds(BX, BY, setCharaSize, setCharaSize);
         }
+        
+        //背景用ラベルの作成
+        back=new JLabel(backI);
+        back.setBounds(0, 0, 1200, 1652);
+        gameP.add(back);
     }
 
     /**
      * 終了処理
      */
     private void end() {
-        SThread.disconect();
+        if (mode != 'N') {
+            SThread.disconect();
+        }
         gameP.hide();
         SmainF.remove(gameP);
         SmainF.removeComponentListener(cl);

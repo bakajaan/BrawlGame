@@ -62,6 +62,7 @@ public final class BrawlGame {
     public void mainRoop() {
         while (true) {
             long oldTime = System.currentTimeMillis();//描画前時間の取得
+            
             String kekka = "";
             //選択中パネルの描画
             switch (panelName) {
@@ -90,15 +91,15 @@ public final class BrawlGame {
             long newTime = System.currentTimeMillis();//描画後時間の取得
             //フレームレートを安定させるためスリープさせる
             long sleepTime = 16 - (newTime - oldTime);
+            if (newTime - oldTime > 16) {
+                System.out.println("処理が重くなっています");
+            }
             if (sleepTime > 0) {
                 try {
                     Thread.sleep(sleepTime);
                 } catch (InterruptedException e) {
                     System.err.println(e);
                 }
-            }
-            if (newTime - oldTime > 16) {
-                System.out.println("処理が重くなっています");
             }
         }
     }

@@ -403,7 +403,7 @@ public final class GamePanel {
     
     /**
      * カメラ操作
-     * 自分の座標に依存する
+     * 自分の座標に依存する。
      */
     private void camera(){
         if(AX+stageX>600){

@@ -27,9 +27,9 @@ public class DrawThread extends Thread {
                     || GP.Achar[AT].getLocation().y != GP.AY) {
                 GP.Achar[AT].setLocation(GP.AX + GP.stageX, GP.AY);
             }
-            if (GP.Bchar[BT].getLocation().x != GP.BX
+            if (GP.Bchar[BT].getLocation().x != GP.BX + GP.stageX
                     || GP.Bchar[BT].getLocation().y != GP.BY) {
-                GP.Bchar[BT].setLocation(GP.BX, GP.BY);
+                GP.Bchar[BT].setLocation(GP.BX + GP.stageX, GP.BY);
             }
             //対象の画像が表示されていない時は他を隠して対象を表示
             if (GP.Achar[AT].isVisible() == false) {

@@ -426,11 +426,20 @@ public final class GamePanel {
      * 自分の座標に依存する。
      */
     private void camera() {
-        if (AX + stageX > 600) {
-            stageX = -(AX - 600);
-        }
-        if (AX + stageX < 200) {
-            stageX = -(AX - 200);
+        if (turnMode == mode) {
+            if (AX + stageX > 600) {
+                stageX = -(AX - 600);
+            }
+            if (AX + stageX < 200) {
+                stageX = -(AX - 200);
+            }
+        } else {
+            if (BX + stageX > 600) {
+                stageX = -(BX - 600);
+            }
+            if (BX + stageX < 200) {
+                stageX = -(BX - 200);
+            }
         }
     }
 

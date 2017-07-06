@@ -127,6 +127,10 @@ public class ServerAccessThread extends Thread {
         }
     }
 
+    /**
+     * サーバー切断
+     * サーバーにCとメッセージを送り切断を要求する
+     */
     public void disconect() {
         out.println("C");
         this.stop();

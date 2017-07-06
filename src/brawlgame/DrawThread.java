@@ -1,7 +1,5 @@
 package brawlgame;
 
-import java.awt.Graphics;
-
 /**
  *
  * @author bakaj

@@ -6,8 +6,15 @@ package brawlgame;
  */
 public class DrawThread extends Thread {
 
+    /**
+     * ゲームパネルクラス
+     */
     GamePanel GP;
 
+    /**
+     * コンストラクタ
+     * @param gameP ゲームクラス
+     */
     public DrawThread(GamePanel gameP) {
         GP = gameP;
     }
@@ -15,14 +22,10 @@ public class DrawThread extends Thread {
     @Override
     public void run() {
         while (true) {
+            long oldTime = System.currentTimeMillis();//描画前時間の取得
             int AT = GP.AT;
             int BT = GP.BT;
-            long oldTime = System.currentTimeMillis();//描画前時間の取得
             //処理速度を上げる為、位置情報が違うときのみアップデート
-            if (GP.back.getLocation().x != GP.stageX
-                    || GP.back.getLocation().y != GP.stageY) {
-                GP.back.setLocation(GP.stageX, GP.stageY);
-            }
             if (GP.Achar[AT].getLocation().x != GP.AX + GP.stageX
                     || GP.Achar[AT].getLocation().y != GP.AY) {
                 GP.Achar[AT].setLocation(GP.AX + GP.stageX, GP.AY);

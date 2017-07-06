@@ -106,7 +106,13 @@ public final class GamePanel {
      * 敵の向き
      */
     int BH;
+    /**
+     * カメラ移動用X背景座標
+     */
     int stageX=0;
+    /**
+     * カメラ移動用背景Y座標
+     */
     int stageY=0;
     /**
      * 徒歩カウント

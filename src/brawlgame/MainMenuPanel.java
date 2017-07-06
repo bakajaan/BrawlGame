@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
+ * メインメニュークラス
  *
  * @author bakaj
  */
@@ -45,6 +46,8 @@ public class MainMenuPanel {
 //</editor-fold>
 
     /**
+     * コンストラクタ
+     * パネルの作成、ラベルやリスナーの追加
      *
      * @param mainF
      */
@@ -95,14 +98,15 @@ public class MainMenuPanel {
         };
         mainF.addKeyListener(ka);
 
-        //一応再描画
+        //再描画
         menuP.repaint();
         mainF.setVisible(true);
     }
 
     /**
+     * ループされる描画メソッド
      *
-     * @return
+     * @return　遷移先パネル名
      */
     public String draw() {
         //選択項目によってラベルの色を変更

@@ -41,7 +41,7 @@ public final class BrawlGame {
 
     /**
      * コンストラクタ
-     * フレームの作成
+     * フレームの作成、初期パネルとしてメニュー画面に繊維
      */
     public BrawlGame() {
         //フレームの作成
@@ -62,7 +62,6 @@ public final class BrawlGame {
     public void mainRoop() {
         while (true) {
             long oldTime = System.currentTimeMillis();//描画前時間の取得
-            
             String kekka = "";
             //選択中パネルの描画
             switch (panelName) {
@@ -73,7 +72,6 @@ public final class BrawlGame {
                     kekka = Game.draw();
                     break;
             }
-
             //戻り値がパネル名だったときパネルの変更
             switch (kekka) {
                 case "menu":
@@ -87,7 +85,6 @@ public final class BrawlGame {
                 default:
                     break;
             }
-
             long newTime = System.currentTimeMillis();//描画後時間の取得
             //フレームレートを安定させるためスリープさせる
             long sleepTime = 16 - (newTime - oldTime);

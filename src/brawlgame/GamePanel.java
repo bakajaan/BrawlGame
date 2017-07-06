@@ -196,13 +196,13 @@ public final class GamePanel {
         gameP.setBorder(new BevelBorder(BevelBorder.RAISED));
         mainF.add(gameP);
 
-        //画像の読み込み
-        loadImage();
-
         //試験用ラベルの作成
         onlyDebug = new JLabel();
         onlyDebug.setBounds(0, 0, 1000, 16);
         gameP.add(onlyDebug);
+
+        //画像の読み込み
+        loadImage();
 
         //キーリスナーの追加
         kl = new KeyListener() {

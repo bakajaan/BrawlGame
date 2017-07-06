@@ -109,11 +109,11 @@ public final class GamePanel {
     /**
      * カメラ移動用X背景座標
      */
-    int stageX=0;
+    int stageX = 0;
     /**
      * カメラ移動用背景Y座標
      */
-    int stageY=0;
+    int stageY = 0;
     /**
      * 徒歩カウント
      * この値を利用して歩く動きを実現する
@@ -133,6 +133,11 @@ public final class GamePanel {
      * 先にサーバーに入った方がaで後がb
      */
     char mode;
+    /**
+     * 攻撃中チーム
+     * 初期はaチームから攻撃開始
+     */
+    char turnMode = 'a';
     /**
      * Wキー押下判定
      */
@@ -314,7 +319,8 @@ public final class GamePanel {
         camera();
 
         onlyDebug.setText("mode=" + mode + " AX=" + AX + " AY=" + AY
-                + " AT=" + AT + " JunpPlace=" + junpPlace);
+                + " AT=" + AT + "turnMode=" + turnMode
+                + " JunpPlace=" + junpPlace);
 
         //フラグがたっていたらmenuを戻す
         if (changePanel == true) {
@@ -346,7 +352,15 @@ public final class GamePanel {
         } else if (AX + setCharaSize > BX && AX < BX + setCharaSize && BT == 3) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             AT = 5;
+            if (mode == 'a') {
+                turnMode = 'b';
+            } else {
+                turnMode = 'a';
+            }
             return;
+        }
+        if (BT == 5) {
+            turnMode = mode;
         }
 
         //キーによって移動
@@ -406,17 +420,17 @@ public final class GamePanel {
             AT = 0;
         }
     }
-    
+
     /**
      * カメラ操作
      * 自分の座標に依存する。
      */
-    private void camera(){
-        if(AX+stageX>600){
-            stageX=-(AX-600);
+    private void camera() {
+        if (AX + stageX > 600) {
+            stageX = -(AX - 600);
         }
-        if(AX+stageX<200){
-            stageX=-(AX-200);
+        if (AX + stageX < 200) {
+            stageX = -(AX - 200);
         }
     }
 
@@ -459,9 +473,9 @@ public final class GamePanel {
             Bchar[i].hide();
             Bchar[i].setBounds(BX, BY, setCharaSize, setCharaSize);
         }
-        
+
         //背景用ラベルの作成
-        back=new JLabel(backI);
+        back = new JLabel(backI);
         back.setBounds(0, 0, 1200, 1652);
         gameP.add(back);
     }

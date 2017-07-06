@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 /**
+ * サーバー通信クラス
  *
  * @author bakaj
  */
@@ -49,7 +50,7 @@ public class ServerAccessThread extends Thread {
      * コンストラクタ
      * サーバーにアクセスしてルートを確立
      *
-     * @param gameP
+     * @param gameP　値取得用GamePanelクラス
      */
     public ServerAccessThread(GamePanel gameP) {
         GP = gameP;

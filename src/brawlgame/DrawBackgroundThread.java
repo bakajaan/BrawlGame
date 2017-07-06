@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package brawlgame;
 
 /**
@@ -10,9 +5,17 @@ package brawlgame;
  * @author bakaj
  */
 public class DrawBackgroundThread extends Thread {
-    
+
+    /**
+     * 値取得用ゲームクラス
+     */
     GamePanel GP;
 
+    /**
+     * コンストラクタ
+     *
+     * @param gameP ゲームクラス
+     */
     public DrawBackgroundThread(GamePanel gameP) {
         GP = gameP;
     }

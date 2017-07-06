@@ -1,6 +1,7 @@
 package brawlgame;
 
 /**
+ * キャラクター描画スレッドクラス
  *
  * @author bakaj
  */
@@ -13,6 +14,7 @@ public class DrawThread extends Thread {
 
     /**
      * コンストラクタ
+     *
      * @param gameP ゲームクラス
      */
     public DrawThread(GamePanel gameP) {

@@ -30,6 +30,10 @@ public final class GamePanel {
      * ゲーム表示用パネル
      */
     JPanel gameP;
+    /**
+     * 背景用ラベル
+     * 背景をアイコンとして格納
+     */
     JLabel back;
     /**
      * 自分キャラクター用ラベル
@@ -180,7 +184,7 @@ public final class GamePanel {
      * ゲームパネル
      * ゲームの内部処理をもつ
      *
-     * @param mainF
+     * @param mainF　パネル追加先フレーム
      */
     public GamePanel(JFrame mainF) {
         //フレームの所持
@@ -189,7 +193,7 @@ public final class GamePanel {
         //それぞれスレッドのインスタンス生成
         SThread = new ServerAccessThread(this);
         DThread = new DrawThread(this);
-        BThread=new DrawBackgroundThread(this);
+        BThread = new DrawBackgroundThread(this);
 
         //パネルの作成
         gameP = new JPanel();
@@ -336,7 +340,7 @@ public final class GamePanel {
     }
 
     /**
-     * キャラクターの処理
+     * キャラクター座標の処理
      * 座標を変更させる
      */
     private void myUpdate() {

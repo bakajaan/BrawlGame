@@ -111,16 +111,13 @@ public class ServerAccessThread extends Thread {
                         receiveT.indexOf("Y") + 1, receiveT.indexOf("y")));
                 long newTime = System.currentTimeMillis();//通信後時間の取得
                 //描画の半分の速さでループするようにスリープさせる
-                long sleepTime = 8 - (newTime - oldTime);
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    System.err.println(e);
+                }
                 if (newTime - oldTime > 16) {
                     System.out.println("ServerThreadが重くなっています");
-                }
-                if (sleepTime > 0) {
-                    try {
-                        Thread.sleep(sleepTime);
-                    } catch (InterruptedException e) {
-                        System.err.println(e);
-                    }
                 }
             }
         } catch (IOException | NumberFormatException e) {
@@ -134,6 +131,7 @@ public class ServerAccessThread extends Thread {
      */
     public void disconect() {
         out.println("C");
+        out.flush();
         this.stop();
     }
 }

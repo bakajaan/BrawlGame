@@ -175,6 +175,10 @@ public final class GamePanel {
      * 左上にテストで表示するラベル
      */
     JLabel onlyDebug;
+    /**
+     * マップ
+     */
+    private GameMap map;
 //</editor-fold>
 
     /**
@@ -470,6 +474,8 @@ public final class GamePanel {
         back = new JLabel(backI);
         back.setBounds(0, 0, 1200, 1652);
         gameP.add(back);
+        //マップ読み込み
+        //map = new GameMap("test.dat");
     }
 
     /**

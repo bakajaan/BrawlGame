@@ -60,10 +60,6 @@ public final class GamePanel {
      */
     ServerAccessThread SThread;
     /**
-     * 背景描画スレッド
-     */
-    DrawBackgroundThread BThread;
-    /**
      * 描画用のスレッド
      * キャラクターの座標更新、描画を行う
      */
@@ -194,7 +190,6 @@ public final class GamePanel {
         //それぞれスレッドのインスタンス生成
         SThread = new ServerAccessThread(this);
         DThread = new DrawThread(this);
-        BThread = new DrawBackgroundThread(this);
 
         //パネルの作成
         gameP = new JPanel();
@@ -313,7 +308,6 @@ public final class GamePanel {
         //それぞれのスレッドを開始
         SThread.start();
         DThread.start();
-        BThread.start();
 
         //一応再描画
         gameP.repaint();
@@ -486,7 +480,6 @@ public final class GamePanel {
             SThread.disconect();
         }
         DThread.stop();
-        BThread.stop();
         gameP.hide();
         SmainF.remove(gameP);
         SmainF.removeComponentListener(cl);

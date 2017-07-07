@@ -24,12 +24,20 @@ public class DrawBackgroundThread extends Thread {
     public void run() {
         while (true) {
             long oldTime = System.currentTimeMillis();//描画前時間の取得
-            int AT = GP.AT;
-            int BT = GP.BT;
-            //処理速度を上げる為、位置情報が違うときのみアップデート
-            if (GP.back.getLocation().x != GP.stageX
-                    || GP.back.getLocation().y != GP.stageY) {
-                GP.back.setLocation(GP.stageX, GP.stageY);
+            if (GP.turnMode == GP.mode) {
+                if (GP.AX > 600) {
+                    GP.gameP.setLocation(-GP.AX + 600, 0);
+                }
+                if (GP.AX < 200) {
+                    GP.gameP.setLocation(-GP.AX + 200, 0);
+                }
+            } else {
+                if (GP.BX > 600) {
+                    GP.gameP.setLocation(-GP.BX + 600, 0);
+                }
+                if (GP.BX < 200) {
+                    GP.gameP.setLocation(-GP.BX + 200, 0);
+                }
             }
             long newTime = System.currentTimeMillis();//描画後時間の取得
             //フレームレートを安定させるためスリープさせる

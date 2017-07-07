@@ -115,10 +115,6 @@ public final class GamePanel {
      */
     int BH;
     /**
-     * カメラ移動用X背景座標
-     */
-    int stageX = 0;
-    /**
      * カメラ移動用背景Y座標
      */
     int stageY = 0;
@@ -326,7 +322,6 @@ public final class GamePanel {
      */
     public String draw() {
         myUpdate();//自分のアップデート
-        camera();
 
         onlyDebug.setText("mode=" + mode + " AX=" + AX + " AY=" + AY
                 + " AT=" + AT + "turnMode=" + turnMode
@@ -428,28 +423,6 @@ public final class GamePanel {
             }
         } else {
             AT = 0;
-        }
-    }
-
-    /**
-     * カメラ操作
-     * 自分の座標に依存する。
-     */
-    private void camera() {
-        if (turnMode == mode) {
-            if (AX + stageX > 600) {
-                stageX = -(AX - 600);
-            }
-            if (AX + stageX < 200) {
-                stageX = -(AX - 200);
-            }
-        } else {
-            if (BX + stageX > 600) {
-                stageX = -(BX - 600);
-            }
-            if (BX + stageX < 200) {
-                stageX = -(BX - 200);
-            }
         }
     }
 

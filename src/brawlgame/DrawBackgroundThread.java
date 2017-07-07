@@ -26,17 +26,17 @@ public class DrawBackgroundThread extends Thread {
             long oldTime = System.currentTimeMillis();//描画前時間の取得
             if (GP.drawEnable == true) {
                 if (GP.turnMode == GP.mode) {
-                    if (GP.AX > 600) {
+                    if (GP.gameP.getLocation().x + GP.AX > 600) {
                         GP.gameP.setLocation(-GP.AX + 600, 0);
                     }
-                    if (GP.AX < 200) {
+                    if (GP.gameP.getLocation().x + GP.AX < 200) {
                         GP.gameP.setLocation(-GP.AX + 200, 0);
                     }
                 } else {
-                    if (GP.BX > 600) {
+                    if (GP.gameP.getLocation().x + GP.BX > 600) {
                         GP.gameP.setLocation(-GP.BX + 600, 0);
                     }
-                    if (GP.BX < 200) {
+                    if (GP.gameP.getLocation().x + GP.BX < 200) {
                         GP.gameP.setLocation(-GP.BX + 200, 0);
                     }
                 }

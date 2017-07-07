@@ -28,7 +28,7 @@ public class DrawThread extends Thread {
             if (GP.drawEnable == true) {
                 int AT = GP.AT;
                 int BT = GP.BT;
-                //背景の描画
+                //パネルの移動
                 if (GP.turnMode == GP.mode) {
                     if (GP.gameP.getLocation().x + GP.AX > 600) {
                         GP.gameP.setLocation(-GP.AX + 600, 0);
@@ -44,31 +44,92 @@ public class DrawThread extends Thread {
                         GP.gameP.setLocation(-GP.BX + 200, 0);
                     }
                 }
-                //処理速度を上げる為、位置情報が違うときのみアップデート
-                if (GP.Achar[AT].getLocation().x != GP.AX
-                        || GP.Achar[AT].getLocation().y != GP.AY) {
-                    GP.Achar[AT].setLocation(GP.AX, GP.AY);
+                //対象のキャラクター画像の位置を設定
+                switch (GP.AH) {
+                    case 1:
+                        if (GP.AcharR[AT].getLocation().x != GP.AX
+                                || GP.AcharR[AT].getLocation().y != GP.AY) {
+                            GP.AcharR[AT].setLocation(GP.AX, GP.AY);
+                        }
+                        break;
+                    case 2:
+                        if (GP.AcharL[AT].getLocation().x != GP.AX
+                                || GP.AcharL[AT].getLocation().y != GP.AY) {
+                            GP.AcharL[AT].setLocation(GP.AX, GP.AY);
+                        }
+                        break;
                 }
-                if (GP.Bchar[BT].getLocation().x != GP.BX
-                        || GP.Bchar[BT].getLocation().y != GP.BY) {
-                    GP.Bchar[BT].setLocation(GP.BX, GP.BY);
+                switch (GP.BH) {
+                    case 1:
+                        if (GP.BcharR[BT].getLocation().x != GP.BX
+                                || GP.BcharR[BT].getLocation().y != GP.BY) {
+                            GP.BcharR[BT].setLocation(GP.BX, GP.BY);
+                        }
+                        break;
+                    case 2:
+                        if (GP.BcharL[BT].getLocation().x != GP.BX
+                                || GP.BcharL[BT].getLocation().y != GP.BY) {
+                            GP.BcharL[BT].setLocation(GP.BX, GP.BY);
+                        }
+                        break;
                 }
                 //対象の画像が表示されていない時は他を隠して対象を表示
-                if (GP.Achar[AT].isVisible() == false) {
-                    for (int i = 0; i < 6; i++) {
-                        if (GP.Achar[i].isVisible()) {
-                            GP.Achar[i].hide();
+                System.out.println("a" + GP.AH + "b" + GP.BH);
+                switch (GP.AH) {
+                    case 1:
+                        if (GP.AcharR[AT].isVisible() == false) {
+                            for (int i = 0; i < 6; i++) {
+                                if (GP.AcharR[i].isVisible()) {
+                                    GP.AcharR[i].hide();
+                                }
+                                if (GP.AcharL[i].isVisible()) {
+                                    GP.AcharL[i].hide();
+                                }
+                            }
+                            GP.AcharR[AT].show();
                         }
-                    }
-                    GP.Achar[AT].show();
+                        break;
+                    case 2:
+                        if (GP.AcharL[AT].isVisible() == false) {
+                            for (int i = 0; i < 6; i++) {
+                                if (GP.AcharR[i].isVisible()) {
+                                    GP.AcharR[i].hide();
+                                }
+                                if (GP.AcharL[i].isVisible()) {
+                                    GP.AcharL[i].hide();
+                                }
+                            }
+                            GP.AcharL[AT].show();
+                        }
+                        break;
                 }
-                if (GP.Bchar[BT].isVisible() == false) {
-                    for (int i = 0; i < 6; i++) {
-                        if (GP.Bchar[i].isVisible()) {
-                            GP.Bchar[i].hide();
+                switch (GP.BH) {
+                    case 1:
+                        if (GP.BcharR[AT].isVisible() == false) {
+                            for (int i = 0; i < 6; i++) {
+                                if (GP.BcharR[i].isVisible()) {
+                                    GP.BcharR[i].hide();
+                                }
+                                if (GP.BcharL[i].isVisible()) {
+                                    GP.BcharL[i].hide();
+                                }
+                            }
+                            GP.BcharR[AT].show();
                         }
-                    }
-                    GP.Bchar[BT].show();
+                        break;
+                    case 2:
+                        if (GP.BcharL[AT].isVisible() == false) {
+                            for (int i = 0; i < 6; i++) {
+                                if (GP.BcharR[i].isVisible()) {
+                                    GP.BcharR[i].hide();
+                                }
+                                if (GP.BcharL[i].isVisible()) {
+                                    GP.BcharL[i].hide();
+                                }
+                            }
+                            GP.BcharL[AT].show();
+                        }
+                        break;
                 }
                 GP.drawEnable = false;
             }

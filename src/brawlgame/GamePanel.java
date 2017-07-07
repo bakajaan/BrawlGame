@@ -36,15 +36,25 @@ public final class GamePanel {
      */
     JLabel back;
     /**
-     * 自分キャラクター用ラベル
+     * 自分キャラクター右向き用ラベル
      * それぞれの動きのアイコンを格納
      */
-    JLabel Achar[];
+    JLabel AcharR[];
     /**
-     * 敵キャラクター用ラベル
+     * 敵キャラクター右向き用ラベル
      * それぞれの動きのアイコンを格納
      */
-    JLabel Bchar[];
+    JLabel BcharR[];
+    /**
+     * 自分キャラクター左向き用ラベル
+     * それぞれの動きのアイコンを格納
+     */
+    JLabel AcharL[];
+    /**
+     * 敵キャラクター左向き用ラベル
+     * それぞれの動きのアイコンを格納
+     */
+    JLabel BcharL[];
     /**
      * キー入力用キーリスナー
      * 終了処理でフレームから削除
@@ -431,10 +441,17 @@ public final class GamePanel {
      */
     public void loadImage() {
         //イメージの読み込み
-        ImageIcon charactar[] = new ImageIcon[6];
+        ImageIcon charactarR[] = new ImageIcon[6];
         for (int i = 0; i < 6; i++) {
-            charactar[i] = new ImageIcon(new ImageIcon(
+            charactarR[i] = new ImageIcon(new ImageIcon(
                     "./src/img/" + (i + 1) + ".png").
+                    getImage().getScaledInstance(setCharaSize, setCharaSize,
+                            Image.SCALE_DEFAULT));
+        }
+        ImageIcon charactarL[] = new ImageIcon[6];
+        for (int i = 0; i < 6; i++) {
+            charactarL[i] = new ImageIcon(new ImageIcon(
+                    "./src/img/" + (i + 1 + 6) + ".png").
                     getImage().getScaledInstance(setCharaSize, setCharaSize,
                             Image.SCALE_DEFAULT));
         }
@@ -445,25 +462,43 @@ public final class GamePanel {
                         Image.SCALE_DEFAULT));
 
         //自分用キャララベル作成
-        Achar = new JLabel[6];
+        AcharR = new JLabel[6];
         for (int i = 0; i < 6; i++) {
-            Achar[i] = new JLabel(charactar[i]);
+            AcharR[i] = new JLabel(charactarR[i]);
         }
         for (int i = 0; i < 6; i++) {
-            gameP.add(Achar[i]);
-            Achar[i].hide();
-            Achar[i].setBounds(AX, AY, setCharaSize, setCharaSize);
+            gameP.add(AcharR[i]);
+            AcharR[i].hide();
+            AcharR[i].setBounds(AX, AY, setCharaSize, setCharaSize);
+        }
+        AcharL = new JLabel[6];
+        for (int i = 0; i < 6; i++) {
+            AcharL[i] = new JLabel(charactarL[i]);
+        }
+        for (int i = 0; i < 6; i++) {
+            gameP.add(AcharL[i]);
+            AcharL[i].hide();
+            AcharL[i].setBounds(AX, AY, setCharaSize, setCharaSize);
         }
 
         //敵用キャララベル作成
-        Bchar = new JLabel[6];
+        BcharR = new JLabel[6];
         for (int i = 0; i < 6; i++) {
-            Bchar[i] = new JLabel(charactar[i]);
+            BcharR[i] = new JLabel(charactarR[i]);
         }
         for (int i = 0; i < 6; i++) {
-            gameP.add(Bchar[i]);
-            Bchar[i].hide();
-            Bchar[i].setBounds(BX, BY, setCharaSize, setCharaSize);
+            gameP.add(BcharR[i]);
+            BcharR[i].hide();
+            BcharR[i].setBounds(BX, BY, setCharaSize, setCharaSize);
+        }
+        BcharL = new JLabel[6];
+        for (int i = 0; i < 6; i++) {
+            BcharL[i] = new JLabel(charactarL[i]);
+        }
+        for (int i = 0; i < 6; i++) {
+            gameP.add(BcharL[i]);
+            BcharL[i].hide();
+            BcharL[i].setBounds(BX, BY, setCharaSize, setCharaSize);
         }
 
         //背景用ラベルの作成

@@ -42,14 +42,11 @@ public class DrawBackgroundThread extends Thread {
                 }
             }
             long newTime = System.currentTimeMillis();//描画後時間の取得
-            //フレームレートを安定させるためスリープさせる
-            long sleepTime = 8 - (newTime - oldTime);
-            if (sleepTime > 0) {
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (InterruptedException e) {
-                    System.err.println(e);
-                }
+            //フレームレートを安定させるため1msスリープさせる
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                System.err.println(e);
             }
             if (newTime - oldTime > 16) {
                 System.out.println("BackThreadが重くなっています");

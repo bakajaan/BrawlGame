@@ -28,6 +28,8 @@ public class DrawThread extends Thread {
             if (GP.drawEnable == true) {
                 int AT = GP.AT;
                 int BT = GP.BT;
+                int AH = GP.AH;
+                int BH = GP.BH;
                 //パネルの移動
                 if (GP.turnMode == GP.mode) {
                     if (GP.gameP.getLocation().x + GP.AX > 600) {
@@ -45,7 +47,7 @@ public class DrawThread extends Thread {
                     }
                 }
                 //対象のキャラクター画像の位置を設定
-                switch (GP.AH) {
+                switch (AH) {
                     case 1:
                         if (GP.AcharR[AT].getLocation().x != GP.AX
                                 || GP.AcharR[AT].getLocation().y != GP.AY) {
@@ -59,7 +61,7 @@ public class DrawThread extends Thread {
                         }
                         break;
                 }
-                switch (GP.BH) {
+                switch (BH) {
                     case 1:
                         if (GP.BcharR[BT].getLocation().x != GP.BX
                                 || GP.BcharR[BT].getLocation().y != GP.BY) {
@@ -74,8 +76,7 @@ public class DrawThread extends Thread {
                         break;
                 }
                 //対象の画像が表示されていない時は他を隠して対象を表示
-                System.out.println("a" + GP.AH + "b" + GP.BH);
-                switch (GP.AH) {
+                switch (AH) {
                     case 1:
                         if (GP.AcharR[AT].isVisible() == false) {
                             for (int i = 0; i < 6; i++) {
@@ -103,9 +104,9 @@ public class DrawThread extends Thread {
                         }
                         break;
                 }
-                switch (GP.BH) {
+                switch (BH) {
                     case 1:
-                        if (GP.BcharR[AT].isVisible() == false) {
+                        if (GP.BcharR[BT].isVisible() == false) {
                             for (int i = 0; i < 6; i++) {
                                 if (GP.BcharR[i].isVisible()) {
                                     GP.BcharR[i].hide();
@@ -114,11 +115,11 @@ public class DrawThread extends Thread {
                                     GP.BcharL[i].hide();
                                 }
                             }
-                            GP.BcharR[AT].show();
+                            GP.BcharR[BT].show();
                         }
                         break;
                     case 2:
-                        if (GP.BcharL[AT].isVisible() == false) {
+                        if (GP.BcharL[BT].isVisible() == false) {
                             for (int i = 0; i < 6; i++) {
                                 if (GP.BcharR[i].isVisible()) {
                                     GP.BcharR[i].hide();
@@ -127,7 +128,7 @@ public class DrawThread extends Thread {
                                     GP.BcharL[i].hide();
                                 }
                             }
-                            GP.BcharL[AT].show();
+                            GP.BcharL[BT].show();
                         }
                         break;
                 }

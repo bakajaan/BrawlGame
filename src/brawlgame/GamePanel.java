@@ -261,12 +261,10 @@ public final class GamePanel {
                     case "A":
                         Akey = false;
                         walkCount = 0;
-                        AH = 0;
                         break;
                     case "D":
                         Dkey = false;
                         walkCount = 0;
-                        AH = 0;
                         break;
                     case "F":
                         Attkey = false;

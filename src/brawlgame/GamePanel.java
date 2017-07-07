@@ -171,6 +171,11 @@ public final class GamePanel {
      */
     boolean changePanel = false;
     /**
+     * 描画許可のフラグ
+     * 座標の処理中はそれぞれの座標に一時的なずれが生じるので描画しない
+     */
+    boolean drawEnable = false;
+    /**
      * 左上にテストで表示するラベル
      */
     JLabel onlyDebug;
@@ -321,8 +326,9 @@ public final class GamePanel {
      * @return 画面遷移先
      */
     public String draw() {
+        drawEnable = false;
         myUpdate();//自分のアップデート
-
+        drawEnable = true;
         onlyDebug.setText("mode=" + mode + " AX=" + AX + " AY=" + AY
                 + " AT=" + AT + "turnMode=" + turnMode
                 + " JunpPlace=" + junpPlace);

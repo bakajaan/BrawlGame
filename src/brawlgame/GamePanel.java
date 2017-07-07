@@ -30,6 +30,10 @@ public final class GamePanel {
      * ゲーム表示用パネル
      */
     JPanel gameP;
+    /**
+     * 背景用ラベル
+     * 背景をアイコンとして格納
+     */
     JLabel back;
     /**
      * 自分キャラクター用ラベル
@@ -106,8 +110,10 @@ public final class GamePanel {
      * 敵の向き
      */
     int BH;
-    int stageX=0;
-    int stageY=0;
+    /**
+     * カメラ移動用背景Y座標
+     */
+    int stageY = 0;
     /**
      * 徒歩カウント
      * この値を利用して歩く動きを実現する
@@ -127,6 +133,11 @@ public final class GamePanel {
      * 先にサーバーに入った方がaで後がb
      */
     char mode;
+    /**
+     * 攻撃中チーム
+     * 初期はaチームから攻撃開始
+     */
+    char turnMode = 'a';
     /**
      * Wキー押下判定
      */
@@ -156,6 +167,11 @@ public final class GamePanel {
      */
     boolean changePanel = false;
     /**
+     * 描画許可のフラグ
+     * 座標の処理中はそれぞれの座標に一時的なずれが生じるので描画しない
+     */
+    boolean drawEnable = false;
+    /**
      * 左上にテストで表示するラベル
      */
     JLabel onlyDebug;
@@ -165,7 +181,7 @@ public final class GamePanel {
      * ゲームパネル
      * ゲームの内部処理をもつ
      *
-     * @param mainF
+     * @param mainF　パネル追加先フレーム
      */
     public GamePanel(JFrame mainF) {
         //フレームの所持
@@ -185,13 +201,13 @@ public final class GamePanel {
         gameP.setBorder(new BevelBorder(BevelBorder.RAISED));
         mainF.add(gameP);
 
-        //画像の読み込み
-        loadImage();
-
         //試験用ラベルの作成
         onlyDebug = new JLabel();
         onlyDebug.setBounds(0, 0, 1000, 16);
         gameP.add(onlyDebug);
+
+        //画像の読み込み
+        loadImage();
 
         //キーリスナーの追加
         kl = new KeyListener() {
@@ -304,11 +320,12 @@ public final class GamePanel {
      * @return 画面遷移先
      */
     public String draw() {
+        drawEnable = false;
         myUpdate();//自分のアップデート
-        camera();
-
+        drawEnable = true;
         onlyDebug.setText("mode=" + mode + " AX=" + AX + " AY=" + AY
-                + " AT=" + AT + " JunpPlace=" + junpPlace);
+                + " AT=" + AT + "turnMode=" + turnMode
+                + " JunpPlace=" + junpPlace);
 
         //フラグがたっていたらmenuを戻す
         if (changePanel == true) {
@@ -318,7 +335,7 @@ public final class GamePanel {
     }
 
     /**
-     * キャラクターの処理
+     * キャラクター座標の処理
      * 座標を変更させる
      */
     private void myUpdate() {
@@ -340,7 +357,15 @@ public final class GamePanel {
         } else if (AX + setCharaSize > BX && AX < BX + setCharaSize && BT == 3) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             AT = 5;
+            if (mode == 'a') {
+                turnMode = 'b';
+            } else {
+                turnMode = 'a';
+            }
             return;
+        }
+        if (BT == 5) {
+            turnMode = mode;
         }
 
         //キーによって移動
@@ -400,19 +425,6 @@ public final class GamePanel {
             AT = 0;
         }
     }
-    
-    /**
-     * カメラ操作
-     * 自分の座標に依存する。
-     */
-    private void camera(){
-        if(AX+stageX>600){
-            stageX=-(AX-600);
-        }
-        if(AX+stageX<200){
-            stageX=-(AX-200);
-        }
-    }
 
     /**
      * 画像を読み込む
@@ -453,9 +465,9 @@ public final class GamePanel {
             Bchar[i].hide();
             Bchar[i].setBounds(BX, BY, setCharaSize, setCharaSize);
         }
-        
+
         //背景用ラベルの作成
-        back=new JLabel(backI);
+        back = new JLabel(backI);
         back.setBounds(0, 0, 1200, 1652);
         gameP.add(back);
     }
@@ -467,6 +479,7 @@ public final class GamePanel {
         if (mode != 'N') {
             SThread.disconect();
         }
+        DThread.stop();
         gameP.hide();
         SmainF.remove(gameP);
         SmainF.removeComponentListener(cl);

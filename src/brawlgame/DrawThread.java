@@ -28,6 +28,22 @@ public class DrawThread extends Thread {
             if (GP.drawEnable == true) {
                 int AT = GP.AT;
                 int BT = GP.BT;
+                //背景の描画
+                if (GP.turnMode == GP.mode) {
+                    if (GP.gameP.getLocation().x + GP.AX > 600) {
+                        GP.gameP.setLocation(-GP.AX + 600, 0);
+                    }
+                    if (GP.gameP.getLocation().x + GP.AX < 200) {
+                        GP.gameP.setLocation(-GP.AX + 200, 0);
+                    }
+                } else {
+                    if (GP.gameP.getLocation().x + GP.BX > 600) {
+                        GP.gameP.setLocation(-GP.BX + 600, 0);
+                    }
+                    if (GP.gameP.getLocation().x + GP.BX < 200) {
+                        GP.gameP.setLocation(-GP.BX + 200, 0);
+                    }
+                }
                 //処理速度を上げる為、位置情報が違うときのみアップデート
                 if (GP.Achar[AT].getLocation().x != GP.AX
                         || GP.Achar[AT].getLocation().y != GP.AY) {

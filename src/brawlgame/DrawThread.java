@@ -70,6 +70,7 @@ public class DrawThread extends Thread {
                     }
                     GP.Bchar[BT].show();
                 }
+                GP.drawEnable = false;
             }
             long newTime = System.currentTimeMillis();//描画後時間の取得
             //フレームレートを安定させるため1msスリープさせる

@@ -124,9 +124,10 @@ public final class GamePanel {
      * カメラ移動用背景Y座標
      */
     int stageY = 0;
+    int standCount=0;
     /**
      * 徒歩カウント
-     * この値を利用して歩く動きを実現する
+     * この値を利用して通常時の動きを実現する
      */
     int walkCount = 0;
     /**
@@ -203,7 +204,7 @@ public final class GamePanel {
 
         //パネルの作成
         gameP = new JPanel();
-        gameP.setBounds(0, 0, 1024, 768);
+        gameP.setBounds(0, 0, 2400, 3304);
         gameP.setLayout(null);
         gameP.setVisible(true);
         gameP.show();
@@ -436,7 +437,15 @@ public final class GamePanel {
                     break;
             }
         } else {
-            AT = 4;
+            standCount++;
+            switch((standCount/5)%2){
+                case 0:
+                    AT=4;
+                    break;
+                case 1:
+                    AT=5;
+                    break;
+            }
         }
     }
 
@@ -462,7 +471,7 @@ public final class GamePanel {
         ImageIcon backI = new ImageIcon();
         backI = new ImageIcon(new ImageIcon(
                 "./src/img/paper.png").
-                getImage().getScaledInstance(1200, 1652,
+                getImage().getScaledInstance(2400, 3304,
                         Image.SCALE_DEFAULT));
 
         //自分用キャララベル作成
@@ -507,7 +516,7 @@ public final class GamePanel {
 
         //背景用ラベルの作成
         back = new JLabel(backI);
-        back.setBounds(0, 0, 1200, 1652);
+        back.setBounds(0, 0, 2400, 3304);
         gameP.add(back);
     }
 

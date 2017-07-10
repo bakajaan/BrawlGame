@@ -5,6 +5,7 @@
  */
 package brawlgame;
 
+import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,6 +26,10 @@ public class GameMap {
 
     public GameMap(String filename) {
         load(filename);
+    }
+
+    public void drow(Graphics g) {
+
     }
 
     private void load(String filename) {
@@ -50,5 +55,23 @@ public class GameMap {
             ex.printStackTrace();
         }
 
+    }
+
+    /**
+     * マップの高さを所得する
+     *
+     * @return マップの高さを返す
+     */
+    private int getHeight() {
+        return height;
+    }
+
+    /**
+     * マップの横幅を所得する
+     *
+     * @return マップの横幅を返す
+     */
+    private int getWidth() {
+        return width;
     }
 }

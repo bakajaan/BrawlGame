@@ -1,6 +1,7 @@
 package brawlgame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -476,6 +477,12 @@ public final class GamePanel {
         gameP.add(back);
         //マップ読み込み
         //map = new GameMap("test.dat");
+    }
+    
+    public void drowpaint(Graphics g){
+        int x = gameP.getX();
+        int y = gameP.getY();
+        map.drow(g);
     }
 
     /**

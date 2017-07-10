@@ -124,7 +124,7 @@ public final class GamePanel {
      * カメラ移動用背景Y座標
      */
     int stageY = 0;
-    int standCount=0;
+    int standCount = 0;
     /**
      * 徒歩カウント
      * この値を利用して通常時の動きを実現する
@@ -169,6 +169,10 @@ public final class GamePanel {
      * 攻撃キー押下判定
      */
     boolean Attkey = false;
+    /**
+     * ジャンプキー押下判定
+     */
+    boolean Junpkey = false;
     /**
      * 着地しているかの判定
      */
@@ -241,6 +245,9 @@ public final class GamePanel {
                     case "D":
                         Dkey = true;
                         break;
+                    case "G":
+                        Junpkey = true;
+                        break;
                     case "F":
                         Attkey = true;
                         break;
@@ -266,6 +273,9 @@ public final class GamePanel {
                     case "D":
                         Dkey = false;
                         walkCount = 0;
+                        break;
+                    case "G":
+                        Junpkey = false;
                         break;
                     case "F":
                         Attkey = false;
@@ -378,13 +388,10 @@ public final class GamePanel {
         }
 
         //キーによって移動
-        if (Wkey && !Skey && setti && !Attkey) {
+        if (Junpkey && setti && !Attkey) {
             junpPlace = AY;
             setti = false;
             gra -= 32;
-        }
-        if (Skey && !Wkey && !setti && !Attkey) {
-            gra += 4;
         }
         if (Akey && !Dkey && !Attkey) {
             AH = 2;
@@ -438,12 +445,12 @@ public final class GamePanel {
             }
         } else {
             standCount++;
-            switch((standCount/5)%2){
+            switch ((standCount / 5) % 2) {
                 case 0:
-                    AT=4;
+                    AT = 4;
                     break;
                 case 1:
-                    AT=5;
+                    AT = 5;
                     break;
             }
         }

@@ -124,6 +124,10 @@ public final class GamePanel {
      * カメラ移動用背景Y座標
      */
     int stageY = 0;
+    /**
+     * 直立カウント
+     * 立っている時のアニメーションに利用
+     */
     int standCount = 0;
     /**
      * 徒歩カウント

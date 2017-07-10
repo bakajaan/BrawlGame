@@ -32,18 +32,32 @@ public class DrawThread extends Thread {
                 int BH = GP.BH;
                 //パネルの移動
                 if (GP.turnMode == GP.mode) {
-                    if (GP.gameP.getLocation().x + GP.AX > 600) {
-                        GP.gameP.setLocation(-GP.AX + 600, 0);
-                    }
-                    if (GP.gameP.getLocation().x + GP.AX < 200) {
-                        GP.gameP.setLocation(-GP.AX + 200, 0);
+                    if (GP.AX > GP.BX) {
+                        if (GP.AX - GP.BX < 980) {
+                            GP.gameP.setLocation(-(GP.BX + (GP.AX - GP.BX) / 2) + 490, 0);
+                        } else {
+                            GP.gameP.setLocation(-GP.AX + 200, 0);
+                        }
+                    } else {
+                        if (GP.BX - GP.AX < 980) {
+                            GP.gameP.setLocation(-(GP.AX + (GP.BX - GP.AX) / 2) + 490, 0);
+                        } else {
+                            GP.gameP.setLocation(-GP.AX + 200, 0);
+                        }
                     }
                 } else {
-                    if (GP.gameP.getLocation().x + GP.BX > 600) {
-                        GP.gameP.setLocation(-GP.BX + 600, 0);
-                    }
-                    if (GP.gameP.getLocation().x + GP.BX < 200) {
-                        GP.gameP.setLocation(-GP.BX + 200, 0);
+                    if (GP.AX > GP.BX) {
+                        if (GP.AX - GP.BX < 980) {
+                            GP.gameP.setLocation(-(GP.BX + (GP.AX - GP.BX) / 2) + 490, 0);
+                        } else {
+                            GP.gameP.setLocation(-GP.BX + 200, 0);
+                        }
+                    } else {
+                        if (GP.BX - GP.AX < 980) {
+                            GP.gameP.setLocation(-(GP.AX + (GP.BX - GP.AX) / 2) + 490, 0);
+                        } else {
+                            GP.gameP.setLocation(-GP.BX + 200, 0);
+                        }
                     }
                 }
                 //対象のキャラクター画像を描画

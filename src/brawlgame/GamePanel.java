@@ -348,7 +348,7 @@ public final class GamePanel {
      */
     private void myUpdate() {
         //死亡中の処理
-        if (AT == 5 && deathCount < 60) {
+        if (AT == 8 && deathCount < 60) {
             //死亡モーション中は1秒間そのまま
             deathCount++;
             return;
@@ -364,7 +364,7 @@ public final class GamePanel {
             return;
         } else if (AX + setCharaSize > BX && AX < BX + setCharaSize && BT == 3) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
-            AT = 5;
+            AT = 8;
             if (mode == 'a') {
                 turnMode = 'b';
             } else {
@@ -372,7 +372,7 @@ public final class GamePanel {
             }
             return;
         }
-        if (BT == 5) {
+        if (BT == 8) {
             turnMode = mode;
         }
 
@@ -411,11 +411,11 @@ public final class GamePanel {
 
         //表示タイプの変更
         if (setti == false) {
-            AT = 4;
+            AT = 7;
         } else if (Attkey) {
-            AT = 3;
-        } else if (walkCount > 0 && AT >= 0 && AT <= 2) {
-            switch ((walkCount / 5) % 4) {
+            AT = 6;
+        } else if (walkCount > 0 && AT >= 0 && AT <= 5) {
+            switch ((walkCount / 5) % 6) {
                 case 0:
                     AT = 0;
                     break;
@@ -426,11 +426,17 @@ public final class GamePanel {
                     AT = 2;
                     break;
                 case 3:
+                    AT = 3;
+                    break;
+                case 4:
+                    AT = 2;
+                    break;
+                case 5:
                     AT = 1;
                     break;
             }
         } else {
-            AT = 0;
+            AT = 4;
         }
     }
 
@@ -439,17 +445,17 @@ public final class GamePanel {
      */
     public void loadImage() {
         //イメージの読み込み
-        ImageIcon charactarR[] = new ImageIcon[6];
-        for (int i = 0; i < 6; i++) {
+        ImageIcon charactarR[] = new ImageIcon[9];
+        for (int i = 0; i < 9; i++) {
             charactarR[i] = new ImageIcon(new ImageIcon(
                     "./src/img/" + (i + 1) + ".png").
                     getImage().getScaledInstance(setCharaSize, setCharaSize,
                             Image.SCALE_DEFAULT));
         }
-        ImageIcon charactarL[] = new ImageIcon[6];
-        for (int i = 0; i < 6; i++) {
+        ImageIcon charactarL[] = new ImageIcon[9];
+        for (int i = 0; i < 9; i++) {
             charactarL[i] = new ImageIcon(new ImageIcon(
-                    "./src/img/" + (i + 1 + 6) + ".png").
+                    "./src/img/" + (i + 1 + 9) + ".png").
                     getImage().getScaledInstance(setCharaSize, setCharaSize,
                             Image.SCALE_DEFAULT));
         }
@@ -460,40 +466,40 @@ public final class GamePanel {
                         Image.SCALE_DEFAULT));
 
         //自分用キャララベル作成
-        AcharR = new JLabel[6];
-        for (int i = 0; i < 6; i++) {
+        AcharR = new JLabel[9];
+        for (int i = 0; i < 9; i++) {
             AcharR[i] = new JLabel(charactarR[i]);
         }
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 9; i++) {
             gameP.add(AcharR[i]);
             AcharR[i].hide();
             AcharR[i].setBounds(AX, AY, setCharaSize, setCharaSize);
         }
-        AcharL = new JLabel[6];
-        for (int i = 0; i < 6; i++) {
+        AcharL = new JLabel[9];
+        for (int i = 0; i < 9; i++) {
             AcharL[i] = new JLabel(charactarL[i]);
         }
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 9; i++) {
             gameP.add(AcharL[i]);
             AcharL[i].hide();
             AcharL[i].setBounds(AX, AY, setCharaSize, setCharaSize);
         }
 
         //敵用キャララベル作成
-        BcharR = new JLabel[6];
-        for (int i = 0; i < 6; i++) {
+        BcharR = new JLabel[9];
+        for (int i = 0; i < 9; i++) {
             BcharR[i] = new JLabel(charactarR[i]);
         }
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 9; i++) {
             gameP.add(BcharR[i]);
             BcharR[i].hide();
             BcharR[i].setBounds(BX, BY, setCharaSize, setCharaSize);
         }
-        BcharL = new JLabel[6];
-        for (int i = 0; i < 6; i++) {
+        BcharL = new JLabel[9];
+        for (int i = 0; i < 9; i++) {
             BcharL[i] = new JLabel(charactarL[i]);
         }
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 9; i++) {
             gameP.add(BcharL[i]);
             BcharL[i].hide();
             BcharL[i].setBounds(BX, BY, setCharaSize, setCharaSize);

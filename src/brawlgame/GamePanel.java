@@ -137,7 +137,7 @@ public final class GamePanel {
     /**
      * キャラクターのサイズ
      */
-    int setCharaSize = 60;
+    int setCharaSize = 100;
     /**
      * 自分がどちらのチームかの判定
      * 先にサーバーに入った方がaで後がb
@@ -388,12 +388,12 @@ public final class GamePanel {
         if (Akey && !Dkey && !Attkey) {
             AH = 2;
             walkCount++;
-            AX -= 8;
+            AX -= 10;
         }
         if (Dkey && !Akey && !Attkey) {
             AH = 1;
             walkCount++;
-            AX += 8;
+            AX += 10;
         }
 
         //着地していない時は重力を座標に影響させる

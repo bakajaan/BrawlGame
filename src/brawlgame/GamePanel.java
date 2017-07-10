@@ -419,6 +419,12 @@ public final class GamePanel {
                 AY = junpPlace;
                 setti = true;
             }
+        } else if (!Akey && !Dkey) {
+            if (AX > BX) {
+                AH = 2;
+            } else {
+                AH = 1;
+            }
         }
 
         //表示タイプの変更

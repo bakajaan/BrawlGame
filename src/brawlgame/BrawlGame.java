@@ -46,7 +46,7 @@ public final class BrawlGame {
     public BrawlGame() {
         //フレームの作成
         mainF = new JFrame();
-        mainF.setBounds(0, 0, 1024, 768);
+        mainF.setBounds(0, 0, 980, 660);
         mainF.setDefaultCloseOperation(EXIT_ON_CLOSE);
         mainF.setLayout(null);
         mainF.setVisible(true);

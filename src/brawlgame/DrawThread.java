@@ -49,8 +49,8 @@ public class DrawThread extends Thread {
                     } else {
                         if (GP.BX - GP.AX < 980) {
                             int move = GP.gameP.getX() + (GP.AX + (GP.BX - GP.AX) / 2) - 490;
-                            if (move > 32) {
-                                move = 32;
+                            if (move < -32) {
+                                move = -32;
                             }
                             GP.gameP.setLocation(GP.gameP.getX() - move, 0);
                         } else {

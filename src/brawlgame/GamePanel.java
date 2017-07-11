@@ -140,6 +140,14 @@ public final class GamePanel {
      */
     int deathCount = 0;
     /**
+     * Aキー押下カウント
+     */
+    int AkeyCount = 0;
+    /**
+     * Dキー押下カウント
+     */
+    int DkeyCount = 0;
+    /**
      * キャラクターのサイズ
      */
     int setCharaSize = 100;
@@ -272,10 +280,12 @@ public final class GamePanel {
                         break;
                     case "A":
                         Akey = false;
+                        AkeyCount = 0;
                         walkCount = 0;
                         break;
                     case "D":
                         Dkey = false;
+                        DkeyCount = 0;
                         walkCount = 0;
                         break;
                     case "G":
@@ -398,14 +408,24 @@ public final class GamePanel {
             gra -= 32;
         }
         if (Akey && !Dkey && !Attkey) {
-            AH = 2;
-            walkCount++;
-            AX -= 10;
+            if (AkeyCount < 10) {
+                AkeyCount++;
+                AX -= 5;
+            } else {
+                AH = 2;
+                walkCount++;
+                AX -= 10;
+            }
         }
         if (Dkey && !Akey && !Attkey) {
-            AH = 1;
-            walkCount++;
-            AX += 10;
+            if (DkeyCount < 10) {
+                DkeyCount++;
+                AX += 5;
+            } else {
+                AH = 1;
+                walkCount++;
+                AX += 10;
+            }
         }
 
         //着地していない時は重力を座標に影響させる

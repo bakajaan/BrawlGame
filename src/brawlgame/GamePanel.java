@@ -147,6 +147,9 @@ public final class GamePanel {
      * Dキー押下カウント
      */
     int DkeyCount = 0;
+    /**
+     * 攻撃時間カウント
+     */
     int AttkeyCount = 0;
     /**
      * キャラクターのサイズ

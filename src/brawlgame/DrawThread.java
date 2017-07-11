@@ -28,47 +28,174 @@ public class DrawThread extends Thread {
             if (GP.drawEnable == true) {
                 int AT = GP.AT;
                 int BT = GP.BT;
-                //背景の描画
+                int AH = GP.AH;
+                int BH = GP.BH;
+                //パネルの移動
                 if (GP.turnMode == GP.mode) {
-                    if (GP.gameP.getLocation().x + GP.AX > 600) {
-                        GP.gameP.setLocation(-GP.AX + 600, 0);
-                    }
-                    if (GP.gameP.getLocation().x + GP.AX < 200) {
-                        GP.gameP.setLocation(-GP.AX + 200, 0);
+                    if (GP.AX > GP.BX) {
+                        if (GP.AX - GP.BX < 980) {
+                            int move = GP.gameP.getX() + (GP.BX + (GP.AX - GP.BX) / 2) - 490 + GP.setCharaSize / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                            GP.gameP.setLocation(GP.gameP.getX() - move, 0);
+                        } else {
+                            int move = GP.gameP.getX() + GP.AX - 200 + GP.setCharaSize / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                            GP.gameP.setLocation(GP.gameP.getX() - move, 0);
+                        }
+                    } else {
+                        if (GP.BX - GP.AX < 980) {
+                            int move = GP.gameP.getX() + (GP.AX + (GP.BX - GP.AX) / 2) - 490 + GP.setCharaSize / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                            GP.gameP.setLocation(GP.gameP.getX() - move, 0);
+                        } else {
+                            int move = GP.gameP.getX() + GP.AX - 200 + GP.setCharaSize / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                            GP.gameP.setLocation(GP.gameP.getX() - move, 0);
+                        }
                     }
                 } else {
-                    if (GP.gameP.getLocation().x + GP.BX > 600) {
-                        GP.gameP.setLocation(-GP.BX + 600, 0);
-                    }
-                    if (GP.gameP.getLocation().x + GP.BX < 200) {
-                        GP.gameP.setLocation(-GP.BX + 200, 0);
-                    }
-                }
-                //処理速度を上げる為、位置情報が違うときのみアップデート
-                if (GP.Achar[AT].getLocation().x != GP.AX
-                        || GP.Achar[AT].getLocation().y != GP.AY) {
-                    GP.Achar[AT].setLocation(GP.AX, GP.AY);
-                }
-                if (GP.Bchar[BT].getLocation().x != GP.BX
-                        || GP.Bchar[BT].getLocation().y != GP.BY) {
-                    GP.Bchar[BT].setLocation(GP.BX, GP.BY);
-                }
-                //対象の画像が表示されていない時は他を隠して対象を表示
-                if (GP.Achar[AT].isVisible() == false) {
-                    for (int i = 0; i < 6; i++) {
-                        if (GP.Achar[i].isVisible()) {
-                            GP.Achar[i].hide();
+                    if (GP.AX > GP.BX) {
+                        if (GP.AX - GP.BX < 980) {
+                            int move = GP.gameP.getX() + (GP.BX + (GP.AX - GP.BX) / 2) - 490 + GP.setCharaSize / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                            GP.gameP.setLocation(GP.gameP.getX() - move, 0);
+                        } else {
+                            int move = GP.gameP.getX() + GP.BX - 200 + GP.setCharaSize / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                            GP.gameP.setLocation(GP.gameP.getX() - move, 0);
+                        }
+                    } else {
+                        if (GP.BX - GP.AX < 980) {
+                            int move = GP.gameP.getX() + (GP.AX + (GP.BX - GP.AX) / 2) - 490 + GP.setCharaSize / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                            GP.gameP.setLocation(GP.gameP.getX() - move, 0);
+                        } else {
+                            int move = GP.gameP.getX() + GP.BX - 200 + GP.setCharaSize / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                            GP.gameP.setLocation(GP.gameP.getX() - move, 0);
                         }
                     }
-                    GP.Achar[AT].show();
                 }
-                if (GP.Bchar[BT].isVisible() == false) {
-                    for (int i = 0; i < 6; i++) {
-                        if (GP.Bchar[i].isVisible()) {
-                            GP.Bchar[i].hide();
+                //対象のキャラクター画像を描画
+                switch (AH) {
+                    case 1:
+                        if (GP.AcharR[AT].getLocation().x != GP.AX
+                                || GP.AcharR[AT].getLocation().y != GP.AY) {
+                            GP.AcharR[AT].setLocation(GP.AX, GP.AY);
                         }
-                    }
-                    GP.Bchar[BT].show();
+                        if (GP.AcharR[AT].isVisible() == false) {
+                            for (int i = 0; i < 9; i++) {
+                                if (GP.AcharR[i].isVisible()) {
+                                    GP.AcharR[i].hide();
+                                    break;
+                                }
+                                if (GP.AcharL[i].isVisible()) {
+                                    GP.AcharL[i].hide();
+                                    break;
+                                }
+                            }
+                            GP.AcharR[AT].show();
+                        }
+                        break;
+                    case 2:
+                        if (GP.AcharL[AT].getLocation().x != GP.AX
+                                || GP.AcharL[AT].getLocation().y != GP.AY) {
+                            GP.AcharL[AT].setLocation(GP.AX, GP.AY);
+                        }
+                        if (GP.AcharL[AT].isVisible() == false) {
+                            for (int i = 0; i < 9; i++) {
+                                if (GP.AcharR[i].isVisible()) {
+                                    GP.AcharR[i].hide();
+                                    break;
+                                }
+                                if (GP.AcharL[i].isVisible()) {
+                                    GP.AcharL[i].hide();
+                                    break;
+                                }
+                            }
+                            GP.AcharL[AT].show();
+                        }
+                        break;
+                }
+                switch (BH) {
+                    case 1:
+                        if (GP.BcharR[BT].getLocation().x != GP.BX
+                                || GP.BcharR[BT].getLocation().y != GP.BY) {
+                            GP.BcharR[BT].setLocation(GP.BX, GP.BY);
+                        }
+                        if (GP.BcharR[BT].isVisible() == false) {
+                            for (int i = 0; i < 9; i++) {
+                                if (GP.BcharR[i].isVisible()) {
+                                    GP.BcharR[i].hide();
+                                    break;
+                                }
+                                if (GP.BcharL[i].isVisible()) {
+                                    GP.BcharL[i].hide();
+                                    break;
+                                }
+                            }
+                            GP.BcharR[BT].show();
+                        }
+                        break;
+                    case 2:
+                        if (GP.BcharL[BT].getLocation().x != GP.BX
+                                || GP.BcharL[BT].getLocation().y != GP.BY) {
+                            GP.BcharL[BT].setLocation(GP.BX, GP.BY);
+                        }
+                        if (GP.BcharL[BT].isVisible() == false) {
+                            for (int i = 0; i < 9; i++) {
+                                if (GP.BcharR[i].isVisible()) {
+                                    GP.BcharR[i].hide();
+                                    break;
+                                }
+                                if (GP.BcharL[i].isVisible()) {
+                                    GP.BcharL[i].hide();
+                                    break;
+                                }
+                            }
+                            GP.BcharL[BT].show();
+                        }
+                        break;
                 }
                 GP.drawEnable = false;
             }

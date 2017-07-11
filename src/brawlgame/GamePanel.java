@@ -147,6 +147,7 @@ public final class GamePanel {
      * Dキー押下カウント
      */
     int DkeyCount = 0;
+    int AttkeyCount = 0;
     /**
      * キャラクターのサイズ
      */
@@ -293,6 +294,7 @@ public final class GamePanel {
                         break;
                     case "F":
                         Attkey = false;
+                        AttkeyCount = 0;
                         break;
                     case "Escape":
                         break;
@@ -450,7 +452,8 @@ public final class GamePanel {
         //表示タイプの変更
         if (setti == false) {
             AT = 7;
-        } else if (Attkey) {
+        } else if (Attkey && AttkeyCount < 30) {
+            AttkeyCount++;
             AT = 6;
         } else if (walkCount > 0 && AT >= 0 && AT <= 5) {
             switch ((walkCount / 5) % 6) {

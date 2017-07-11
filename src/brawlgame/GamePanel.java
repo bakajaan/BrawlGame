@@ -521,7 +521,7 @@ public final class GamePanel {
                 "./src/img/paper.png").
                 getImage().getScaledInstance(2400, 3304,
                         Image.SCALE_DEFAULT));
-
+        
         //自分用キャララベル作成
         AcharR = new JLabel[16];
         for (int i = 0; i < 16; i++) {

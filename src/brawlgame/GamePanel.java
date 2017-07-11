@@ -157,6 +157,10 @@ public final class GamePanel {
      */
     int setCharaSize = 100;
     /**
+     * キャラクターの画像の量
+     */
+    int charType = 17;
+    /**
      * 自分がどちらのチームかの判定
      * 先にサーバーに入った方がaで後がb
      */
@@ -236,7 +240,6 @@ public final class GamePanel {
                 super.paintComponent(g);
                 map.drow(g);
             }
-
         };
         gameP.setBounds(0, 0, 2400, 3304);
         gameP.setLayout(null);
@@ -247,7 +250,7 @@ public final class GamePanel {
         mainF.add(gameP);
         //試験用ラベルの作成
         onlyDebug = new JLabel();
-        onlyDebug.setBounds(0, 0, 1000, 16);
+        onlyDebug.setBounds(0, 0, 1000, charType);
         gameP.add(onlyDebug);
 
         //画像の読み込み
@@ -450,6 +453,16 @@ public final class GamePanel {
         if (setti == false) {
             gra += 2;
             AY += gra;
+            if(Attkey){
+                switch(AH){
+                    case 1:
+                        AX+=12;
+                        break;
+                    case 2:
+                        AX-=12;
+                        break;
+                }
+            }
             //自分の座標がジャンプ地点より低くなったら着地状態に変更
             if (AY > junpPlace) {
                 AT = 0;
@@ -466,8 +479,10 @@ public final class GamePanel {
         }
 
         //表示タイプの変更
-        if (setti == false) {
+        if (setti == false && !Attkey) {
             AT = 13;
+        } else if (setti == false && Attkey) {
+            AT = 16;
         } else if (Attkey && AttkeyCount < 15) {
             AttkeyCount++;
             AT = 6;
@@ -510,15 +525,15 @@ public final class GamePanel {
      */
     public void loadImage() {
         //イメージの読み込み
-        ImageIcon charactarR[] = new ImageIcon[16];
-        for (int i = 0; i < 16; i++) {
+        ImageIcon charactarR[] = new ImageIcon[charType];
+        for (int i = 0; i < charType; i++) {
             charactarR[i] = new ImageIcon(new ImageIcon(
                     "./src/img/" + "a" + (i + 1) + ".png").
                     getImage().getScaledInstance(setCharaSize, setCharaSize,
                             Image.SCALE_DEFAULT));
         }
-        ImageIcon charactarL[] = new ImageIcon[16];
-        for (int i = 0; i < 16; i++) {
+        ImageIcon charactarL[] = new ImageIcon[charType];
+        for (int i = 0; i < charType; i++) {
             charactarL[i] = new ImageIcon(new ImageIcon(
                     "./src/img/" + "b" + (i + 1) + ".png").
                     getImage().getScaledInstance(setCharaSize, setCharaSize,
@@ -529,42 +544,42 @@ public final class GamePanel {
                 "./src/img/paper.png").
                 getImage().getScaledInstance(2400, 3304,
                         Image.SCALE_DEFAULT));
-        
+
         //自分用キャララベル作成
-        AcharR = new JLabel[16];
-        for (int i = 0; i < 16; i++) {
+        AcharR = new JLabel[charType];
+        for (int i = 0; i < charType; i++) {
             AcharR[i] = new JLabel(charactarR[i]);
         }
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < charType; i++) {
             gameP.add(AcharR[i]);
             AcharR[i].hide();
             AcharR[i].setBounds(AX, AY, setCharaSize, setCharaSize);
         }
-        AcharL = new JLabel[16];
-        for (int i = 0; i < 16; i++) {
+        AcharL = new JLabel[charType];
+        for (int i = 0; i < charType; i++) {
             AcharL[i] = new JLabel(charactarL[i]);
         }
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < charType; i++) {
             gameP.add(AcharL[i]);
             AcharL[i].hide();
             AcharL[i].setBounds(AX, AY, setCharaSize, setCharaSize);
         }
 
         //敵用キャララベル作成
-        BcharR = new JLabel[16];
-        for (int i = 0; i < 16; i++) {
+        BcharR = new JLabel[charType];
+        for (int i = 0; i < charType; i++) {
             BcharR[i] = new JLabel(charactarR[i]);
         }
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < charType; i++) {
             gameP.add(BcharR[i]);
             BcharR[i].hide();
             BcharR[i].setBounds(BX, BY, setCharaSize, setCharaSize);
         }
-        BcharL = new JLabel[16];
-        for (int i = 0; i < 16; i++) {
+        BcharL = new JLabel[charType];
+        for (int i = 0; i < charType; i++) {
             BcharL[i] = new JLabel(charactarL[i]);
         }
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < charType; i++) {
             gameP.add(BcharL[i]);
             BcharL[i].hide();
             BcharL[i].setBounds(BX, BY, setCharaSize, setCharaSize);

@@ -125,7 +125,7 @@ public class DrawThread extends Thread {
                             GP.AcharR[AT].setLocation(GP.AX, GP.AY);
                         }
                         if (GP.AcharR[AT].isVisible() == false) {
-                            for (int i = 0; i < 16; i++) {
+                            for (int i = 0; i < GP.charType; i++) {
                                 if (GP.AcharR[i].isVisible()) {
                                     GP.AcharR[i].hide();
                                     break;
@@ -144,7 +144,7 @@ public class DrawThread extends Thread {
                             GP.AcharL[AT].setLocation(GP.AX, GP.AY);
                         }
                         if (GP.AcharL[AT].isVisible() == false) {
-                            for (int i = 0; i < 16; i++) {
+                            for (int i = 0; i < GP.charType; i++) {
                                 if (GP.AcharR[i].isVisible()) {
                                     GP.AcharR[i].hide();
                                     break;
@@ -165,7 +165,7 @@ public class DrawThread extends Thread {
                             GP.BcharR[BT].setLocation(GP.BX, GP.BY);
                         }
                         if (GP.BcharR[BT].isVisible() == false) {
-                            for (int i = 0; i < 16; i++) {
+                            for (int i = 0; i < GP.charType; i++) {
                                 if (GP.BcharR[i].isVisible()) {
                                     GP.BcharR[i].hide();
                                     break;
@@ -184,7 +184,7 @@ public class DrawThread extends Thread {
                             GP.BcharL[BT].setLocation(GP.BX, GP.BY);
                         }
                         if (GP.BcharL[BT].isVisible() == false) {
-                            for (int i = 0; i < 16; i++) {
+                            for (int i = 0; i < GP.charType; i++) {
                                 if (GP.BcharR[i].isVisible()) {
                                     GP.BcharR[i].hide();
                                     break;

@@ -96,7 +96,7 @@ public class GameMap {
                 }
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            System.err.println(ex);
         }
 
     }

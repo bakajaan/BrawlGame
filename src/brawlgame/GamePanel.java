@@ -227,8 +227,17 @@ public final class GamePanel {
         SThread = new ServerAccessThread(this);
         DThread = new DrawThread(this);
 
+        //マップ読み込み
+        map = new GameMap("map01.dat");
         //パネルの作成
-        gameP = new JPanel();
+        gameP = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                map.drow(g);
+            }
+
+        };
         gameP.setBounds(0, 0, 2400, 3304);
         gameP.setLayout(null);
         gameP.setVisible(true);
@@ -236,7 +245,6 @@ public final class GamePanel {
         gameP.setBackground(Color.WHITE);
         gameP.setBorder(new BevelBorder(BevelBorder.RAISED));
         mainF.add(gameP);
-
         //試験用ラベルの作成
         onlyDebug = new JLabel();
         onlyDebug.setBounds(0, 0, 1000, 16);
@@ -565,15 +573,7 @@ public final class GamePanel {
         //背景用ラベルの作成
         back = new JLabel(backI);
         back.setBounds(0, 0, 2400, 3304);
-        gameP.add(back);
-        //マップ読み込み
-        //map = new GameMap("test.dat");
-    }
-    
-    public void drowpaint(Graphics g){
-        int x = gameP.getX();
-        int y = gameP.getY();
-        map.drow(g,x,y);
+        //gameP.add(back);
     }
 
     /**

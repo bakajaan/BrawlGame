@@ -452,7 +452,7 @@ public final class GamePanel {
         //表示タイプの変更
         if (setti == false) {
             AT = 7;
-        } else if (Attkey && AttkeyCount < 30) {
+        } else if (Attkey && AttkeyCount < 15) {
             AttkeyCount++;
             AT = 6;
         } else if (walkCount > 0 && AT >= 0 && AT <= 5) {

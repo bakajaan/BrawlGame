@@ -34,7 +34,7 @@ public class DrawThread extends Thread {
                 if (GP.turnMode == GP.mode) {
                     if (GP.AX > GP.BX) {
                         if (GP.AX - GP.BX < 980) {
-                            int move = GP.gameP.getX() + (GP.BX + (GP.AX - GP.BX) / 2) - 490;
+                            int move = GP.gameP.getX() + (GP.BX + (GP.AX - GP.BX) / 2) - 490 + GP.setCharaSize / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -43,7 +43,7 @@ public class DrawThread extends Thread {
                             }
                             GP.gameP.setLocation(GP.gameP.getX() - move, 0);
                         } else {
-                            int move = GP.gameP.getX() + GP.AX - 200;
+                            int move = GP.gameP.getX() + GP.AX - 200 + GP.setCharaSize / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -54,7 +54,7 @@ public class DrawThread extends Thread {
                         }
                     } else {
                         if (GP.BX - GP.AX < 980) {
-                            int move = GP.gameP.getX() + (GP.AX + (GP.BX - GP.AX) / 2) - 490;
+                            int move = GP.gameP.getX() + (GP.AX + (GP.BX - GP.AX) / 2) - 490 + GP.setCharaSize / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -63,7 +63,7 @@ public class DrawThread extends Thread {
                             }
                             GP.gameP.setLocation(GP.gameP.getX() - move, 0);
                         } else {
-                            int move = GP.gameP.getX() + GP.AX - 200;
+                            int move = GP.gameP.getX() + GP.AX - 200 + GP.setCharaSize / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -76,7 +76,7 @@ public class DrawThread extends Thread {
                 } else {
                     if (GP.AX > GP.BX) {
                         if (GP.AX - GP.BX < 980) {
-                            int move = GP.gameP.getX() + (GP.BX + (GP.AX - GP.BX) / 2) - 490;
+                            int move = GP.gameP.getX() + (GP.BX + (GP.AX - GP.BX) / 2) - 490 + GP.setCharaSize / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -85,7 +85,7 @@ public class DrawThread extends Thread {
                             }
                             GP.gameP.setLocation(GP.gameP.getX() - move, 0);
                         } else {
-                            int move = GP.gameP.getX() + GP.BX - 200;
+                            int move = GP.gameP.getX() + GP.BX - 200 + GP.setCharaSize / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -96,7 +96,7 @@ public class DrawThread extends Thread {
                         }
                     } else {
                         if (GP.BX - GP.AX < 980) {
-                            int move = GP.gameP.getX() + (GP.AX + (GP.BX - GP.AX) / 2) - 490;
+                            int move = GP.gameP.getX() + (GP.AX + (GP.BX - GP.AX) / 2) - 490 + GP.setCharaSize / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -105,7 +105,7 @@ public class DrawThread extends Thread {
                             }
                             GP.gameP.setLocation(GP.gameP.getX() - move, 0);
                         } else {
-                            int move = GP.gameP.getX() + GP.BX - 200;
+                            int move = GP.gameP.getX() + GP.BX - 200 + GP.setCharaSize / 2;
                             if (move > 32) {
                                 move = 32;
                             }

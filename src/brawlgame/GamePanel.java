@@ -383,7 +383,7 @@ public final class GamePanel {
      */
     private void myUpdate() {
         //死亡中の処理
-        if (AT == 8 && deathCount < 60) {
+        if (AT == 14 && deathCount < 60) {
             //死亡モーション中は1秒間そのまま
             deathCount++;
             return;
@@ -397,9 +397,9 @@ public final class GamePanel {
                 AX = 200;
             }
             return;
-        } else if (AX + setCharaSize > BX && AX < BX + setCharaSize && BT == 3) {
+        } else if (AX + setCharaSize > BX && AX < BX + setCharaSize && (BT == 6 || BT == 9 || BT == 12)) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
-            AT = 8;
+            AT = 14;
             if (mode == 'a') {
                 turnMode = 'b';
             } else {
@@ -407,7 +407,7 @@ public final class GamePanel {
             }
             return;
         }
-        if (BT == 8) {
+        if (BT == 14) {
             turnMode = mode;
         }
 
@@ -459,7 +459,7 @@ public final class GamePanel {
 
         //表示タイプの変更
         if (setti == false) {
-            AT = 7;
+            AT = 13;
         } else if (Attkey && AttkeyCount < 15) {
             AttkeyCount++;
             AT = 6;
@@ -502,17 +502,17 @@ public final class GamePanel {
      */
     public void loadImage() {
         //イメージの読み込み
-        ImageIcon charactarR[] = new ImageIcon[9];
-        for (int i = 0; i < 9; i++) {
+        ImageIcon charactarR[] = new ImageIcon[16];
+        for (int i = 0; i < 16; i++) {
             charactarR[i] = new ImageIcon(new ImageIcon(
-                    "./src/img/" + (i + 1) + ".png").
+                    "./src/img/" + "a" + (i + 1) + ".png").
                     getImage().getScaledInstance(setCharaSize, setCharaSize,
                             Image.SCALE_DEFAULT));
         }
-        ImageIcon charactarL[] = new ImageIcon[9];
-        for (int i = 0; i < 9; i++) {
+        ImageIcon charactarL[] = new ImageIcon[16];
+        for (int i = 0; i < 16; i++) {
             charactarL[i] = new ImageIcon(new ImageIcon(
-                    "./src/img/" + (i + 1 + 9) + ".png").
+                    "./src/img/" + "b" + (i + 1) + ".png").
                     getImage().getScaledInstance(setCharaSize, setCharaSize,
                             Image.SCALE_DEFAULT));
         }
@@ -521,42 +521,42 @@ public final class GamePanel {
                 "./src/img/paper.png").
                 getImage().getScaledInstance(2400, 3304,
                         Image.SCALE_DEFAULT));
-
+        
         //自分用キャララベル作成
-        AcharR = new JLabel[9];
-        for (int i = 0; i < 9; i++) {
+        AcharR = new JLabel[16];
+        for (int i = 0; i < 16; i++) {
             AcharR[i] = new JLabel(charactarR[i]);
         }
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 16; i++) {
             gameP.add(AcharR[i]);
             AcharR[i].hide();
             AcharR[i].setBounds(AX, AY, setCharaSize, setCharaSize);
         }
-        AcharL = new JLabel[9];
-        for (int i = 0; i < 9; i++) {
+        AcharL = new JLabel[16];
+        for (int i = 0; i < 16; i++) {
             AcharL[i] = new JLabel(charactarL[i]);
         }
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 16; i++) {
             gameP.add(AcharL[i]);
             AcharL[i].hide();
             AcharL[i].setBounds(AX, AY, setCharaSize, setCharaSize);
         }
 
         //敵用キャララベル作成
-        BcharR = new JLabel[9];
-        for (int i = 0; i < 9; i++) {
+        BcharR = new JLabel[16];
+        for (int i = 0; i < 16; i++) {
             BcharR[i] = new JLabel(charactarR[i]);
         }
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 16; i++) {
             gameP.add(BcharR[i]);
             BcharR[i].hide();
             BcharR[i].setBounds(BX, BY, setCharaSize, setCharaSize);
         }
-        BcharL = new JLabel[9];
-        for (int i = 0; i < 9; i++) {
+        BcharL = new JLabel[16];
+        for (int i = 0; i < 16; i++) {
             BcharL[i] = new JLabel(charactarL[i]);
         }
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 16; i++) {
             gameP.add(BcharL[i]);
             BcharL[i].hide();
             BcharL[i].setBounds(BX, BY, setCharaSize, setCharaSize);
@@ -569,11 +569,11 @@ public final class GamePanel {
         //マップ読み込み
         //map = new GameMap("test.dat");
     }
-    
-    public void drowpaint(Graphics g){
+
+    public void drowpaint(Graphics g) {
         int x = gameP.getX();
         int y = gameP.getY();
-        map.drow(g,x,y);
+        map.drow(g, x, y);
     }
 
     /**

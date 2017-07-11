@@ -482,7 +482,7 @@ public final class GamePanel {
     public void drowpaint(Graphics g){
         int x = gameP.getX();
         int y = gameP.getY();
-        map.drow(g);
+        map.drow(g,x,y);
     }
 
     /**

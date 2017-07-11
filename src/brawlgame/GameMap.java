@@ -28,8 +28,8 @@ public class GameMap {
         load(filename);
     }
 
-    public void drow(Graphics g) {
-
+    public void drow(Graphics g,int x,int y) {
+        
     }
 
     private void load(String filename) {

@@ -30,6 +30,7 @@ public class DrawThread extends Thread {
                 int BT = GP.BT;
                 int AH = GP.AH;
                 int BH = GP.BH;
+                GP.gameP.repaint();
                 //パネルの移動
                 if (GP.turnMode == GP.mode) {
                     if (GP.AX > GP.BX) {

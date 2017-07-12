@@ -387,12 +387,12 @@ public final class GamePanel {
         }
 
         //キーによって移動
-        if (Junpkey && setti && !Attkey) {
+        if (Junpkey && setti && !Attkey && !Skey) {
             junpPlace = AY;
             setti = false;
             gra -= 20;
         }
-        if (Akey && !Dkey && !Attkey) {
+        if (Akey && !Dkey && !Attkey && !Skey) {
             if (AkeyCount < 10) {
                 AkeyCount++;
                 AX -= 5;
@@ -402,7 +402,7 @@ public final class GamePanel {
                 AX -= 10;
             }
         }
-        if (Dkey && !Akey && !Attkey) {
+        if (Dkey && !Akey && !Attkey && !Skey) {
             if (DkeyCount < 10) {
                 DkeyCount++;
                 AX += 5;
@@ -447,6 +447,8 @@ public final class GamePanel {
             AT = 13;
         } else if (setti == false && Attkey) {
             AT = 16;
+        } else if (Skey) {
+            AT = 15;
         } else if (Attkey && AttkeyCount < 15) {
             AttkeyCount++;
             AT = 6;

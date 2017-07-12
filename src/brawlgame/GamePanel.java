@@ -445,6 +445,9 @@ public final class GamePanel {
                 AH = 1;
             }
         }
+        if (AX < 0) {
+            AX = 0;
+        }
 
         //表示タイプの変更
         if (setti == false && !Attkey) {

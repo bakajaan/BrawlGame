@@ -341,7 +341,7 @@ public final class GamePanel {
      */
     public String draw() {
         drawEnable = false;
-        myUpdate();//自分のアップデート
+        update();//自分のアップデート
         drawEnable = true;
         onlyDebug.setText("mode=" + mode + " AX=" + AX + " AY=" + AY
                 + " AT=" + AT + "turnMode=" + turnMode
@@ -358,7 +358,7 @@ public final class GamePanel {
      * キャラクター座標の処理
      * 座標を変更させる
      */
-    private void myUpdate() {
+    private void update() {
         //死亡中の処理
         if (AT == 14 && deathCount < 60) {
             //死亡モーション中は1秒間そのまま
@@ -501,7 +501,8 @@ public final class GamePanel {
      * 終了処理
      */
     @SuppressWarnings("deprecation")
-    private void end(JFrame mainF, KeyListener kl, ComponentListener cl, ServerAccessThread SThread, DrawThread DThread) {
+    private void end(JFrame mainF, KeyListener kl, ComponentListener cl,
+            ServerAccessThread SThread, DrawThread DThread) {
         if (mode != 'N') {
             SThread.disconect();
         }

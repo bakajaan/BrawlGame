@@ -127,6 +127,7 @@ public final class GamePanel {
      * キャラクターの画像の量
      */
     private int charType = 17;
+    private int sowdPosision = 0;
     /**
      * 自分がどちらのチームかの判定
      * 先にサーバーに入った方がaで後がb
@@ -191,8 +192,8 @@ public final class GamePanel {
 
         //マップ読み込み
         GameMap map = new GameMap("map01.dat");
-        GameChara chara=new GameChara(this);
-        
+        GameChara chara = new GameChara(this);
+
         //パネルの作成
         gameP = new JPanel() {
             private static final long serialVersionUID = 1L;
@@ -211,7 +212,7 @@ public final class GamePanel {
         gameP.setBackground(Color.WHITE);
         gameP.setBorder(new BevelBorder(BevelBorder.RAISED));
         mainF.add(gameP);
-        
+
         //画像の読み込み
         loadImage(gameP);
 
@@ -256,9 +257,15 @@ public final class GamePanel {
                 switch (e.getKeyText(e.getKeyCode())) {
                     case "W":
                         Wkey = true;
+                        if (sowdPosision < 2) {
+                            sowdPosision++;
+                        }
                         break;
                     case "S":
                         Skey = true;
+                        if (sowdPosision > 0) {
+                            sowdPosision--;
+                        }
                         break;
                     case "A":
                         Akey = true;
@@ -441,9 +448,19 @@ public final class GamePanel {
             AT = 16;
         } else if (Skey) {
             AT = 15;
-        } else if (Attkey && AttkeyCount < 15) {
+        } else if (Attkey && AttkeyCount < 20) {
             AttkeyCount++;
-            AT = 6;
+            switch (sowdPosision) {
+                case 0:
+                    AT = 6;
+                    break;
+                case 1:
+                    AT = 9;
+                    break;
+                case 2:
+                    AT = 12;
+                    break;
+            }
         } else if (walkCount > 0 && AT >= 0 && AT <= 5) {
             switch ((walkCount / 5) % 6) {
                 case 0:
@@ -467,12 +484,36 @@ public final class GamePanel {
             }
         } else {
             standCount++;
-            switch ((standCount / 5) % 2) {
+            switch (sowdPosision) {
                 case 0:
-                    AT = 4;
+                    switch ((standCount / 5) % 2) {
+                        case 0:
+                            AT = 4;
+                            break;
+                        case 1:
+                            AT = 5;
+                            break;
+                    }
                     break;
                 case 1:
-                    AT = 5;
+                    switch ((standCount / 5) % 2) {
+                        case 0:
+                            AT = 7;
+                            break;
+                        case 1:
+                            AT = 8;
+                            break;
+                    }
+                    break;
+                case 2:
+                    switch ((standCount / 5) % 2) {
+                        case 0:
+                            AT = 10;
+                            break;
+                        case 1:
+                            AT = 11;
+                            break;
+                    }
                     break;
             }
         }
@@ -480,11 +521,12 @@ public final class GamePanel {
 
     /**
      * 画像を読み込む
+     *
      * @param gameP
      */
     @SuppressWarnings("deprecation")
     public void loadImage(JPanel gameP) {
-        
+
     }
 
     /**

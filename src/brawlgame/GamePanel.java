@@ -195,6 +195,7 @@ public final class GamePanel {
 
         //マップ読み込み
         GameMap map = new GameMap("map01.dat");
+        GameChara chara=new GameChara(this);
         //パネルの作成
         gameP = new JPanel() {
             private static final long serialVersionUID = 1L;
@@ -203,6 +204,7 @@ public final class GamePanel {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 map.drow(g);
+                chara.drow(g);
             }
         };
         gameP.setBounds(0, 0, 2400, 3304);
@@ -488,64 +490,11 @@ public final class GamePanel {
 
     /**
      * 画像を読み込む
+     * @param gameP
      */
     @SuppressWarnings("deprecation")
     public void loadImage(JPanel gameP) {
-        //イメージの読み込み
-        ImageIcon charactarR[] = new ImageIcon[charType];
-        for (int i = 0; i < charType; i++) {
-            charactarR[i] = new ImageIcon(new ImageIcon(
-                    "./src/img/" + "a" + (i + 1) + ".png").
-                    getImage().getScaledInstance(charSize, charSize,
-                            Image.SCALE_DEFAULT));
-        }
-        ImageIcon charactarL[] = new ImageIcon[charType];
-        for (int i = 0; i < charType; i++) {
-            charactarL[i] = new ImageIcon(new ImageIcon(
-                    "./src/img/" + "b" + (i + 1) + ".png").
-                    getImage().getScaledInstance(charSize, charSize,
-                            Image.SCALE_DEFAULT));
-        }
-
-        //自分用キャララベル作成
-        AcharR = new JLabel[charType];
-        for (int i = 0; i < charType; i++) {
-            AcharR[i] = new JLabel(charactarR[i]);
-        }
-        for (int i = 0; i < charType; i++) {
-            gameP.add(AcharR[i]);
-            AcharR[i].hide();
-            AcharR[i].setBounds(AX, AY, charSize, charSize);
-        }
-        AcharL = new JLabel[charType];
-        for (int i = 0; i < charType; i++) {
-            AcharL[i] = new JLabel(charactarL[i]);
-        }
-        for (int i = 0; i < charType; i++) {
-            gameP.add(AcharL[i]);
-            AcharL[i].hide();
-            AcharL[i].setBounds(AX, AY, charSize, charSize);
-        }
-
-        //敵用キャララベル作成
-        BcharR = new JLabel[charType];
-        for (int i = 0; i < charType; i++) {
-            BcharR[i] = new JLabel(charactarR[i]);
-        }
-        for (int i = 0; i < charType; i++) {
-            gameP.add(BcharR[i]);
-            BcharR[i].hide();
-            BcharR[i].setBounds(BX, BY, charSize, charSize);
-        }
-        BcharL = new JLabel[charType];
-        for (int i = 0; i < charType; i++) {
-            BcharL[i] = new JLabel(charactarL[i]);
-        }
-        for (int i = 0; i < charType; i++) {
-            gameP.add(BcharL[i]);
-            BcharL[i].hide();
-            BcharL[i].setBounds(BX, BY, charSize, charSize);
-        }
+        
     }
 
     /**

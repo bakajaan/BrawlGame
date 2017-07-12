@@ -59,7 +59,6 @@ public class GameMap {
      * @param g グラフィック
      */
     public void drow(Graphics g) {
-
         g.drawImage(background, 0, 0, null);
         for (int i = 0; i < height / TILE_SIZE; i++) {
             for (int j = 0; j < width / TILE_SIZE; j++) {

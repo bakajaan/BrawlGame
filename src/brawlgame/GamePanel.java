@@ -311,6 +311,16 @@ public final class GamePanel {
                         break;
                     case "F":
                         Attkey = false;
+                        if (AttkeyCount < 20) {
+                            switch (AH) {
+                                case 1:
+                                    AX -= 30;
+                                    break;
+                                case 2:
+                                    AX += 30;
+                                    break;
+                            }
+                        }
                         AttkeyCount = 0;
                         break;
                     case "Escape":
@@ -456,7 +466,26 @@ public final class GamePanel {
             AT = 16;
         } else if (syagamiCount > 20) {
             AT = 15;
-        } else if (Attkey && AttkeyCount < 20) {
+        } else if (Attkey && AttkeyCount <= 20) {
+            if (AttkeyCount == 0) {
+                switch (AH) {
+                    case 1:
+                        AX += 30;
+                        break;
+                    case 2:
+                        AX -= 30;
+                        break;
+                }
+            } else if (AttkeyCount == 20) {
+                switch (AH) {
+                    case 1:
+                        AX -= 30;
+                        break;
+                    case 2:
+                        AX += 30;
+                        break;
+                }
+            }
             AttkeyCount++;
             switch (sowdPosision) {
                 case 0:

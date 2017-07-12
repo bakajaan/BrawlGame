@@ -425,6 +425,15 @@ public final class GamePanel {
         }
         if (Skey) {
             syagamiCount++;
+        } else if (AX + charSize > BX && AX < BX + charSize && Attkey && (BT == 6 || BT == 9 || BT == 12)) {
+            switch(AH){
+                case 1:
+                    AX-=30;
+                    break;
+                case 2:
+                    AX+=30;
+                    break;
+            }
         }
 
         //着地していない時は重力を座標に影響させる

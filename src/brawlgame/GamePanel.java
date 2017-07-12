@@ -174,10 +174,6 @@ public final class GamePanel {
      * 座標の処理中はそれぞれの座標に一時的なずれが生じるので描画しない
      */
     private boolean drawEnable = false;
-    /**
-     * 左上にテストで表示するラベル
-     */
-    private final JLabel onlyDebug;
 //</editor-fold>
 
     /**
@@ -196,6 +192,7 @@ public final class GamePanel {
         //マップ読み込み
         GameMap map = new GameMap("map01.dat");
         GameChara chara=new GameChara(this);
+        
         //パネルの作成
         gameP = new JPanel() {
             private static final long serialVersionUID = 1L;
@@ -214,11 +211,7 @@ public final class GamePanel {
         gameP.setBackground(Color.WHITE);
         gameP.setBorder(new BevelBorder(BevelBorder.RAISED));
         mainF.add(gameP);
-        //試験用ラベルの作成
-        onlyDebug = new JLabel();
-        onlyDebug.setBounds(0, 0, 1000, charType);
-        gameP.add(onlyDebug);
-
+        
         //画像の読み込み
         loadImage(gameP);
 
@@ -343,9 +336,6 @@ public final class GamePanel {
         drawEnable = false;
         update();//自分のアップデート
         drawEnable = true;
-        onlyDebug.setText("mode=" + mode + " AX=" + AX + " AY=" + AY
-                + " AT=" + AT + "turnMode=" + turnMode
-                + " JunpPlace=" + junpPlace);
 
         //フラグがたっていたらmenuを戻す
         if (changePanel == true) {

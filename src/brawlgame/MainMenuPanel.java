@@ -18,31 +18,31 @@ public class MainMenuPanel {
     /**
      * メインフレーム
      */
-    private final JFrame SmainF;
+    JFrame SmainF;
     /**
      * メニュー用パネル
      */
-    private final JPanel menuP;
+    JPanel menuP;
     /**
      * スタートラベル
      */
-    private final JLabel start;
+    JLabel start;
     /**
      * 終了ラベル
      */
-    private final JLabel end;
+    JLabel end;
     /**
      * 選択項目
      */
-    private int selectMenu = 0;
+    int selectMenu = 0;
     /**
      * パネルを変更するかどうか
      */
-    private boolean changePanel = false;
+    boolean changePanel = false;
     /**
      * リスナー用キーアダプター
      */
-    private final KeyAdapter ka;
+    KeyAdapter ka;
 //</editor-fold>
 
     /**
@@ -51,7 +51,6 @@ public class MainMenuPanel {
      *
      * @param mainF
      */
-    @SuppressWarnings("deprecation")
     public MainMenuPanel(JFrame mainF) {
         //フレームの所持
         SmainF = mainF;
@@ -78,7 +77,7 @@ public class MainMenuPanel {
         ka = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                switch (KeyEvent.getKeyText(e.getKeyCode())) {
+                switch (e.getKeyText(e.getKeyCode())) {
                     case "上":
                         selectMenu = 0;
                         break;
@@ -131,7 +130,6 @@ public class MainMenuPanel {
     /**
      * 終了処理
      */
-    @SuppressWarnings("deprecation")
     private void end() {
         menuP.hide();
         SmainF.remove(menuP);

@@ -14,19 +14,19 @@ public final class BrawlGame {
     /**
      * 現在のパネルの名前
      */
-    private String panelName;
+    String panelName;
     /**
      * メインフレーム
      */
-    private final JFrame mainF;
+    JFrame mainF;
     /**
      * メニュークラス
      */
-    private MainMenuPanel Menu;
+    MainMenuPanel Menu;
     /**
      * ゲームクラス
      */
-    private GamePanel Game;
+    GamePanel Game;
 //</editor-fold>
 
     /**
@@ -106,7 +106,7 @@ public final class BrawlGame {
      *
      * @param panel　変更先パネル名
      */
-    private void panelChange(String panel) {
+    public void panelChange(String panel) {
         //パネルのインスタンスを生成
         switch (panel) {
             case "menu":

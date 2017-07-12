@@ -119,6 +119,7 @@ public final class GamePanel {
      * 攻撃時間カウント
      */
     private int AttkeyCount = 0;
+    private int syagamiCount = 0;
     /**
      * キャラクターのサイズ
      */
@@ -293,6 +294,7 @@ public final class GamePanel {
                         break;
                     case "S":
                         Skey = false;
+                        syagamiCount = 0;
                         break;
                     case "A":
                         Akey = false;
@@ -411,6 +413,9 @@ public final class GamePanel {
                 AX += 10;
             }
         }
+        if (Skey) {
+            syagamiCount++;
+        }
 
         //着地していない時は重力を座標に影響させる
         if (setti == false) {
@@ -446,7 +451,7 @@ public final class GamePanel {
             AT = 13;
         } else if (setti == false && Attkey) {
             AT = 16;
-        } else if (Skey) {
+        } else if (syagamiCount > 20) {
             AT = 15;
         } else if (Attkey && AttkeyCount < 20) {
             AttkeyCount++;

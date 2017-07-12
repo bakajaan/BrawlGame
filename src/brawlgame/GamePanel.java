@@ -383,7 +383,7 @@ public final class GamePanel {
                 AX = 200;
             }
             return;
-        } else if (AX + charSize > BX && AX < BX + charSize && (BT == 6 || BT == 9 || BT == 12)) {
+        } else if (AY + charSize > BY && AY < BY + charSize && AX + charSize > BX && AX < BX + charSize && (BT == 6 || BT == 9 || BT == 12)) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             AT = 14;
             if (mode == 'a') {
@@ -425,13 +425,13 @@ public final class GamePanel {
         }
         if (Skey) {
             syagamiCount++;
-        } else if (AX + charSize > BX && AX < BX + charSize && Attkey && (BT == 6 || BT == 9 || BT == 12)) {
-            switch(AH){
+        } else if (AY + charSize > BY && AY < BY + charSize && AX + charSize > BX && AX < BX + charSize && Attkey && (BT == 6 || BT == 9 || BT == 12)) {
+            switch (AH) {
                 case 1:
-                    AX-=30;
+                    AX -= 30;
                     break;
                 case 2:
-                    AX+=30;
+                    AX += 30;
                     break;
             }
         }

@@ -390,7 +390,7 @@ public final class GamePanel {
         if (Junpkey && setti && !Attkey) {
             junpPlace = AY;
             setti = false;
-            gra -= 32;
+            gra -= 20;
         }
         if (Akey && !Dkey && !Attkey) {
             if (AkeyCount < 10) {
@@ -415,7 +415,7 @@ public final class GamePanel {
 
         //着地していない時は重力を座標に影響させる
         if (setti == false) {
-            gra += 2;
+            gra += 1;
             AY += gra;
             if (Attkey) {
                 switch (AH) {

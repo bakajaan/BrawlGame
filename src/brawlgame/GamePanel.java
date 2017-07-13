@@ -358,7 +358,7 @@ public final class GamePanel {
      * 座標を変更させる
      */
     private void update() {
-        //死亡中の処理
+        //死亡処理
         if (AT == 14 && deathCount < 60) {
             //死亡モーション中は1秒間そのまま
             deathCount++;
@@ -389,7 +389,7 @@ public final class GamePanel {
             turnMode = mode;
         }
 
-        //キーによって移動
+        //キーによる移動
         if (Junpkey && setti && !Attkey && !Skey) {
             junpPlace = AY;
             setti = false;
@@ -417,7 +417,10 @@ public final class GamePanel {
         }
         if (Skey) {
             syagamiCount++;
-        } else if (AY + charSize > BY && AY < BY + charSize
+        }
+
+        //敵との反発移動
+        if (AY + charSize > BY && AY < BY + charSize
                 && AX + charSize > BX && AX < BX + charSize && Attkey
                 && (BT == 6 || BT == 9 || BT == 12)) {
             switch (AH) {
@@ -430,7 +433,7 @@ public final class GamePanel {
             }
         }
 
-        //着地していない時は重力を座標に影響させる
+        //重力による移動
         if (setti == false) {
             gra += 1;
             AY += gra;
@@ -451,18 +454,23 @@ public final class GamePanel {
                 AY = junpPlace;
                 setti = true;
             }
-        } else if (!Akey && !Dkey) {
+        }
+
+        //座標の最終チェック
+        if (AX < 0) {
+            AX = 0;
+        }
+
+        //向いてる方向の変更
+        if (setti && !Akey && !Dkey) {
             if (AX > BX) {
                 AH = 2;
             } else {
                 AH = 1;
             }
         }
-        if (AX < 0) {
-            AX = 0;
-        }
 
-        //表示タイプの変更
+        //表示タイプ変更
         if (setti == false && !Attkey) {
             AT = 13;
         } else if (setti == false && Attkey) {

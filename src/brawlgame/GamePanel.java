@@ -311,16 +311,6 @@ public final class GamePanel {
                         break;
                     case "F":
                         Attkey = false;
-                        if (AttkeyCount < 20) {
-                            switch (AH) {
-                                case 1:
-                                    AX -= 30;
-                                    break;
-                                case 2:
-                                    AX += 30;
-                                    break;
-                            }
-                        }
                         AttkeyCount = 0;
                         break;
                     case "Escape":
@@ -383,7 +373,9 @@ public final class GamePanel {
                 AX = 200;
             }
             return;
-        } else if (AY + charSize > BY && AY < BY + charSize && AX + charSize > BX && AX < BX + charSize && (BT == 6 || BT == 9 || BT == 12)) {
+        } else if (AY + charSize > BY && AY < BY + charSize
+                && AX + charSize > BX && AX < BX + charSize
+                && (BT == 6 || BT == 9 || BT == 12)) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             AT = 14;
             if (mode == 'a') {
@@ -425,7 +417,9 @@ public final class GamePanel {
         }
         if (Skey) {
             syagamiCount++;
-        } else if (AY + charSize > BY && AY < BY + charSize && AX + charSize > BX && AX < BX + charSize && Attkey && (BT == 6 || BT == 9 || BT == 12)) {
+        } else if (AY + charSize > BY && AY < BY + charSize
+                && AX + charSize > BX && AX < BX + charSize && Attkey
+                && (BT == 6 || BT == 9 || BT == 12)) {
             switch (AH) {
                 case 1:
                     AX -= 30;
@@ -476,25 +470,6 @@ public final class GamePanel {
         } else if (syagamiCount > 20) {
             AT = 15;
         } else if (Attkey && AttkeyCount <= 20) {
-            if (AttkeyCount == 0) {
-                switch (AH) {
-                    case 1:
-                        AX += 30;
-                        break;
-                    case 2:
-                        AX -= 30;
-                        break;
-                }
-            } else if (AttkeyCount == 20) {
-                switch (AH) {
-                    case 1:
-                        AX -= 30;
-                        break;
-                    case 2:
-                        AX += 30;
-                        break;
-                }
-            }
             AttkeyCount++;
             switch (sowdPosision) {
                 case 0:

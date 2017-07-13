@@ -7,6 +7,7 @@ package brawlgame;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -18,6 +19,8 @@ import javax.swing.ImageIcon;
  * @author C0116309
  */
 public class GameMap {
+
+    GamePanel GP;
 
     public static final int TILE_SIZE = 32;
 
@@ -48,6 +51,16 @@ public class GameMap {
                 getImage().getScaledInstance(TILE_SIZE, TILE_SIZE,
                         Image.SCALE_DEFAULT));
         blockImage = icon.getImage();
+    }
+
+    /**
+     * ピクセル単位をタイル単位に変更する
+     *
+     * @param pixels ピクセル単位
+     * @return タイル単位
+     */
+    public static int pixelsToTiles(double pixels) {
+        return (int) Math.floor(pixels / TILE_SIZE);
     }
 
     public static int tilePixel(int tiles) {
@@ -95,5 +108,59 @@ public class GameMap {
             System.err.println(ex);
         }
 
+    }
+
+    public Point getTileCollision(double newX, double newY) {
+        // 小数点以下切り上げ
+        // 浮動小数点の関係で切り上げしないと衝突してないと判定される場合がある
+        newX = Math.ceil(newX);
+        newY = Math.ceil(newY);
+
+        double fromX = Math.min(GP.getAX(), newX);
+        double fromY = Math.min(GP.getAY(), newY);
+        double toX = Math.max(GP.getAX(), newX);
+        double toY = Math.max(GP.getAY(), newY);
+
+        int fromTileX = pixelsToTiles(fromX);
+        int fromTileY = pixelsToTiles(fromY);
+        int toTileX = pixelsToTiles(toX + GP.getCharSize() - 1);
+        int toTileY = pixelsToTiles(toY + GP.getCharSize() - 1);
+
+        // 衝突しているか調べる
+        for (int x = fromTileX; x <= toTileX; x++) {
+            for (int y = fromTileY; y <= toTileY; y++) {
+                // 画面外は衝突
+                if (x < 0 || x >= col) {
+                    return new Point(x, y);
+                }
+                if (y < 0 || y >= row) {
+                    return new Point(x, y);
+                }
+                // ブロックがあったら衝突
+                if (map[y][x] == 1) {
+                    return new Point(x, y);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * マップの高さを所得する
+     *
+     * @return マップの高さを返す
+     */
+    private int getHeight() {
+        return height;
+    }
+
+    /**
+     * マップの横幅を所得する
+     *
+     * @return マップの横幅を返す
+     */
+    private int getWidth() {
+        return width;
     }
 }

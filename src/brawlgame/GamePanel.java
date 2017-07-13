@@ -374,8 +374,22 @@ public final class GamePanel {
             }
             return;
         } else if (AY + charSize > BY && AY < BY + charSize
-                && AX + charSize > BX && AX < BX + charSize
-                && (BT == 6 || BT == 9 || BT == 12)) {
+                && AX + charSize / 2 > BX && AX < BX + charSize
+                && (BT == 6 || BT == 9 || BT == 12)
+                && BH == 1) {
+            //相手と重なっていて相手が攻撃モーション中の時死亡させる
+            AT = 14;
+            AttkeyCount = 0;
+            if (mode == 'a') {
+                turnMode = 'b';
+            } else {
+                turnMode = 'a';
+            }
+            return;
+        } else if (AY + charSize > BY && AY < BY + charSize
+                && AX + charSize > BX && AX < BX + charSize / 2
+                && (BT == 6 || BT == 9 || BT == 12)
+                && BH == 2) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             AT = 14;
             AttkeyCount = 0;

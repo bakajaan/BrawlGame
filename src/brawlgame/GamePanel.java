@@ -311,7 +311,7 @@ public final class GamePanel {
                         break;
                     case "F":
                         Attkey = false;
-                        AttkeyCount = 0;
+                        //AttkeyCount = 0;
                         break;
                     case "Escape":
                         break;
@@ -378,6 +378,7 @@ public final class GamePanel {
                 && (BT == 6 || BT == 9 || BT == 12)) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             AT = 14;
+            AttkeyCount = 0;
             if (mode == 'a') {
                 turnMode = 'b';
             } else {
@@ -417,6 +418,48 @@ public final class GamePanel {
         }
         if (Skey) {
             syagamiCount++;
+        }
+        if (Attkey && AttkeyCount < 20) {
+            AttkeyCount++;
+            if (AttkeyCount < 4 && setti) {
+                switch (AH) {
+                    case 1:
+                        AX += 8;
+                        break;
+                    case 2:
+                        AX -= 8;
+                        break;
+                }
+            }
+            if (AttkeyCount > 17) {
+                switch (AH) {
+                    case 1:
+                        AX -= 8;
+                        break;
+                    case 2:
+                        AX += 8;
+                        break;
+                }
+            }
+        }
+        if (!Attkey && AttkeyCount != 0 && AttkeyCount != 20) {
+            AttkeyCount--;
+            if (AttkeyCount >= 3) {
+                AttkeyCount = 2;
+            }
+            if (AttkeyCount < 3) {
+                switch (AH) {
+                    case 1:
+                        AX -= 8;
+                        break;
+                    case 2:
+                        AX += 8;
+                        break;
+                }
+            }
+        }
+        if (!Attkey && AttkeyCount == 20) {
+            AttkeyCount = 0;
         }
 
         //敵との反発移動
@@ -477,8 +520,7 @@ public final class GamePanel {
             AT = 16;
         } else if (syagamiCount > 20) {
             AT = 15;
-        } else if (Attkey && AttkeyCount <= 20) {
-            AttkeyCount++;
+        } else if (Attkey && AttkeyCount < 20) {
             switch (sowdPosision) {
                 case 0:
                     AT = 6;
@@ -490,7 +532,7 @@ public final class GamePanel {
                     AT = 12;
                     break;
             }
-        } else if (walkCount > 0 && AT >= 0 && AT <= 5) {
+        } else if (walkCount > 0) {
             switch ((walkCount / 5) % 6) {
                 case 0:
                     AT = 0;

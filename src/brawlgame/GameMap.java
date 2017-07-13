@@ -11,9 +11,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 /**
@@ -27,8 +24,8 @@ public class GameMap {
     private int[][] map;
     private int row;
     private int col;
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
 
     private Image blockImage;
     private Image background;
@@ -62,7 +59,6 @@ public class GameMap {
      * @param g グラフィック
      */
     public void drow(Graphics g) {
-
         g.drawImage(background, 0, 0, null);
         for (int i = 0; i < height / TILE_SIZE; i++) {
             for (int j = 0; j < width / TILE_SIZE; j++) {
@@ -96,26 +92,8 @@ public class GameMap {
                 }
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            System.err.println(ex);
         }
 
-    }
-
-    /**
-     * マップの高さを所得する
-     *
-     * @return マップの高さを返す
-     */
-    private int getHeight() {
-        return height;
-    }
-
-    /**
-     * マップの横幅を所得する
-     *
-     * @return マップの横幅を返す
-     */
-    private int getWidth() {
-        return width;
     }
 }

@@ -20,30 +20,20 @@ public class ServerAccessThread extends Thread {
     /**
      * サーバー接続用ソケット
      */
-    Socket sock;
+    private Socket sock;
     /**
      * サーバー送信用
      */
-    PrintWriter out;
+    private PrintWriter out;
     /**
      * サーバー受信用
      */
-    BufferedReader in;
-    /**
-     * サーバーアドレス
-     */
-    //自宅Wi-Fi
-    //String server = "192.168.3.17";
-    //String server = "192.168.3.10";
-    //ポケットWi-Fi
-    //String server = "192.168.179.3";
-    //オフライン
-    String server = "localhost";
+    private BufferedReader in;
     /**
      * ゲームパネル
      * 座標を取得するのに利用
      */
-    GamePanel GP = null;
+    private GamePanel GP = null;
 //</editor-fold>
 
     /**
@@ -53,6 +43,16 @@ public class ServerAccessThread extends Thread {
      * @param gameP　値取得用GamePanelクラス
      */
     public ServerAccessThread(GamePanel gameP) {
+        /**
+         * サーバーアドレス
+         */
+        //自宅Wi-Fi
+        //String server = "192.168.3.17";
+        //String server = "192.168.3.10";
+        //ポケットWi-Fi
+        //String server = "192.168.179.3";
+        //オフライン
+        String server = "localhost";
         GP = gameP;
         //サーバーに接続
         try {
@@ -94,21 +94,21 @@ public class ServerAccessThread extends Thread {
             while (true) {
                 long oldTime = System.currentTimeMillis();//通信前時間の取得
                 String sendT = ""
-                        + "T" + GP.AT + "t"
-                        + "H" + GP.AH + "h"
-                        + "X" + GP.AX + "x"
-                        + "Y" + GP.AY + "y";
+                        + "T" + GP.getAT() + "t"
+                        + "H" + GP.getAH() + "h"
+                        + "X" + GP.getAX() + "x"
+                        + "Y" + GP.getAY() + "y";
                 out.println(sendT);
                 out.flush();
                 String receiveT = in.readLine();
-                GP.BT = Integer.parseInt(receiveT.substring(
-                        receiveT.indexOf("T") + 1, receiveT.indexOf("t")));
-                GP.BH = Integer.parseInt(receiveT.substring(
-                        receiveT.indexOf("H") + 1, receiveT.indexOf("h")));
-                GP.BX = Integer.parseInt(receiveT.substring(
-                        receiveT.indexOf("X") + 1, receiveT.indexOf("x")));
-                GP.BY = Integer.parseInt(receiveT.substring(
-                        receiveT.indexOf("Y") + 1, receiveT.indexOf("y")));
+                GP.setBT(Integer.parseInt(receiveT.substring(
+                        receiveT.indexOf("T") + 1, receiveT.indexOf("t"))));
+                GP.setBH(Integer.parseInt(receiveT.substring(
+                        receiveT.indexOf("H") + 1, receiveT.indexOf("h"))));
+                GP.setBX(Integer.parseInt(receiveT.substring(
+                        receiveT.indexOf("X") + 1, receiveT.indexOf("x"))));
+                GP.setBY(Integer.parseInt(receiveT.substring(
+                        receiveT.indexOf("Y") + 1, receiveT.indexOf("y"))));
                 long newTime = System.currentTimeMillis();//通信後時間の取得
                 //描画の半分の速さでループするようにスリープさせる
                 try {
@@ -129,6 +129,7 @@ public class ServerAccessThread extends Thread {
      * サーバー切断
      * サーバーにCとメッセージを送り切断を要求する
      */
+    @SuppressWarnings("deprecation")
     public void disconect() {
         out.println("C");
         out.flush();

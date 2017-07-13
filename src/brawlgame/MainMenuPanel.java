@@ -1,8 +1,8 @@
 package brawlgame;
 
 import java.awt.Color;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,33 +16,21 @@ public class MainMenuPanel {
 
     //<editor-fold defaultstate="collapsed" desc="メンバ">
     /**
-     * メインフレーム
-     */
-    JFrame SmainF;
-    /**
-     * メニュー用パネル
-     */
-    JPanel menuP;
-    /**
      * スタートラベル
      */
-    JLabel start;
+    private final JLabel start;
     /**
      * 終了ラベル
      */
-    JLabel end;
+    private final JLabel end;
     /**
      * 選択項目
      */
-    int selectMenu = 0;
+    private int selectMenu = 0;
     /**
      * パネルを変更するかどうか
      */
-    boolean changePanel = false;
-    /**
-     * リスナー用キーアダプター
-     */
-    KeyAdapter ka;
+    private boolean changePanel = false;
 //</editor-fold>
 
     /**
@@ -51,12 +39,11 @@ public class MainMenuPanel {
      *
      * @param mainF
      */
+    @SuppressWarnings("deprecation")
     public MainMenuPanel(JFrame mainF) {
-        //フレームの所持
-        SmainF = mainF;
 
         //パネルの作成
-        menuP = new JPanel();
+        JPanel menuP = new JPanel();
         menuP.setBounds(0, 0, 1024, 768);
         menuP.setLayout(null);
         mainF.add(menuP);
@@ -74,7 +61,7 @@ public class MainMenuPanel {
         menuP.add(end);
 
         //キーリスナーの追加
-        ka = new KeyAdapter() {
+        KeyListener ka = new KeyListener() {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyText(e.getKeyCode())) {
@@ -87,13 +74,21 @@ public class MainMenuPanel {
                     case "Enter":
                         switch (selectMenu) {
                             case 0:
-                                end();
+                                end(mainF, menuP, this);
                                 break;
                             case 1:
                                 System.exit(0);
                         }
                         break;
                 }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
             }
         };
         mainF.addKeyListener(ka);
@@ -130,10 +125,11 @@ public class MainMenuPanel {
     /**
      * 終了処理
      */
-    private void end() {
+    @SuppressWarnings("deprecation")
+    private void end(JFrame mainF, JPanel menuP, KeyListener kl) {
         menuP.hide();
-        SmainF.remove(menuP);
-        SmainF.removeKeyListener(ka);
+        mainF.remove(menuP);
+        mainF.removeKeyListener(kl);
         changePanel = true;
     }
 }

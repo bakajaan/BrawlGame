@@ -410,7 +410,7 @@ public final class GamePanel {
             setti = false;
             gra -= 20;
         }
-        if (Akey && !Dkey && !Attkey && !Skey) {
+        if (Akey && !Dkey && !Attkey && syagamiCount < 20) {
             if (AkeyCount < 10) {
                 AkeyCount++;
                 AX -= 5;
@@ -420,7 +420,7 @@ public final class GamePanel {
                 AX -= 10;
             }
         }
-        if (Dkey && !Akey && !Attkey && !Skey) {
+        if (Dkey && !Akey && !Attkey && syagamiCount < 20) {
             if (DkeyCount < 10) {
                 DkeyCount++;
                 AX += 5;

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package brawlgame;
 
 import java.awt.Graphics;
@@ -19,20 +14,20 @@ import javax.swing.ImageIcon;
  * @author C0116309
  */
 public class GameMap {
-
-    GamePanel GP;
-
-    public static final int TILE_SIZE = 32;
-
+    public final int TILE_SIZE = 32;
     private int[][] map;
     private int row;
     private int col;
     private final int width;
     private final int height;
-
     private Image blockImage;
     private Image background;
 
+    /**
+     * コンストラクタ
+     *
+     * @param filename
+     */
     public GameMap(String filename) {
         load(filename);
         width = TILE_SIZE * col;
@@ -59,15 +54,16 @@ public class GameMap {
      * @param pixels ピクセル単位
      * @return タイル単位
      */
-    public static int pixelsToTiles(double pixels) {
+    public int pixelsToTiles(double pixels) {
         return (int) Math.floor(pixels / TILE_SIZE);
     }
 
-    public static int tilePixel(int tiles) {
+    public int tilePixel(int tiles) {
         return tiles * TILE_SIZE;
     }
 
     /**
+     * 描画
      *
      * @param g グラフィック
      */
@@ -84,6 +80,11 @@ public class GameMap {
         }
     }
 
+    /**
+     * 画像読み込み
+     *
+     * @param filename
+     */
     private void load(String filename) {
         try {
             File file = new File("./src/map/" + filename);
@@ -110,18 +111,20 @@ public class GameMap {
 
     }
 
-    public Point getTileCollision(GameChara player ,int newX, int newY) {
-        // 小数点以下切り上げ
-        // 浮動小数点の関係で切り上げしないと衝突してないと判定される場合がある
-        //newX = Math.ceil(newX);
-        //newY = Math.ceil(newY);
-
-
+    /**
+     * 衝突判定
+     *
+     * @param player
+     * @param newX
+     * @param newY
+     * @return
+     */
+    public Point getTileCollision(GameChara player, int newX, int newY) {
         int fromX = Math.min(player.getZahyou().x, newX);
         int fromY = Math.min(player.getZahyou().y, newY);
         int toX = Math.max(player.getZahyou().x, newX);
         int toY = Math.max(player.getZahyou().y, newY);
-        
+
         int fromTileX = pixelsToTiles(fromX);
         int fromTileY = pixelsToTiles(fromY);
         int toTileX = pixelsToTiles(toX + 100 - 1);
@@ -145,25 +148,5 @@ public class GameMap {
         }
 
         return null;
-    }
-    
-    
-
-    /**
-     * マップの高さを所得する
-     *
-     * @return マップの高さを返す
-     */
-    private int getHeight() {
-        return height;
-    }
-
-    /**
-     * マップの横幅を所得する
-     *
-     * @return マップの横幅を返す
-     */
-    private int getWidth() {
-        return width;
     }
 }

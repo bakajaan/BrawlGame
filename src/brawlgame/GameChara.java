@@ -28,9 +28,6 @@ public class GameChara {
     private int huriageCount = 0;
     private char mode;
 
-    private int vx = 0;
-    private int vy = 0;
-
     public GameChara(GamePanel gameP) {
         GP = gameP;
         zahyou = new Point(200, 300);
@@ -187,39 +184,33 @@ public class GameChara {
 
         //ぶつかった時
         //左右
-        vx = move.x;
-        int nextAX = zahyou.x + vx;
+        int nextAX = zahyou.x + move.x;
         Point tile = GP.getMap().getTileCollision(this, nextAX, zahyou.y);
         if (tile == null) {
             zahyou.x += move.x;
         } else {
             //右へ進んでいる場合
-            if (head == 1) {
+            if (move.x > 0) {
                 zahyou.x = GP.getMap().tilePixel(tile.x) - GP.getCharSize();
                 //左に進んでいる場合
-            } else if (head == 2) {
+            } else if (move.x < 0) {
                 zahyou.x = GP.getMap().tilePixel(tile.x + 1);
             }
-            vx = 0;
         }
         //上下
-        vy = move.y;
-        int nextAY = zahyou.y + vy;
+        int nextAY = zahyou.y + move.y;
         tile = GP.getMap().getTileCollision(this, zahyou.x, nextAY);
         if (tile == null) {
             zahyou.y += move.y;
-            System.out.println("" + setti + junpPower);
             setti = false;
         } else {
             //下にある場合
-            if (vy > 0) {
+            if (move.y > 0) {
                 zahyou.y = GP.getMap().tilePixel(tile.y) - GP.getCharSize();
                 setti = true;
-                vy = 0;
                 //上にある場合
-            } else if (vy < 0) {
+            } else if (move.y < 0) {
                 zahyou.y = GP.getMap().tilePixel(tile.y + 1);
-                vy = 0;
             }
 
         }

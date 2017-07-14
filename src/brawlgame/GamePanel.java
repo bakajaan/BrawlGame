@@ -7,6 +7,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,81 +29,10 @@ public final class GamePanel {
      */
     private JPanel gameP;
     /**
-     * 自分キャラクター右向き用ラベル
-     * それぞれの動きのアイコンを格納
-     */
-    private JLabel AcharR[];
-    /**
-     * 敵キャラクター右向き用ラベル
-     * それぞれの動きのアイコンを格納
-     */
-    private JLabel BcharR[];
-    /**
-     * 自分キャラクター左向き用ラベル
-     * それぞれの動きのアイコンを格納
-     */
-    private JLabel AcharL[];
-    /**
-     * 敵キャラクター左向き用ラベル
-     * それぞれの動きのアイコンを格納
-     */
-    private JLabel BcharL[];
-    /**
-     * ジャンプ時Y座標を格納
-     * Y座標が重なったときジャンプを終了(仮)
-     */
-    private int junpPlace = 0;
-    /**
      * 重力
      * 着地していない時座標から引かれる
      */
-    private int gra = 0;
-    /**
-     * 自分X座標
-     * 左上が(0.0)
-     */
-    private int AX = 200;
-    /**
-     * 自分Y座標
-     * 左上が(0.0)
-     */
-    private int AY = 300;
-    /**
-     * 敵X座標
-     * 左上が(0.0)
-     */
-    private int BX;
-    /**
-     * 敵Y座標
-     * 左上が(0.0)
-     */
-    private int BY;
-    /**
-     * 自分の動きのタイプ
-     */
-    private int AT = 0;
-    /**
-     * 敵の動きのタイプ
-     */
-    private int BT;
-    /**
-     * 自分の向き
-     */
-    private int AH = 0;
-    /**
-     * 敵の向き
-     */
-    private int BH;
-    /**
-     * 直立カウント
-     * 立っている時のアニメーションに利用
-     */
-    private int standCount = 0;
-    /**
-     * 徒歩カウント
-     * この値を利用して通常時の動きを実現する
-     */
-    private int walkCount = 0;
+    private int gra = 2;
     /**
      * 死亡カウント
      * 死亡して一定時間するとリスポーンする
@@ -120,6 +51,7 @@ public final class GamePanel {
      */
     private int AttkeyCount = 0;
     private int syagamiCount = 0;
+    private int WkeyCount = 0;
     /**
      * キャラクターのサイズ
      */
@@ -128,7 +60,6 @@ public final class GamePanel {
      * キャラクターの画像の量
      */
     private int charType = 17;
-    private int sowdPosision = 0;
     /**
      * 自分がどちらのチームかの判定
      * 先にサーバーに入った方がaで後がb
@@ -164,10 +95,6 @@ public final class GamePanel {
      */
     private boolean Junpkey = false;
     /**
-     * 着地しているかの判定
-     */
-    private boolean setti = true;
-    /**
      * パネルを変更していいかどうかの判定
      */
     private boolean changePanel = false;
@@ -176,6 +103,9 @@ public final class GamePanel {
      * 座標の処理中はそれぞれの座標に一時的なずれが生じるので描画しない
      */
     private boolean drawEnable = false;
+    private GameChara me;
+    private GameChara teki;
+    private List otherChara;
 //</editor-fold>
 
     /**
@@ -193,9 +123,11 @@ public final class GamePanel {
 
         //マップ読み込み
         GameMap map = new GameMap("map01.dat");
-        GameChara chara = new GameChara(this);
+        me = new GameChara(this);
+        teki = new GameChara(this);
+        otherChara = new ArrayList();
 
-        //パネルの作成
+        //パネルの作成 
         gameP = new JPanel() {
             private static final long serialVersionUID = 1L;
 
@@ -203,7 +135,8 @@ public final class GamePanel {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 map.drow(g);
-                chara.drow(g);
+                me.drow(g);
+                teki.drow(g);
             }
         };
         gameP.setBounds(0, 0, 2400, 3304);
@@ -258,15 +191,9 @@ public final class GamePanel {
                 switch (e.getKeyText(e.getKeyCode())) {
                     case "W":
                         Wkey = true;
-                        if (sowdPosision < 2) {
-                            sowdPosision++;
-                        }
                         break;
                     case "S":
                         Skey = true;
-                        if (sowdPosision > 0) {
-                            sowdPosision--;
-                        }
                         break;
                     case "A":
                         Akey = true;
@@ -291,6 +218,7 @@ public final class GamePanel {
                 switch (e.getKeyText(e.getKeyCode())) {
                     case "W":
                         Wkey = false;
+                        WkeyCount = 0;
                         break;
                     case "S":
                         Skey = false;
@@ -299,12 +227,10 @@ public final class GamePanel {
                     case "A":
                         Akey = false;
                         AkeyCount = 0;
-                        walkCount = 0;
                         break;
                     case "D":
                         Dkey = false;
                         DkeyCount = 0;
-                        walkCount = 0;
                         break;
                     case "G":
                         Junpkey = false;
@@ -326,6 +252,7 @@ public final class GamePanel {
             end(mainF, kl, cl, SThread, DThread);
             return;
         }
+        me.setMode(mode);
 
         //それぞれのスレッドを開始
         SThread.start();
@@ -343,7 +270,8 @@ public final class GamePanel {
      */
     public String draw() {
         drawEnable = false;
-        update();//自分のアップデート
+        update();//キー操作
+        me.update();//自分の座標計算
         drawEnable = true;
 
         //フラグがたっていたらmenuを戻す
@@ -359,26 +287,14 @@ public final class GamePanel {
      */
     private void update() {
         //死亡処理
-        if (AT == 14 && deathCount < 60) {
-            //死亡モーション中は1秒間そのまま
-            deathCount++;
-            return;
-        } else if (deathCount == 60) {
-            //死亡して１秒たったら座標とモーションタイプをリセット
-            deathCount = 0;
-            AT = 0;
-            if (mode == 'a') {
-                AX = 200;
-            } else {
-                AX = 200;
-            }
-            return;
-        } else if (AY + charSize > BY && AY < BY + charSize
-                && AX + charSize / 2 > BX && AX < BX + charSize
-                && (BT == 6 || BT == 9 || BT == 12)
-                && BH == 1) {
+        if (me.getZahyou().y + charSize > teki.getZahyou().y
+                && me.getZahyou().y < teki.getZahyou().y + charSize
+                && me.getZahyou().x + charSize / 2 > teki.getZahyou().x
+                && me.getZahyou().x < teki.getZahyou().x + charSize
+                && (teki.getType() == 6 || teki.getType() == 9 || teki.getType() == 12)
+                && teki.getHead() == 1) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
-            AT = 14;
+            me.setType(14);
             AttkeyCount = 0;
             if (mode == 'a') {
                 turnMode = 'b';
@@ -386,12 +302,14 @@ public final class GamePanel {
                 turnMode = 'a';
             }
             return;
-        } else if (AY + charSize > BY && AY < BY + charSize
-                && AX + charSize > BX && AX < BX + charSize / 2
-                && (BT == 6 || BT == 9 || BT == 12)
-                && BH == 2) {
+        } else if (me.getZahyou().y + charSize > teki.getZahyou().y
+                && me.getZahyou().y < teki.getZahyou().y + charSize
+                && me.getZahyou().x + charSize > teki.getZahyou().x
+                && me.getZahyou().x < teki.getZahyou().x + charSize / 2
+                && (teki.getType() == 6 || teki.getType() == 9 || teki.getType() == 12)
+                && teki.getHead() == 2) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
-            AT = 14;
+            me.setType(14);
             AttkeyCount = 0;
             if (mode == 'a') {
                 turnMode = 'b';
@@ -400,207 +318,35 @@ public final class GamePanel {
             }
             return;
         }
-        if (BT == 14) {
+        if (teki.getType() == 14) {
             turnMode = mode;
         }
 
-        //キーによる移動
-        if (Junpkey && setti && !Attkey && !Skey) {
-            junpPlace = AY;
-            setti = false;
-            gra -= 20;
-        }
-        if (Akey && !Dkey && !Attkey && syagamiCount < 20) {
+        //キーによるカウント
+        if (Akey) {
             if (AkeyCount < 10) {
                 AkeyCount++;
-                AX -= 5;
-            } else {
-                AH = 2;
-                walkCount++;
-                AX -= 10;
             }
         }
-        if (Dkey && !Akey && !Attkey && syagamiCount < 20) {
+        if (Dkey) {
             if (DkeyCount < 10) {
                 DkeyCount++;
-                AX += 5;
-            } else {
-                AH = 1;
-                walkCount++;
-                AX += 10;
             }
         }
-        if (Skey) {
-            syagamiCount++;
+        if (Wkey) {
+            WkeyCount++;
         }
         if (Attkey && AttkeyCount < 20) {
             AttkeyCount++;
-            if (AttkeyCount < 4 && setti) {
-                switch (AH) {
-                    case 1:
-                        AX += 8;
-                        break;
-                    case 2:
-                        AX -= 8;
-                        break;
-                }
-            }
-            if (AttkeyCount > 17) {
-                switch (AH) {
-                    case 1:
-                        AX -= 8;
-                        break;
-                    case 2:
-                        AX += 8;
-                        break;
-                }
-            }
         }
         if (!Attkey && AttkeyCount != 0 && AttkeyCount != 20) {
             AttkeyCount--;
             if (AttkeyCount >= 3) {
                 AttkeyCount = 2;
             }
-            if (AttkeyCount < 3) {
-                switch (AH) {
-                    case 1:
-                        AX -= 8;
-                        break;
-                    case 2:
-                        AX += 8;
-                        break;
-                }
-            }
         }
         if (!Attkey && AttkeyCount == 20) {
             AttkeyCount = 0;
-        }
-
-        //敵との反発移動
-        if (AY + charSize > BY && AY < BY + charSize
-                && AX + charSize > BX && AX < BX + charSize && Attkey
-                && (BT == 6 || BT == 9 || BT == 12)) {
-            switch (AH) {
-                case 1:
-                    AX -= 30;
-                    break;
-                case 2:
-                    AX += 30;
-                    break;
-            }
-        }
-
-        //重力による移動
-        if (setti == false) {
-            gra += 1;
-            AY += gra;
-            if (Attkey) {
-                switch (AH) {
-                    case 1:
-                        AX += 12;
-                        break;
-                    case 2:
-                        AX -= 12;
-                        break;
-                }
-            }
-            //自分の座標がジャンプ地点より低くなったら着地状態に変更
-            if (AY > junpPlace) {
-                AT = 0;
-                gra = 0;
-                AY = junpPlace;
-                setti = true;
-            }
-        }
-
-        //座標の最終チェック
-        if (AX < 0) {
-            AX = 0;
-        }
-
-        //向いてる方向の変更
-        if (setti && !Akey && !Dkey) {
-            if (AX > BX) {
-                AH = 2;
-            } else {
-                AH = 1;
-            }
-        }
-
-        //表示タイプ変更
-        if (setti == false && !Attkey) {
-            AT = 13;
-        } else if (setti == false && Attkey) {
-            AT = 16;
-        } else if (syagamiCount > 20) {
-            AT = 15;
-        } else if (Attkey && AttkeyCount < 20) {
-            switch (sowdPosision) {
-                case 0:
-                    AT = 6;
-                    break;
-                case 1:
-                    AT = 9;
-                    break;
-                case 2:
-                    AT = 12;
-                    break;
-            }
-        } else if (walkCount > 0) {
-            switch ((walkCount / 5) % 6) {
-                case 0:
-                    AT = 0;
-                    break;
-                case 1:
-                    AT = 1;
-                    break;
-                case 2:
-                    AT = 2;
-                    break;
-                case 3:
-                    AT = 3;
-                    break;
-                case 4:
-                    AT = 2;
-                    break;
-                case 5:
-                    AT = 1;
-                    break;
-            }
-        } else {
-            standCount++;
-            switch (sowdPosision) {
-                case 0:
-                    switch ((standCount / 5) % 2) {
-                        case 0:
-                            AT = 4;
-                            break;
-                        case 1:
-                            AT = 5;
-                            break;
-                    }
-                    break;
-                case 1:
-                    switch ((standCount / 5) % 2) {
-                        case 0:
-                            AT = 7;
-                            break;
-                        case 1:
-                            AT = 8;
-                            break;
-                    }
-                    break;
-                case 2:
-                    switch ((standCount / 5) % 2) {
-                        case 0:
-                            AT = 10;
-                            break;
-                        case 1:
-                            AT = 11;
-                            break;
-                    }
-                    break;
-            }
         }
     }
 
@@ -636,118 +382,6 @@ public final class GamePanel {
      */
     public JPanel getGameP() {
         return gameP;
-    }
-
-    /**
-     * @return the AcharR
-     */
-    public JLabel[] getAcharR() {
-        return AcharR;
-    }
-
-    /**
-     * @return the BcharR
-     */
-    public JLabel[] getBcharR() {
-        return BcharR;
-    }
-
-    /**
-     * @return the AcharL
-     */
-    public JLabel[] getAcharL() {
-        return AcharL;
-    }
-
-    /**
-     * @return the BcharL
-     */
-    public JLabel[] getBcharL() {
-        return BcharL;
-    }
-
-    /**
-     * @return the AX
-     */
-    public int getAX() {
-        return AX;
-    }
-
-    /**
-     * @return the AY
-     */
-    public int getAY() {
-        return AY;
-    }
-
-    /**
-     * @return the BX
-     */
-    public int getBX() {
-        return BX;
-    }
-
-    /**
-     * @return the BY
-     */
-    public int getBY() {
-        return BY;
-    }
-
-    /**
-     * @return the AT
-     */
-    public int getAT() {
-        return AT;
-    }
-
-    /**
-     * @return the BT
-     */
-    public int getBT() {
-        return BT;
-    }
-
-    /**
-     * @return the AH
-     */
-    public int getAH() {
-        return AH;
-    }
-
-    /**
-     * @return the BH
-     */
-    public int getBH() {
-        return BH;
-    }
-
-    /**
-     * @param BX the BX to set
-     */
-    public void setBX(int BX) {
-        this.BX = BX;
-    }
-
-    /**
-     * @param BY the BY to set
-     */
-    public void setBY(int BY) {
-        this.BY = BY;
-    }
-
-    /**
-     * @param BT the BT to set
-     */
-    public void setBT(int BT) {
-        this.BT = BT;
-    }
-
-    /**
-     * @param BH the BH to set
-     */
-    public void setBH(int BH) {
-        this.BH = BH;
     }
 
     /**
@@ -804,5 +438,115 @@ public final class GamePanel {
      */
     public void setDrawEnable(boolean drawEnable) {
         this.drawEnable = drawEnable;
+    }
+
+    /**
+     * @return the deathCount
+     */
+    public int getDeathCount() {
+        return deathCount;
+    }
+
+    /**
+     * @return the AkeyCount
+     */
+    public int getAkeyCount() {
+        return AkeyCount;
+    }
+
+    /**
+     * @return the DkeyCount
+     */
+    public int getDkeyCount() {
+        return DkeyCount;
+    }
+
+    /**
+     * @return the AttkeyCount
+     */
+    public int getAttkeyCount() {
+        return AttkeyCount;
+    }
+
+    /**
+     * @return the syagamiCount
+     */
+    public int getSyagamiCount() {
+        return syagamiCount;
+    }
+
+    /**
+     * @return the Wkey
+     */
+    public boolean isWkey() {
+        return Wkey;
+    }
+
+    /**
+     * @return the Akey
+     */
+    public boolean isAkey() {
+        return Akey;
+    }
+
+    /**
+     * @return the Skey
+     */
+    public boolean isSkey() {
+        return Skey;
+    }
+
+    /**
+     * @return the Dkey
+     */
+    public boolean isDkey() {
+        return Dkey;
+    }
+
+    /**
+     * @return the Attkey
+     */
+    public boolean isAttkey() {
+        return Attkey;
+    }
+
+    /**
+     * @return the Junpkey
+     */
+    public boolean isJunpkey() {
+        return Junpkey;
+    }
+
+    /**
+     * @return the gra
+     */
+    public int getGra() {
+        return gra;
+    }
+
+    /**
+     * @param gra the gra to set
+     */
+    public void setGra(int gra) {
+        this.gra = gra;
+    }
+
+    public GameChara getMe() {
+        return me;
+    }
+
+    public GameChara getTeki() {
+        return teki;
+    }
+
+    public void addOtherchara() {
+
+    }
+
+    /**
+     * @return the WkeyCount
+     */
+    public int getWkeyCount() {
+        return WkeyCount;
     }
 }

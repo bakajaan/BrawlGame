@@ -1,5 +1,6 @@
 package brawlgame;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -94,21 +95,23 @@ public class ServerAccessThread extends Thread {
             while (true) {
                 long oldTime = System.currentTimeMillis();//通信前時間の取得
                 String sendT = ""
-                        + "T" + GP.getAT() + "t"
-                        + "H" + GP.getAH() + "h"
-                        + "X" + GP.getAX() + "x"
-                        + "Y" + GP.getAY() + "y";
+                        + "T" + GP.getMe().getType() + "t"
+                        + "H" + GP.getMe().getHead() + "h"
+                        + "X" + GP.getMe().getZahyou().x + "x"
+                        + "Y" + GP.getMe().getZahyou().y + "y";
                 out.println(sendT);
                 out.flush();
                 String receiveT = in.readLine();
-                GP.setBT(Integer.parseInt(receiveT.substring(
+                GP.getTeki().setType(Integer.parseInt(receiveT.substring(
                         receiveT.indexOf("T") + 1, receiveT.indexOf("t"))));
-                GP.setBH(Integer.parseInt(receiveT.substring(
+                GP.getTeki().setHead(Integer.parseInt(receiveT.substring(
                         receiveT.indexOf("H") + 1, receiveT.indexOf("h"))));
-                GP.setBX(Integer.parseInt(receiveT.substring(
-                        receiveT.indexOf("X") + 1, receiveT.indexOf("x"))));
-                GP.setBY(Integer.parseInt(receiveT.substring(
-                        receiveT.indexOf("Y") + 1, receiveT.indexOf("y"))));
+                Point zahyou = new Point(0, 0);
+                zahyou.x = Integer.parseInt(receiveT.substring(
+                        receiveT.indexOf("X") + 1, receiveT.indexOf("x")));
+                zahyou.y = Integer.parseInt(receiveT.substring(
+                        receiveT.indexOf("Y") + 1, receiveT.indexOf("y")));
+                GP.getTeki().setZahyou(zahyou);
                 long newTime = System.currentTimeMillis();//通信後時間の取得
                 //描画の半分の速さでループするようにスリープさせる
                 try {

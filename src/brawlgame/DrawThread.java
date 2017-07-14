@@ -32,9 +32,9 @@ public class DrawThread extends Thread {
             if (GP.isDrawEnable()) {
                 int move = 0;
                 if (GP.getTurnMode() == GP.getMode()) {
-                    if (GP.getAX() > GP.getBX()) {
-                        if (GP.getAX() - GP.getBX() < 980) {
-                            move = GP.getGameP().getX() + (GP.getBX() + (GP.getAX() - GP.getBX()) / 2) - 490 + GP.getCharSize() / 2;
+                    if (GP.getMe().getZahyou().x > GP.getTeki().getZahyou().x) {
+                        if (GP.getMe().getZahyou().x - GP.getTeki().getZahyou().x < 980) {
+                            move = GP.getGameP().getX() + (GP.getTeki().getZahyou().x + (GP.getMe().getZahyou().x - GP.getTeki().getZahyou().x) / 2) - 490 + GP.getCharSize() / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -42,7 +42,7 @@ public class DrawThread extends Thread {
                                 move = -32;
                             }
                         } else {
-                            move = GP.getGameP().getX() + GP.getAX() - 200 + GP.getCharSize() / 2;
+                            move = GP.getGameP().getX() + GP.getMe().getZahyou().x - 200 + GP.getCharSize() / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -51,8 +51,8 @@ public class DrawThread extends Thread {
                             }
                         }
                     } else {
-                        if (GP.getBX() - GP.getAX() < 980) {
-                            move = GP.getGameP().getX() + (GP.getAX() + (GP.getBX() - GP.getAX()) / 2) - 490 + GP.getCharSize() / 2;
+                        if (GP.getTeki().getZahyou().x - GP.getMe().getZahyou().x < 980) {
+                            move = GP.getGameP().getX() + (GP.getMe().getZahyou().x + (GP.getTeki().getZahyou().x - GP.getMe().getZahyou().x) / 2) - 490 + GP.getCharSize() / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -60,7 +60,7 @@ public class DrawThread extends Thread {
                                 move = -32;
                             }
                         } else {
-                            move = GP.getGameP().getX() + GP.getAX() - 200 + GP.getCharSize() / 2;
+                            move = GP.getGameP().getX() + GP.getMe().getZahyou().x - 200 + GP.getCharSize() / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -70,9 +70,9 @@ public class DrawThread extends Thread {
                         }
                     }
                 } else {
-                    if (GP.getAX() > GP.getBX()) {
-                        if (GP.getAX() - GP.getBX() < 980) {
-                            move = GP.getGameP().getX() + (GP.getBX() + (GP.getAX() - GP.getBX()) / 2) - 490 + GP.getCharSize() / 2;
+                    if (GP.getMe().getZahyou().x > GP.getTeki().getZahyou().x) {
+                        if (GP.getMe().getZahyou().x - GP.getTeki().getZahyou().x < 980) {
+                            move = GP.getGameP().getX() + (GP.getTeki().getZahyou().x + (GP.getMe().getZahyou().x - GP.getTeki().getZahyou().x) / 2) - 490 + GP.getCharSize() / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -80,7 +80,7 @@ public class DrawThread extends Thread {
                                 move = -32;
                             }
                         } else {
-                            move = GP.getGameP().getX() + GP.getBX() - 200 + GP.getCharSize() / 2;
+                            move = GP.getGameP().getX() + GP.getTeki().getZahyou().x - 200 + GP.getCharSize() / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -89,8 +89,8 @@ public class DrawThread extends Thread {
                             }
                         }
                     } else {
-                        if (GP.getBX() - GP.getAX() < 980) {
-                            move = GP.getGameP().getX() + (GP.getAX() + (GP.getBX() - GP.getAX()) / 2) - 490 + GP.getCharSize() / 2;
+                        if (GP.getTeki().getZahyou().x - GP.getMe().getZahyou().x < 980) {
+                            move = GP.getGameP().getX() + (GP.getMe().getZahyou().x + (GP.getTeki().getZahyou().x - GP.getMe().getZahyou().x) / 2) - 490 + GP.getCharSize() / 2;
                             if (move > 32) {
                                 move = 32;
                             }
@@ -98,7 +98,7 @@ public class DrawThread extends Thread {
                                 move = -32;
                             }
                         } else {
-                            move = GP.getGameP().getX() + GP.getBX() - 200 + GP.getCharSize() / 2;
+                            move = GP.getGameP().getX() + GP.getTeki().getZahyou().x - 200 + GP.getCharSize() / 2;
                             if (move > 32) {
                                 move = 32;
                             }

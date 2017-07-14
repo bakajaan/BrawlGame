@@ -116,10 +116,10 @@ public class GameMap {
         newX = Math.ceil(newX);
         newY = Math.ceil(newY);
 
-        double fromX = Math.min(GP.getAX(), newX);
-        double fromY = Math.min(GP.getAY(), newY);
-        double toX = Math.max(GP.getAX(), newX);
-        double toY = Math.max(GP.getAY(), newY);
+        double fromX = Math.min(GP.getMe().getZahyou().x, newX);
+        double fromY = Math.min(GP.getMe().getZahyou().y, newY);
+        double toX = Math.max(GP.getMe().getZahyou().x, newX);
+        double toY = Math.max(GP.getMe().getZahyou().y, newY);
 
         int fromTileX = pixelsToTiles(fromX);
         int fromTileY = pixelsToTiles(fromY);

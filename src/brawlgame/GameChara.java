@@ -82,7 +82,7 @@ public class GameChara {
         if (!GP.isAkey() && !GP.isDkey()) {
             walkCount = 0;
         }
-        if (GP.isJunpkey() && setti == true && !GP.isAttkey() && !GP.isSkey()) {
+        if (GP.isJunpkey() && setti && !GP.isAttkey() && !GP.isSkey()) {
             junpPlace.y = zahyou.y;
             setti = false;
             junpPower = 28;
@@ -161,28 +161,29 @@ public class GameChara {
         }
 
         //重力による移動
-        //if (setti == false) {
-            junpPower -= GP.getGra();
-            move.y -= junpPower;
-            if (GP.isAttkey()) {
-                switch (head) {
-                    case 1:
-                        move.x += 16;
-                        break;
-                    case 2:
-                        move.x -= 16;
-                        break;
-                }
+        if (setti == true) {
+            junpPower = 0;
+        }
+        junpPower -= GP.getGra();
+        move.y -= junpPower;
+        if (GP.isAttkey()) {
+            switch (head) {
+                case 1:
+                    move.x += 16;
+                    break;
+                case 2:
+                    move.x -= 16;
+                    break;
             }
-            //自分の座標がジャンプ地点より低くなったら着地状態に変更
-            /*if (zahyou.y + move.y >= junpPlace.y) {
+        }
+        //自分の座標がジャンプ地点より低くなったら着地状態に変更
+        /*if (zahyou.y + move.y >= junpPlace.y) {
                 type = 0;
                 move.y = 0;
                 junpPower = 0;
                 zahyou.y = junpPlace.y;
                 setti = true;
             }*/
-        //}
 
         //ぶつかった時
         //左右
@@ -207,6 +208,7 @@ public class GameChara {
         tile = GP.getMap().getTileCollision(this, zahyou.x, nextAY);
         if (tile == null) {
             zahyou.y = zahyou.y + move.y;
+            System.out.println("" + setti + junpPower);
             setti = false;
         } else {
             //下にある場合
@@ -219,7 +221,7 @@ public class GameChara {
                 zahyou.y = GP.getMap().tilePixel(tile.y + 1);
                 vy = 0;
             }
-            
+
         }
 
         //向いてる方向の変更

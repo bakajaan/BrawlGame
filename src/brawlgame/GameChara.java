@@ -34,10 +34,15 @@ public class GameChara {
      *
      * @param gameP
      */
-    public GameChara(GamePanel gameP) {
+    public GameChara(GamePanel gameP, char m) {
+        mode = m;
         GP = gameP;
-        zahyou = new Point(200, 300);
-        junpPlace = new Point(200, 300);
+        if (m == 'a') {
+            zahyou = new Point(950, 300);
+        } else {
+            zahyou = new Point(1350, 300);
+        }
+        junpPlace = new Point(250, 300);
         loadImage();
     }
 
@@ -78,9 +83,9 @@ public class GameChara {
             deathCount = 0;
             type = 0;
             if (mode == 'a') {
-                zahyou.x = 200;
+                zahyou.x = 250;
             } else {
-                zahyou.x = 200;
+                zahyou.x = 2050;
             }
             return;
         }
@@ -132,8 +137,8 @@ public class GameChara {
         } else {
             huriageCount = 0;
         }
-        if (GP.isAttkey() && AttCount < 20) {
-            if (AttCount < 4 && setti) {
+        if (GP.isAttkey() && AttCount < 20 && setti) {
+            if (AttCount < 4) {
                 switch (head) {
                     case 1:
                         move.x += 8;
@@ -155,21 +160,25 @@ public class GameChara {
             }
             AttCount++;
         }
-        if (!GP.isAttkey() && AttCount != 0 && AttCount != 20) {
-            if (AttCount > 10) {
-                AttCount = 20 - AttCount;
-            }
-            if (AttCount == 0) {
-            } else if (AttCount < 3) {
-                switch (head) {
-                    case 1:
-                        move.x -= 8;
-                        break;
-                    case 2:
-                        move.x += 8;
-                        break;
+        if (!GP.isAttkey() && AttCount != 0) {
+            if (AttCount == 20) {
+                AttCount = 0;
+            } else {
+                if (AttCount >= 4) {
+                    AttCount = 3;
+                } else {
+                    AttCount--;
                 }
-                AttCount--;
+                if (AttCount < 4) {
+                    switch (head) {
+                        case 1:
+                            move.x -= 8;
+                            break;
+                        case 2:
+                            move.x += 8;
+                            break;
+                    }
+                }
             }
         }
 
@@ -180,7 +189,8 @@ public class GameChara {
         junpPower -= GP.getGra();
         move.y -= junpPower;
         //System.out.println(setti);
-        /*if (GP.isAttkey() && setti) {
+        if (GP.isAttkey() && !setti) {
+            AttCount = 20;
             switch (head) {
                 case 1:
                     move.x += 16;
@@ -189,7 +199,7 @@ public class GameChara {
                     move.x -= 16;
                     break;
             }
-        }*/
+        }
         //自分の座標がジャンプ地点より低くなったら着地状態に変更
         /*if (zahyou.y + move.y >= junpPlace.y) {
                 type = 0;

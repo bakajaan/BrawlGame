@@ -107,12 +107,6 @@ public final class GamePanel {
         ServerAccessThread SThread = new ServerAccessThread(this);
         DrawThread DThread = new DrawThread(this);
 
-        //マップ読み込み
-        map = new GameMap("map02.dat");
-        me = new GameChara(this);
-        teki = new GameChara(this);
-        otherChara = new ArrayList();
-
         //パネルの作成 
         gameP = new JPanel() {
             private static final long serialVersionUID = 1L;
@@ -234,7 +228,13 @@ public final class GamePanel {
             end(mainF, kl, cl, SThread, DThread);
             return;
         }
-        me.setMode(mode);
+        //me.setMode(mode);
+
+        //マップ読み込み
+        map = new GameMap("map02.dat");
+        me = new GameChara(this,mode);
+        teki = new GameChara(this,'b');
+        otherChara = new ArrayList();
 
         //それぞれのスレッドを開始
         SThread.start();

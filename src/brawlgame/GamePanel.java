@@ -3,6 +3,7 @@ package brawlgame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
@@ -178,6 +179,11 @@ public final class GamePanel {
     private boolean drawEnable = false;
 //</editor-fold>
 
+    GameMap map;
+
+    int vx = 0;
+    int vy = 0;
+
     /**
      * ゲームパネル
      * ゲームの内部処理をもつ
@@ -192,7 +198,7 @@ public final class GamePanel {
         DrawThread DThread = new DrawThread(this);
 
         //マップ読み込み
-        GameMap map = new GameMap("map01.dat");
+        map = new GameMap("map01.dat");
         GameChara chara = new GameChara(this);
 
         //パネルの作成
@@ -358,6 +364,44 @@ public final class GamePanel {
      * 座標を変更させる
      */
     private void update() {
+        //ぶつかった時
+        //左右
+        if (AH == 1) {
+            vx = 1;
+        } else if (AH == 2) {
+            vx = -1;
+        }
+        int nextAX = AX + vx;
+        Point tile = map.getTileCollision(this, nextAX, AY);
+        if (tile == null) {
+            //AX = nextAX;
+        } else {
+            //右へ進んでいる場合
+            if (AH == 1) {
+                AX = GameMap.tilePixel(tile.x) - charSize;
+                //左に進んでいる場合
+            } else if (AH == 2) {
+                AX = GameMap.tilePixel(tile.x + 1);
+            }
+            vx = 0;
+        }
+        //上下
+        vy = gra;
+        int nextAY = AY + vy;
+        tile = map.getTileCollision(this, AX, AY);
+        if (tile == null) {
+
+        } else {
+            //下にある場合
+            if (vy>0) {
+                AY = GameMap.tilePixel(tile.y) - charSize;
+                setti = true;
+                //上にある場合
+            } else if(vy<0){
+                AY = GameMap.tilePixel(tile.y +1);
+            }
+            vy = 0;
+        }
         //死亡処理
         if (AT == 14 && deathCount < 60) {
             //死亡モーション中は1秒間そのまま

@@ -1,8 +1,10 @@
 package brawlgame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,21 +18,19 @@ public class MainMenuPanel {
 
     //<editor-fold defaultstate="collapsed" desc="メンバ">
     /**
-     * スタートラベル
-     */
-    private final JLabel start;
-    /**
-     * 終了ラベル
-     */
-    private final JLabel end;
-    /**
      * 選択項目
      */
     private int selectMenu = 0;
+    private int backCount = 0;
     /**
      * パネルを変更するかどうか
      */
     private boolean changePanel = false;
+    private ImageIcon title;
+    private ImageIcon menu1;
+    private ImageIcon menu2;
+    private ImageIcon back[];
+    private JPanel menuP;
 //</editor-fold>
 
     /**
@@ -42,23 +42,32 @@ public class MainMenuPanel {
     @SuppressWarnings("deprecation")
     public MainMenuPanel(JFrame mainF) {
 
+        loadImage();
+
         //パネルの作成
-        JPanel menuP = new JPanel();
+        menuP = new JPanel() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(title.getImage(), 0, 0, null);
+                switch (selectMenu) {
+                    case 0:
+                        g.drawImage(menu1.getImage(), 0, 0, null);
+                        break;
+                    case 1:
+                        g.drawImage(menu2.getImage(), 0, 0, null);
+                        break;
+                }
+                g.drawImage(back[backCount / 10 % 4].getImage(), 0, 0, null);
+            }
+        };
         menuP.setBounds(0, 0, 1024, 768);
         menuP.setLayout(null);
         mainF.add(menuP);
         menuP.setVisible(true);
         menuP.show();
-
-        //ラベルの作成
-        start = new JLabel("start");
-        start.setBounds(0, 0, 100, 50);
-        start.setForeground(Color.BLACK);
-        menuP.add(start);
-        end = new JLabel("end");
-        end.setBounds(0, 50, 100, 50);
-        end.setForeground(Color.GRAY);
-        menuP.add(end);
 
         //キーリスナーの追加
         KeyListener ka = new KeyListener() {
@@ -104,22 +113,23 @@ public class MainMenuPanel {
      * @return　遷移先パネル名
      */
     public String draw() {
-        //選択項目によってラベルの色を変更
-        switch (selectMenu) {
-            case 0:
-                start.setForeground(Color.BLACK);
-                end.setForeground(Color.GRAY);
-                break;
-            case 1:
-                start.setForeground(Color.GRAY);
-                end.setForeground(Color.BLACK);
-                break;
-        }
+        backCount++;
+        menuP.repaint();
         //フラグがたっていたらgameを戻す
         if (changePanel == true) {
             return "game";
         }
         return "";
+    }
+
+    private void loadImage() {
+        title = new ImageIcon("./src/img/m1.png");
+        menu1 = new ImageIcon("./src/img/m2.png");
+        menu2 = new ImageIcon("./src/img/m3.png");
+        back = new ImageIcon[4];
+        for (int i = 0; i < 4; i++) {
+            back[i] = new ImageIcon("./src/img/mb" + (i + 1) + ".png");
+        }
     }
 
     /**

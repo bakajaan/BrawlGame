@@ -108,7 +108,7 @@ public final class GamePanel {
         DrawThread DThread = new DrawThread(this);
 
         //マップ読み込み
-        map = new GameMap("map01.dat");
+        map = new GameMap("map02.dat");
         me = new GameChara(this);
         teki = new GameChara(this);
         otherChara = new ArrayList();

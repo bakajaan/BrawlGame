@@ -31,11 +31,6 @@ public final class GamePanel {
      */
     private int gra = 2;
     /**
-     * 死亡カウント
-     * 死亡して一定時間するとリスポーンする
-     */
-    private int deathCount = 0;
-    /**
      * Aキー押下カウント
      */
     private int AkeyCount = 0;
@@ -47,7 +42,6 @@ public final class GamePanel {
      * 攻撃時間カウント
      */
     private int AttkeyCount = 0;
-    private int syagamiCount = 0;
     private int WkeyCount = 0;
     /**
      * キャラクターのサイズ
@@ -57,11 +51,6 @@ public final class GamePanel {
      * キャラクターの画像の量
      */
     private int charType = 17;
-    /**
-     * 自分がどちらのチームかの判定
-     * 先にサーバーに入った方がaで後がb
-     */
-    private char mode;
     /**
      * 攻撃中チーム
      * 初期はaチームから攻撃開始
@@ -216,7 +205,6 @@ public final class GamePanel {
                         break;
                     case "S":
                         Skey = false;
-                        syagamiCount = 0;
                         break;
                     case "A":
                         Akey = false;
@@ -241,7 +229,7 @@ public final class GamePanel {
         mainF.addKeyListener(kl);
 
         //自分のチームを取得
-        mode = SThread.getMode();
+        char mode = SThread.getMode();
         if (mode == 'N') {
             end(mainF, kl, cl, SThread, DThread);
             return;
@@ -290,7 +278,7 @@ public final class GamePanel {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             me.setType(14);
             AttkeyCount = 0;
-            if (mode == 'a') {
+            if (me.getMode() == 'a') {
                 turnMode = 'b';
             } else {
                 turnMode = 'a';
@@ -305,7 +293,7 @@ public final class GamePanel {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             me.setType(14);
             AttkeyCount = 0;
-            if (mode == 'a') {
+            if (me.getMode() == 'a') {
                 turnMode = 'b';
             } else {
                 turnMode = 'a';
@@ -313,7 +301,7 @@ public final class GamePanel {
             return;
         }
         if (teki.getType() == 14) {
-            turnMode = mode;
+            turnMode = me.getMode();
         }
 
         //キーによるカウント
@@ -350,7 +338,7 @@ public final class GamePanel {
     @SuppressWarnings("deprecation")
     private void end(JFrame mainF, KeyListener kl, ComponentListener cl,
             ServerAccessThread SThread, DrawThread DThread) {
-        if (mode != 'N') {
+        if (me.getMode() != 'N') {
             SThread.disconect();
         }
         DThread.stop();
@@ -361,160 +349,133 @@ public final class GamePanel {
         changePanel = true;
     }
 
+    //<editor-fold defaultstate="collapsed" desc="取得、設定メソッド">
     /**
      * @return the gameP
      */
     public JPanel getGameP() {
         return gameP;
     }
-
+    
     /**
      * @return the charSize
      */
     public int getCharSize() {
         return charSize;
     }
-
+    
     /**
      * @return the charType
      */
     public int getCharType() {
         return charType;
     }
-
-    /**
-     * @return the mode
-     */
-    public char getMode() {
-        return mode;
-    }
-
-    /**
-     * @param mode the mode to set
-     */
-    public void setMode(char mode) {
-        this.mode = mode;
-    }
-
+    
     /**
      * @return the turnMode
      */
     public char getTurnMode() {
         return turnMode;
     }
-
+    
     /**
      * @param turnMode the turnMode to set
      */
     public void setTurnMode(char turnMode) {
         this.turnMode = turnMode;
     }
-
+    
     /**
      * @return the drawEnable
      */
     public boolean isDrawEnable() {
         return drawEnable;
     }
-
+    
     /**
      * @param drawEnable the drawEnable to set
      */
     public void setDrawEnable(boolean drawEnable) {
         this.drawEnable = drawEnable;
     }
-
-    /**
-     * @return the deathCount
-     */
-    public int getDeathCount() {
-        return deathCount;
-    }
-
+    
     /**
      * @return the AkeyCount
      */
     public int getAkeyCount() {
         return AkeyCount;
     }
-
+    
     /**
      * @return the DkeyCount
      */
     public int getDkeyCount() {
         return DkeyCount;
     }
-
+    
     /**
      * @return the AttkeyCount
      */
     public int getAttkeyCount() {
         return AttkeyCount;
     }
-
-    /**
-     * @return the syagamiCount
-     */
-    public int getSyagamiCount() {
-        return syagamiCount;
-    }
-
+    
     /**
      * @return the Wkey
      */
     public boolean isWkey() {
         return Wkey;
     }
-
+    
     /**
      * @return the Akey
      */
     public boolean isAkey() {
         return Akey;
     }
-
+    
     /**
      * @return the Skey
      */
     public boolean isSkey() {
         return Skey;
     }
-
+    
     /**
      * @return the Dkey
      */
     public boolean isDkey() {
         return Dkey;
     }
-
+    
     /**
      * @return the Attkey
      */
     public boolean isAttkey() {
         return Attkey;
     }
-
+    
     /**
      * @return the Junpkey
      */
     public boolean isJunpkey() {
         return Junpkey;
     }
-
+    
     /**
      * @return the gra
      */
     public int getGra() {
         return gra;
     }
-
+    
     /**
      * @param gra the gra to set
      */
     public void setGra(int gra) {
         this.gra = gra;
     }
-
+    
     /**
      *
      * @return
@@ -522,7 +483,7 @@ public final class GamePanel {
     public GameChara getMe() {
         return me;
     }
-
+    
     /**
      *
      * @return
@@ -530,21 +491,21 @@ public final class GamePanel {
     public GameChara getTeki() {
         return teki;
     }
-
+    
     /**
      *
      */
     public void addOtherchara() {
-
+        
     }
-
+    
     /**
      * @return the WkeyCount
      */
     public int getWkeyCount() {
         return WkeyCount;
     }
-
+    
     /**
      *
      * @return
@@ -552,5 +513,5 @@ public final class GamePanel {
     public GameMap getMap() {
         return map;
     }
-
+//</editor-fold>
 }

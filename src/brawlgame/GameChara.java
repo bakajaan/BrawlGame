@@ -17,7 +17,7 @@ public class GameChara {
     private Point zahyou;
     private boolean setti = true;
     private int junpPower = 0;
-    private Point junpPlace;
+    private final Point junpPlace;
     private int syagamiCount = 0;
     private int standCount = 0;
     private int walkCount = 0;
@@ -29,6 +29,11 @@ public class GameChara {
     private int AttCount = 0;
     private char mode;
 
+    /**
+     * コンストラクタ
+     *
+     * @param gameP
+     */
     public GameChara(GamePanel gameP) {
         GP = gameP;
         zahyou = new Point(200, 300);
@@ -57,6 +62,9 @@ public class GameChara {
         }
     }
 
+    /**
+     * 更新
+     */
     public void update() {
         Point move = new Point(0, 0);
 
@@ -76,6 +84,7 @@ public class GameChara {
             }
             return;
         }
+
         //キーによる移動
         if (!GP.isAkey() && !GP.isDkey()) {
             walkCount = 0;
@@ -160,7 +169,7 @@ public class GameChara {
                         move.x += 8;
                         break;
                 }
-                AttCount--; 
+                AttCount--;
             }
         }
 
@@ -220,7 +229,6 @@ public class GameChara {
             } else if (move.y < 0) {
                 zahyou.y = GP.getMap().tilePixel(tile.y + 1);
             }
-
         }
 
         //向いてる方向の変更
@@ -325,6 +333,7 @@ public class GameChara {
         }
     }
 
+    //<editor-fold defaultstate="collapsed" desc="取得、設定メソッド">
     public Point getZahyou() {
         return zahyou;
     }
@@ -362,5 +371,5 @@ public class GameChara {
     public void setMode(char mode) {
         this.mode = mode;
     }
-
+//</editor-fold>
 }

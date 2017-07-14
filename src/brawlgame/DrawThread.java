@@ -29,7 +29,7 @@ public class DrawThread extends Thread {
             //パネルの移動
             if (GP.isDrawEnable()) {
                 int move = 0;
-                if (GP.getTurnMode() == GP.getMode()) {
+                if (GP.getTurnMode() == GP.getMe().getMode()) {
                     if (GP.getMe().getZahyou().x > GP.getTeki().getZahyou().x) {
                         if (GP.getMe().getZahyou().x - GP.getTeki().getZahyou().x < 980) {
                             move = GP.getGameP().getX() + (GP.getTeki().getZahyou().x + (GP.getMe().getZahyou().x - GP.getTeki().getZahyou().x) / 2) - 490 + GP.getCharSize() / 2;

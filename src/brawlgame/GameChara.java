@@ -228,6 +228,7 @@ public class GameChara {
                 //上にある場合
             } else if (move.y < 0) {
                 zahyou.y = GP.getMap().tilePixel(tile.y + 1);
+                junpPower = 0;
             }
         }
 

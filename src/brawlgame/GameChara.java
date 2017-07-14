@@ -28,8 +28,8 @@ public class GameChara {
     private int huriageCount = 0;
     private char mode;
 
-    int vx = 0;
-    int vy = 0;
+    private int vx = 0;
+    private int vy = 0;
 
     public GameChara(GamePanel gameP) {
         GP = gameP;
@@ -191,7 +191,7 @@ public class GameChara {
         int nextAX = zahyou.x + vx;
         Point tile = GP.getMap().getTileCollision(this, nextAX, zahyou.y);
         if (tile == null) {
-            zahyou.x = zahyou.x + move.x;
+            zahyou.x += move.x;
         } else {
             //右へ進んでいる場合
             if (head == 1) {
@@ -207,7 +207,7 @@ public class GameChara {
         int nextAY = zahyou.y + vy;
         tile = GP.getMap().getTileCollision(this, zahyou.x, nextAY);
         if (tile == null) {
-            zahyou.y = zahyou.y + move.y;
+            zahyou.y += move.y;
             System.out.println("" + setti + junpPower);
             setti = false;
         } else {

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package brawlgame;
 
 import java.awt.Graphics;
@@ -19,9 +14,6 @@ import javax.swing.ImageIcon;
  * @author C0116309
  */
 public class GameMap {
-
-    GamePanel GP;
-
     public static final int TILE_SIZE = 32;
 
     private int[][] map;
@@ -111,12 +103,6 @@ public class GameMap {
     }
 
     public Point getTileCollision(GameChara player ,int newX, int newY) {
-        // 小数点以下切り上げ
-        // 浮動小数点の関係で切り上げしないと衝突してないと判定される場合がある
-        //newX = Math.ceil(newX);
-        //newY = Math.ceil(newY);
-
-
         int fromX = Math.min(player.getZahyou().x, newX);
         int fromY = Math.min(player.getZahyou().y, newY);
         int toX = Math.max(player.getZahyou().x, newX);
@@ -145,25 +131,5 @@ public class GameMap {
         }
 
         return null;
-    }
-    
-    
-
-    /**
-     * マップの高さを所得する
-     *
-     * @return マップの高さを返す
-     */
-    private int getHeight() {
-        return height;
-    }
-
-    /**
-     * マップの横幅を所得する
-     *
-     * @return マップの横幅を返す
-     */
-    private int getWidth() {
-        return width;
     }
 }

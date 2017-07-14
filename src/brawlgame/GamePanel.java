@@ -2,17 +2,13 @@ package brawlgame;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
@@ -107,11 +103,8 @@ public final class GamePanel {
     private GameChara me;
     private GameChara teki;
     private List otherChara;
-//</editor-fold>
-
     private GameMap map;
-
-
+//</editor-fold>
 
     /**
      * ゲームパネル
@@ -121,7 +114,6 @@ public final class GamePanel {
      */
     @SuppressWarnings("deprecation")
     public GamePanel(JFrame mainF) {
-
         //それぞれスレッドのインスタンス生成
         ServerAccessThread SThread = new ServerAccessThread(this);
         DrawThread DThread = new DrawThread(this);
@@ -151,9 +143,6 @@ public final class GamePanel {
         gameP.setBackground(Color.WHITE);
         gameP.setBorder(new BevelBorder(BevelBorder.RAISED));
         mainF.add(gameP);
-
-        //画像の読み込み
-        loadImage(gameP);
 
         //コンポーネントリスナーの追加
         ComponentListener cl = new ComponentListener() {
@@ -291,7 +280,6 @@ public final class GamePanel {
      * 座標を変更させる
      */
     private void update() {
-        
         //死亡処理
         if (me.getZahyou().y + charSize > teki.getZahyou().y
                 && me.getZahyou().y < teki.getZahyou().y + charSize
@@ -354,16 +342,6 @@ public final class GamePanel {
         if (!Attkey && AttkeyCount == 20) {
             AttkeyCount = 0;
         }
-    }
-
-    /**
-     * 画像を読み込む
-     *
-     * @param gameP
-     */
-    @SuppressWarnings("deprecation")
-    public void loadImage(JPanel gameP) {
-
     }
 
     /**
@@ -537,14 +515,25 @@ public final class GamePanel {
         this.gra = gra;
     }
 
+    /**
+     *
+     * @return
+     */
     public GameChara getMe() {
         return me;
     }
 
+    /**
+     *
+     * @return
+     */
     public GameChara getTeki() {
         return teki;
     }
 
+    /**
+     *
+     */
     public void addOtherchara() {
 
     }
@@ -556,8 +545,12 @@ public final class GamePanel {
         return WkeyCount;
     }
 
+    /**
+     *
+     * @return
+     */
     public GameMap getMap() {
         return map;
     }
-    
+
 }

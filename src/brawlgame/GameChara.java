@@ -161,7 +161,7 @@ public class GameChara {
         }
 
         //重力による移動
-        if (setti == false) {
+        //if (setti == false) {
             junpPower -= GP.getGra();
             move.y -= junpPower;
             if (GP.isAttkey()) {
@@ -175,14 +175,14 @@ public class GameChara {
                 }
             }
             //自分の座標がジャンプ地点より低くなったら着地状態に変更
-            if (zahyou.y + move.y >= junpPlace.y) {
+            /*if (zahyou.y + move.y >= junpPlace.y) {
                 type = 0;
                 move.y = 0;
                 junpPower = 0;
                 zahyou.y = junpPlace.y;
                 setti = true;
-            }
-        }
+            }*/
+        //}
 
         //ぶつかった時
         //左右
@@ -190,6 +190,7 @@ public class GameChara {
         int nextAX = zahyou.x + vx;
         Point tile = GP.getMap().getTileCollision(this, nextAX, zahyou.y);
         if (tile == null) {
+            zahyou.x = zahyou.x + move.x;
         } else {
             //右へ進んでいる場合
             if (head == 1) {
@@ -205,24 +206,27 @@ public class GameChara {
         int nextAY = zahyou.y + vy;
         tile = GP.getMap().getTileCollision(this, zahyou.x, nextAY);
         if (tile == null) {
+            zahyou.y = zahyou.y + move.y;
+            setti = false;
         } else {
             //下にある場合
             if (vy > 0) {
                 zahyou.y = GP.getMap().tilePixel(tile.y) - GP.getCharSize();
                 setti = true;
+                vy = 0;
                 //上にある場合
             } else if (vy < 0) {
                 zahyou.y = GP.getMap().tilePixel(tile.y + 1);
+                vy = 0;
             }
-            vy = 0;
+            
         }
 
         //座標の最終チェック
         if (zahyou.y < 0) {
             zahyou.y = 0;
         }
-        zahyou.x = zahyou.x + move.x;
-        zahyou.y = zahyou.y + move.y;
+
         //向いてる方向の変更
         if (setti && !GP.isAkey() && !GP.isDkey()) {
             if (zahyou.x > GP.getTeki().getZahyou().x) {

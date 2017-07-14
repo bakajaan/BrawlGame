@@ -110,21 +110,22 @@ public class GameMap {
 
     }
 
-    public Point getTileCollision(double newX, double newY) {
+    public Point getTileCollision(GameChara player ,int newX, int newY) {
         // 小数点以下切り上げ
         // 浮動小数点の関係で切り上げしないと衝突してないと判定される場合がある
-        newX = Math.ceil(newX);
-        newY = Math.ceil(newY);
+        //newX = Math.ceil(newX);
+        //newY = Math.ceil(newY);
 
-        double fromX = Math.min(GP.getMe().getZahyou().x, newX);
-        double fromY = Math.min(GP.getMe().getZahyou().y, newY);
-        double toX = Math.max(GP.getMe().getZahyou().x, newX);
-        double toY = Math.max(GP.getMe().getZahyou().y, newY);
 
+        int fromX = Math.min(player.getZahyou().x, newX);
+        int fromY = Math.min(player.getZahyou().y, newY);
+        int toX = Math.max(player.getZahyou().x, newX);
+        int toY = Math.max(player.getZahyou().y, newY);
+        
         int fromTileX = pixelsToTiles(fromX);
         int fromTileY = pixelsToTiles(fromY);
-        int toTileX = pixelsToTiles(toX + GP.getCharSize() - 1);
-        int toTileY = pixelsToTiles(toY + GP.getCharSize() - 1);
+        int toTileX = pixelsToTiles(toX + 100 - 1);
+        int toTileY = pixelsToTiles(toY + 100 - 1);
 
         // 衝突しているか調べる
         for (int x = fromTileX; x <= toTileX; x++) {
@@ -145,6 +146,8 @@ public class GameMap {
 
         return null;
     }
+    
+    
 
     /**
      * マップの高さを所得する

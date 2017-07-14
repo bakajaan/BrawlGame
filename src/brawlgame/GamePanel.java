@@ -3,6 +3,7 @@ package brawlgame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
@@ -108,6 +109,10 @@ public final class GamePanel {
     private List otherChara;
 //</editor-fold>
 
+    private GameMap map;
+
+
+
     /**
      * ゲームパネル
      * ゲームの内部処理をもつ
@@ -122,7 +127,7 @@ public final class GamePanel {
         DrawThread DThread = new DrawThread(this);
 
         //マップ読み込み
-        GameMap map = new GameMap("map01.dat");
+        map = new GameMap("map01.dat");
         me = new GameChara(this);
         teki = new GameChara(this);
         otherChara = new ArrayList();
@@ -286,6 +291,7 @@ public final class GamePanel {
      * 座標を変更させる
      */
     private void update() {
+        
         //死亡処理
         if (me.getZahyou().y + charSize > teki.getZahyou().y
                 && me.getZahyou().y < teki.getZahyou().y + charSize
@@ -549,4 +555,9 @@ public final class GamePanel {
     public int getWkeyCount() {
         return WkeyCount;
     }
+
+    public GameMap getMap() {
+        return map;
+    }
+    
 }

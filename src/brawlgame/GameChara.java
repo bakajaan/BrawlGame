@@ -28,6 +28,9 @@ public class GameChara {
     private int huriageCount = 0;
     private char mode;
 
+    int vx = 0;
+    int vy = 0;
+
     public GameChara(GamePanel gameP) {
         GP = gameP;
         zahyou = new Point(200, 300);
@@ -58,6 +61,7 @@ public class GameChara {
 
     public void update() {
         Point move = new Point(0, 0);
+
         //死亡処理
         if (type == 14 && deathCount < 60) {
             //死亡モーション中は1秒間そのまま
@@ -178,6 +182,39 @@ public class GameChara {
                 zahyou.y = junpPlace.y;
                 setti = true;
             }
+        }
+
+        //ぶつかった時
+        //左右
+        vx = move.x;
+        int nextAX = zahyou.x + vx;
+        Point tile = GP.getMap().getTileCollision(this, nextAX, zahyou.y);
+        if (tile == null) {
+        } else {
+            //右へ進んでいる場合
+            if (head == 1) {
+                zahyou.x = GP.getMap().tilePixel(tile.x) - GP.getCharSize();
+                //左に進んでいる場合
+            } else if (head == 2) {
+                zahyou.x = GP.getMap().tilePixel(tile.x + 1);
+            }
+            vx = 0;
+        }
+        //上下
+        vy = move.y;
+        int nextAY = zahyou.y + vy;
+        tile = GP.getMap().getTileCollision(this, zahyou.x, nextAY);
+        if (tile == null) {
+        } else {
+            //下にある場合
+            if (vy > 0) {
+                zahyou.y = GP.getMap().tilePixel(tile.y) - GP.getCharSize();
+                setti = true;
+                //上にある場合
+            } else if (vy < 0) {
+                zahyou.y = GP.getMap().tilePixel(tile.y + 1);
+            }
+            vy = 0;
         }
 
         //座標の最終チェック

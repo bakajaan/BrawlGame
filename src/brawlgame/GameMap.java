@@ -39,7 +39,7 @@ public class GameMap {
      * 画像を読み込む
      */
     private void loadImage() {
-        ImageIcon iconb = new ImageIcon(new ImageIcon("./src/img/paper.png").getImage().getScaledInstance(2400, 3304, Image.SCALE_DEFAULT));
+        ImageIcon iconb = new ImageIcon(new ImageIcon("./src/img/back2.jpg").getImage().getScaledInstance(2640, 1920, Image.SCALE_DEFAULT));
         background = iconb.getImage();
         ImageIcon icon = new ImageIcon(new ImageIcon(
                 "./src/img/block.gif").
@@ -143,6 +143,9 @@ public class GameMap {
                 // ブロックがあったら衝突
                 if (map[y][x] == 1) {
                     return new Point(x, y);
+                }
+                if (map[y][x] == 2) {
+                    player.setType(14);
                 }
             }
         }

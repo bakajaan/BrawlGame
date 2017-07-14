@@ -26,6 +26,7 @@ public class GameChara {
     private int sowdPosision = 0;
     private int deathCount = 0;
     private int huriageCount = 0;
+    private int AttCount = 0;
     private char mode;
 
     public GameChara(GamePanel gameP) {
@@ -122,8 +123,8 @@ public class GameChara {
         } else {
             huriageCount = 0;
         }
-        if (GP.isAttkey() && GP.getAttkeyCount() < 20) {
-            if (GP.getAttkeyCount() < 4 && setti) {
+        if (GP.isAttkey() && AttCount < 20) {
+            if (AttCount < 4 && setti) {
                 switch (head) {
                     case 1:
                         move.x += 8;
@@ -133,7 +134,7 @@ public class GameChara {
                         break;
                 }
             }
-            if (GP.getAttkeyCount() > 17) {
+            if (AttCount > 15) {
                 switch (head) {
                     case 1:
                         move.x -= 8;
@@ -143,9 +144,14 @@ public class GameChara {
                         break;
                 }
             }
+            AttCount++;
         }
-        if (!GP.isAttkey() && GP.getAttkeyCount() != 0 && GP.getAttkeyCount() != 20) {
-            if (GP.getAttkeyCount() < 3) {
+        if (!GP.isAttkey() && AttCount != 0 && AttCount != 20) {
+            if (AttCount > 10) {
+                AttCount = 20 - AttCount;
+            }
+            if (AttCount == 0) {
+            } else if (AttCount < 3) {
                 switch (head) {
                     case 1:
                         move.x -= 8;
@@ -154,6 +160,7 @@ public class GameChara {
                         move.x += 8;
                         break;
                 }
+                AttCount--; 
             }
         }
 
@@ -163,7 +170,8 @@ public class GameChara {
         }
         junpPower -= GP.getGra();
         move.y -= junpPower;
-        if (GP.isAttkey()) {
+        //System.out.println(setti);
+        /*if (GP.isAttkey() && setti) {
             switch (head) {
                 case 1:
                     move.x += 16;
@@ -172,7 +180,7 @@ public class GameChara {
                     move.x -= 16;
                     break;
             }
-        }
+        }*/
         //自分の座標がジャンプ地点より低くなったら着地状態に変更
         /*if (zahyou.y + move.y >= junpPlace.y) {
                 type = 0;

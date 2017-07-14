@@ -222,11 +222,6 @@ public class GameChara {
             
         }
 
-        //座標の最終チェック
-        if (zahyou.y < 0) {
-            zahyou.y = 0;
-        }
-
         //向いてる方向の変更
         if (setti && !GP.isAkey() && !GP.isDkey()) {
             if (zahyou.x > GP.getTeki().getZahyou().x) {

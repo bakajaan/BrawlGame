@@ -94,7 +94,7 @@ public class GameChara {
         if (!GP.isAkey() && !GP.isDkey()) {
             walkCount = 0;
         }
-        if (GP.isJunpkey() && setti && !GP.isAttkey() && !GP.isSkey()) {
+        if (GP.isJunpkey() && setti && !GP.isAttkey() && syagamiCount < 20) {
             junpPlace.y = zahyou.y;
             setti = false;
             junpPower = 28;
@@ -117,7 +117,7 @@ public class GameChara {
                 move.x += 10;
             }
         }
-        if (GP.isSkey()) {
+        if (GP.isSkey() && setti) {
             if (syagamiCount == 0) {
                 if (sowdPosision > 0) {
                     sowdPosision--;
@@ -127,7 +127,7 @@ public class GameChara {
         } else {
             syagamiCount = 0;
         }
-        if (GP.isWkey()) {
+        if (GP.isWkey() && setti) {
             if (huriageCount == 0) {
                 if (sowdPosision < 2) {
                     sowdPosision++;
@@ -188,7 +188,6 @@ public class GameChara {
         }
         junpPower -= GP.getGra();
         move.y -= junpPower;
-        //System.out.println(setti);
         if (GP.isAttkey() && !setti) {
             AttCount = 20;
             switch (head) {

@@ -131,16 +131,16 @@ public final class GamePanel {
         ComponentListener cl = new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                if (e.getComponent().getWidth() / 4
-                        > e.getComponent().getHeight() / 3) {
-                    //横長の時縦の大きさのみ変更
-                    gameP.setSize((e.getComponent().getHeight() / 3) * 4,
-                            e.getComponent().getHeight());
-                } else {
-                    //縦長の時横の大きさのみ変更
-                    gameP.setSize(e.getComponent().getWidth(),
-                            (e.getComponent().getWidth() / 4) * 3);
-                }
+//                if (e.getComponent().getWidth() / 4
+//                        > e.getComponent().getHeight() / 3) {
+//                    //横長の時縦の大きさのみ変更
+//                    gameP.setSize((e.getComponent().getHeight() / 3) * 4,
+//                            e.getComponent().getHeight());
+//                } else {
+//                    //縦長の時横の大きさのみ変更
+//                    gameP.setSize(e.getComponent().getWidth(),
+//                            (e.getComponent().getWidth() / 4) * 3);
+//                }
             }
 
             @Override

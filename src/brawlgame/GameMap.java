@@ -14,14 +14,15 @@ import javax.swing.ImageIcon;
  * @author C0116309
  */
 public class GameMap {
+
     public final int TILE_SIZE = 32;
     private int[][] map;
     private int row;
     private int col;
     private final int width;
     private final int height;
-    private Image blockImage;
-    private Image background;
+    private ImageIcon iconb;
+    private ImageIcon icon;
 
     /**
      * コンストラクタ
@@ -39,14 +40,12 @@ public class GameMap {
      * 画像を読み込む
      */
     private void loadImage() {
-        ImageIcon iconb = new ImageIcon("./src/img/back2.jpg");
+        iconb = new ImageIcon("./src/img/back2.jpg");
         //ImageIcon iconb = new ImageIcon(new ImageIcon("./src/img/back2.jpg").getImage().getScaledInstance(2640, 1920, Image.SCALE_DEFAULT));
-        background = iconb.getImage();
-        ImageIcon icon = new ImageIcon(new ImageIcon(
+        icon = new ImageIcon(new ImageIcon(
                 "./src/img/block.gif").
                 getImage().getScaledInstance(TILE_SIZE, TILE_SIZE,
                         Image.SCALE_DEFAULT));
-        blockImage = icon.getImage();
     }
 
     /**
@@ -69,12 +68,12 @@ public class GameMap {
      * @param g グラフィック
      */
     public void drow(Graphics g) {
-        g.drawImage(background, 0, 0, null);
+        g.drawImage(iconb.getImage(), 0, 0, null);
         for (int i = 0; i < height / TILE_SIZE; i++) {
             for (int j = 0; j < width / TILE_SIZE; j++) {
                 switch (map[i][j]) {
                     case 1://足場
-                        g.drawImage(blockImage, tilePixel(j), tilePixel(i), null);
+                        g.drawImage(icon.getImage(), tilePixel(j), tilePixel(i), null);
                         break;
                 }
             }
@@ -82,7 +81,7 @@ public class GameMap {
     }
 
     /**
-     * 画像読み込み
+     * ファイル読み込み
      *
      * @param filename
      */

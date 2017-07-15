@@ -39,7 +39,8 @@ public class GameMap {
      * 画像を読み込む
      */
     private void loadImage() {
-        ImageIcon iconb = new ImageIcon(new ImageIcon("./src/img/back2.jpg").getImage().getScaledInstance(2640, 1920, Image.SCALE_DEFAULT));
+        ImageIcon iconb = new ImageIcon("./src/img/back2.jpg");
+        //ImageIcon iconb = new ImageIcon(new ImageIcon("./src/img/back2.jpg").getImage().getScaledInstance(2640, 1920, Image.SCALE_DEFAULT));
         background = iconb.getImage();
         ImageIcon icon = new ImageIcon(new ImageIcon(
                 "./src/img/block.gif").

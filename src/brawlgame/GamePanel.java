@@ -228,12 +228,11 @@ public final class GamePanel {
             end(mainF, kl, cl, SThread, DThread);
             return;
         }
-        //me.setMode(mode);
 
         //マップ読み込み
         map = new GameMap("map02.dat");
-        me = new GameChara(this,mode);
-        teki = new GameChara(this,'b');
+        me = new GameChara(this, mode);
+        teki = new GameChara(this, 'b');
         otherChara = new ArrayList();
 
         //それぞれのスレッドを開始
@@ -284,12 +283,12 @@ public final class GamePanel {
                 turnMode = 'a';
             }
             return;
-        } else if (me.getZahyou().y + charSize > teki.getZahyou().y
+        } else if ((me.getZahyou().y + charSize > teki.getZahyou().y
                 && me.getZahyou().y < teki.getZahyou().y + charSize
                 && me.getZahyou().x + charSize > teki.getZahyou().x
                 && me.getZahyou().x < teki.getZahyou().x + charSize / 2
                 && (teki.getType() == 6 || teki.getType() == 9 || teki.getType() == 12)
-                && teki.getHead() == 2) {
+                && teki.getHead() == 2) || me.getZahyou().y > 600) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             me.setType(14);
             AttkeyCount = 0;
@@ -356,126 +355,126 @@ public final class GamePanel {
     public JPanel getGameP() {
         return gameP;
     }
-    
+
     /**
      * @return the charSize
      */
     public int getCharSize() {
         return charSize;
     }
-    
+
     /**
      * @return the charType
      */
     public int getCharType() {
         return charType;
     }
-    
+
     /**
      * @return the turnMode
      */
     public char getTurnMode() {
         return turnMode;
     }
-    
+
     /**
      * @param turnMode the turnMode to set
      */
     public void setTurnMode(char turnMode) {
         this.turnMode = turnMode;
     }
-    
+
     /**
      * @return the drawEnable
      */
     public boolean isDrawEnable() {
         return drawEnable;
     }
-    
+
     /**
      * @param drawEnable the drawEnable to set
      */
     public void setDrawEnable(boolean drawEnable) {
         this.drawEnable = drawEnable;
     }
-    
+
     /**
      * @return the AkeyCount
      */
     public int getAkeyCount() {
         return AkeyCount;
     }
-    
+
     /**
      * @return the DkeyCount
      */
     public int getDkeyCount() {
         return DkeyCount;
     }
-    
+
     /**
      * @return the AttkeyCount
      */
     public int getAttkeyCount() {
         return AttkeyCount;
     }
-    
+
     /**
      * @return the Wkey
      */
     public boolean isWkey() {
         return Wkey;
     }
-    
+
     /**
      * @return the Akey
      */
     public boolean isAkey() {
         return Akey;
     }
-    
+
     /**
      * @return the Skey
      */
     public boolean isSkey() {
         return Skey;
     }
-    
+
     /**
      * @return the Dkey
      */
     public boolean isDkey() {
         return Dkey;
     }
-    
+
     /**
      * @return the Attkey
      */
     public boolean isAttkey() {
         return Attkey;
     }
-    
+
     /**
      * @return the Junpkey
      */
     public boolean isJunpkey() {
         return Junpkey;
     }
-    
+
     /**
      * @return the gra
      */
     public int getGra() {
         return gra;
     }
-    
+
     /**
      * @param gra the gra to set
      */
     public void setGra(int gra) {
         this.gra = gra;
     }
-    
+
     /**
      *
      * @return
@@ -483,7 +482,7 @@ public final class GamePanel {
     public GameChara getMe() {
         return me;
     }
-    
+
     /**
      *
      * @return
@@ -491,21 +490,21 @@ public final class GamePanel {
     public GameChara getTeki() {
         return teki;
     }
-    
+
     /**
      *
      */
     public void addOtherchara() {
-        
+
     }
-    
+
     /**
      * @return the WkeyCount
      */
     public int getWkeyCount() {
         return WkeyCount;
     }
-    
+
     /**
      *
      * @return

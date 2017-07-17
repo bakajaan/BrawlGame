@@ -1,6 +1,5 @@
 package brawlgame;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
@@ -34,6 +33,7 @@ public class GameChara {
      * コンストラクタ
      *
      * @param gameP
+     * @param m
      */
     public GameChara(GamePanel gameP, char m) {
         mode = m;

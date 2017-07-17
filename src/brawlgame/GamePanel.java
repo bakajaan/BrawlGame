@@ -114,9 +114,15 @@ public final class GamePanel {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                map.drow(g);
-                me.drow(g);
-                teki.drow(g);
+                if (map != null) {
+                    map.drow(g);
+                }
+                if (me != null) {
+                    me.drow(g);
+                }
+                if (teki != null) {
+                    teki.drow(g);
+                }
             }
         };
         gameP.setBounds(0, 0, 2400, 3304);
@@ -230,9 +236,9 @@ public final class GamePanel {
         }
 
         //マップ読み込み
-        map = new GameMap("map02.dat");
         me = new GameChara(this, mode);
         teki = new GameChara(this, 'b');
+        map = new GameMap("map02.dat", this);
         otherChara = new ArrayList();
 
         //それぞれのスレッドを開始
@@ -267,6 +273,17 @@ public final class GamePanel {
      * 座標を変更させる
      */
     private void update() {
+
+        if (me.getMode() == 'a') {
+            if (teki.getZahyou().x == 0) {
+                map = new GameMap("map01.dat", this);
+            }
+        } else {
+            if (me.getZahyou().x == 0) {
+                map = new GameMap("map01.dat", this);
+            }
+        }
+
         //死亡処理
         if (me.getZahyou().y + charSize > teki.getZahyou().y
                 && me.getZahyou().y < teki.getZahyou().y + charSize
@@ -288,7 +305,7 @@ public final class GamePanel {
                 && me.getZahyou().x + charSize > teki.getZahyou().x
                 && me.getZahyou().x < teki.getZahyou().x + charSize / 2
                 && (teki.getType() == 6 || teki.getType() == 9 || teki.getType() == 12)
-                && teki.getHead() == 2) || me.getZahyou().y > 600) {
+                && teki.getHead() == 2)) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             me.setType(14);
             AttkeyCount = 0;
@@ -298,6 +315,8 @@ public final class GamePanel {
                 turnMode = 'a';
             }
             return;
+        } else if (me.getZahyou().y > 600 || teki.getZahyou().y > 600) {
+            map = new GameMap("map01.dat", this);
         }
         if (teki.getType() == 14) {
             turnMode = me.getMode();

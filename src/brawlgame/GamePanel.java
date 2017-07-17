@@ -93,6 +93,7 @@ public final class GamePanel {
     private GameChara teki;
     private List otherChara;
     private GameMap map;
+    private boolean fight = false;
 //</editor-fold>
 
     /**
@@ -282,6 +283,9 @@ public final class GamePanel {
             if (me.getZahyou().x == 0) {
                 map = new GameMap("map01.dat", this);
             }
+        }
+        if (!fight && teki.getType() != 15) {
+            fight = true;
         }
 
         //死亡処理
@@ -530,6 +534,13 @@ public final class GamePanel {
      */
     public GameMap getMap() {
         return map;
+    }
+
+    /**
+     * @return the fight
+     */
+    public boolean isFight() {
+        return fight;
     }
 //</editor-fold>
 }

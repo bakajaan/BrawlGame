@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
@@ -43,6 +44,7 @@ public final class GamePanel {
      */
     private int AttkeyCount = 0;
     private int WkeyCount = 0;
+    private int connectCount = 0;
     /**
      * キャラクターのサイズ
      */
@@ -93,6 +95,7 @@ public final class GamePanel {
     private GameChara teki;
     private List otherChara;
     private GameMap map;
+    private final ImageIcon connect[];
     private boolean fight = false;
 //</editor-fold>
 
@@ -124,6 +127,10 @@ public final class GamePanel {
                 if (teki != null) {
                     teki.drow(g);
                 }
+                if (!fight) {
+                    connectCount++;
+                    g.drawImage(connect[connectCount / 5 % 4].getImage(), -gameP.getX(), 0, null);
+                }
             }
         };
         gameP.setBounds(0, 0, 2400, 3304);
@@ -133,6 +140,14 @@ public final class GamePanel {
         gameP.setBackground(Color.WHITE);
         gameP.setBorder(new BevelBorder(BevelBorder.RAISED));
         mainF.add(gameP);
+
+        connect = new ImageIcon[4];
+        for (int i = 0; i < 4; i++) {
+            connect[i] = new ImageIcon("./src/img/c" + (i + 1) + ".png");
+        }
+        Graphics g = gameP.getGraphics();
+        ImageIcon load = new ImageIcon("./src/img/ml1.png");
+        g.drawImage(load.getImage(), 0, 0, null);
 
         //コンポーネントリスナーの追加
         ComponentListener cl = new ComponentListener() {
@@ -277,11 +292,11 @@ public final class GamePanel {
 
         if (me.getMode() == 'a') {
             if (teki.getZahyou().x == 0) {
-                map = new GameMap("map01.dat", this);
+                map = new GameMap("map03.dat", this);
             }
         } else {
             if (me.getZahyou().x == 0) {
-                map = new GameMap("map01.dat", this);
+                map = new GameMap("map03.dat", this);
             }
         }
         if (!fight && teki.getType() != 15) {
@@ -309,7 +324,7 @@ public final class GamePanel {
                 && me.getZahyou().x + charSize > teki.getZahyou().x
                 && me.getZahyou().x < teki.getZahyou().x + charSize / 2
                 && (teki.getType() == 6 || teki.getType() == 9 || teki.getType() == 12)
-                && teki.getHead() == 2)) {
+                && teki.getHead() == 2) || me.getZahyou().y > 600) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             me.setType(14);
             AttkeyCount = 0;
@@ -319,8 +334,6 @@ public final class GamePanel {
                 turnMode = 'a';
             }
             return;
-        } else if (me.getZahyou().y > 600 || teki.getZahyou().y > 600) {
-            map = new GameMap("map01.dat", this);
         }
         if (teki.getType() == 14) {
             turnMode = me.getMode();

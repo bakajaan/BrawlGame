@@ -1,5 +1,6 @@
 package brawlgame;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
@@ -91,85 +92,65 @@ public class GameChara {
         }
 
         //キーによる移動
-        if (!GP.isAkey() && !GP.isDkey()) {
-            walkCount = 0;
-        }
-        if (GP.isJunpkey() && setti && !GP.isAttkey() && syagamiCount < 20) {
-            junpPlace.y = zahyou.y;
-            setti = false;
-            junpPower = 28;
-        }
-        if (GP.isAkey() && !GP.isDkey() && !GP.isAttkey() && syagamiCount < 20) {
-            if (GP.getAkeyCount() < 10) {
-                move.x -= 5;
-            } else {
-                head = 2;
-                walkCount++;
-                move.x -= 10;
+        if (GP.isFight()) {
+            if (!GP.isAkey() && !GP.isDkey()) {
+                walkCount = 0;
             }
-        }
-        if (GP.isDkey() && !GP.isAkey() && !GP.isAttkey() && syagamiCount < 20) {
-            if (GP.getDkeyCount() < 10) {
-                move.x += 5;
-            } else {
-                head = 1;
-                walkCount++;
-                move.x += 10;
+            if (GP.isJunpkey() && setti && !GP.isAttkey() && syagamiCount < 20) {
+                junpPlace.y = zahyou.y;
+                setti = false;
+                junpPower = 28;
             }
-        }
-        if (GP.isSkey() && setti) {
-            if (syagamiCount == 0) {
-                if (sowdPosision > 0) {
-                    sowdPosision--;
-                }
-            }
-            syagamiCount++;
-        } else {
-            syagamiCount = 0;
-        }
-        if (GP.isWkey() && setti) {
-            if (huriageCount == 0) {
-                if (sowdPosision < 2) {
-                    sowdPosision++;
-                }
-                huriageCount++;
-            }
-        } else {
-            huriageCount = 0;
-        }
-        if (GP.isAttkey() && AttCount < 20 && setti) {
-            if (AttCount < 4) {
-                switch (head) {
-                    case 1:
-                        move.x += 8;
-                        break;
-                    case 2:
-                        move.x -= 8;
-                        break;
-                }
-            }
-            if (AttCount > 15) {
-                switch (head) {
-                    case 1:
-                        move.x -= 8;
-                        break;
-                    case 2:
-                        move.x += 8;
-                        break;
-                }
-            }
-            AttCount++;
-        }
-        if (!GP.isAttkey() && AttCount != 0) {
-            if (AttCount == 20) {
-                AttCount = 0;
-            } else {
-                if (AttCount >= 4) {
-                    AttCount = 3;
+            if (GP.isAkey() && !GP.isDkey() && !GP.isAttkey() && syagamiCount < 20) {
+                if (GP.getAkeyCount() < 10) {
+                    move.x -= 5;
                 } else {
-                    AttCount--;
+                    head = 2;
+                    walkCount++;
+                    move.x -= 10;
                 }
+            }
+            if (GP.isDkey() && !GP.isAkey() && !GP.isAttkey() && syagamiCount < 20) {
+                if (GP.getDkeyCount() < 10) {
+                    move.x += 5;
+                } else {
+                    head = 1;
+                    walkCount++;
+                    move.x += 10;
+                }
+            }
+            if (GP.isSkey() && setti) {
+                if (syagamiCount == 0) {
+                    if (sowdPosision > 0) {
+                        sowdPosision--;
+                    }
+                }
+                syagamiCount++;
+            } else {
+                syagamiCount = 0;
+            }
+            if (GP.isWkey() && setti) {
+                if (huriageCount == 0) {
+                    if (sowdPosision < 2) {
+                        sowdPosision++;
+                    }
+                    huriageCount++;
+                }
+            } else {
+                huriageCount = 0;
+            }
+            if (GP.isAttkey() && AttCount < 20 && setti) {
                 if (AttCount < 4) {
+                    switch (head) {
+                        case 1:
+                            move.x += 8;
+                            break;
+                        case 2:
+                            move.x -= 8;
+                            break;
+                    }
+                }
+                if (AttCount > 15) {
                     switch (head) {
                         case 1:
                             move.x -= 8;
@@ -179,9 +160,30 @@ public class GameChara {
                             break;
                     }
                 }
+                AttCount++;
+            }
+            if (!GP.isAttkey() && AttCount != 0) {
+                if (AttCount == 20) {
+                    AttCount = 0;
+                } else {
+                    if (AttCount >= 4) {
+                        AttCount = 3;
+                    } else {
+                        AttCount--;
+                    }
+                    if (AttCount < 4) {
+                        switch (head) {
+                            case 1:
+                                move.x -= 8;
+                                break;
+                            case 2:
+                                move.x += 8;
+                                break;
+                        }
+                    }
+                }
             }
         }
-
         //重力による移動
         if (setti == true) {
             junpPower = 0;

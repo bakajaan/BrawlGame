@@ -26,7 +26,7 @@ public class MainMenuPanel {
      * パネルを変更するかどうか
      */
     private boolean changePanel = false;
-    private ImageIcon title;
+    private ImageIcon title[];
     private ImageIcon menu1;
     private ImageIcon menu2;
     private ImageIcon back[];
@@ -51,7 +51,12 @@ public class MainMenuPanel {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                g.drawImage(title.getImage(), 0, 0, null);
+//                if ((int) (Math.random() * 10) == 2) {
+//                    g.drawImage(title[1].getImage(), 0, 0, null);
+//                }else if ((int) (Math.random() * 10) == 3) {
+//                    g.drawImage(title[2].getImage(), 0, 0, null);
+//                }
+                g.drawImage(title[0].getImage(), 0, 0, null);
                 switch (selectMenu) {
                     case 0:
                         g.drawImage(menu1.getImage(), 0, 0, null);
@@ -123,9 +128,12 @@ public class MainMenuPanel {
     }
 
     private void loadImage() {
-        title = new ImageIcon("./src/img/m1.png");
-        menu1 = new ImageIcon("./src/img/m2.png");
-        menu2 = new ImageIcon("./src/img/m3.png");
+        title = new ImageIcon[4];
+        for (int i = 0; i < 4; i++) {
+            title[i] = new ImageIcon("./src/img/mt" + (i + 1) + ".png");
+        }
+        menu1 = new ImageIcon("./src/img/m1.png");
+        menu2 = new ImageIcon("./src/img/m2.png");
         back = new ImageIcon[4];
         for (int i = 0; i < 4; i++) {
             back[i] = new ImageIcon("./src/img/mb" + (i + 1) + ".png");

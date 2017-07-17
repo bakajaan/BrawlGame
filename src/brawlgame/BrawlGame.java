@@ -49,6 +49,7 @@ public final class BrawlGame {
         mainF.setBounds(0, 0, 980, 660);
         mainF.setDefaultCloseOperation(EXIT_ON_CLOSE);
         mainF.setLayout(null);
+        mainF.setResizable(false);
         mainF.setVisible(true);
 
         //メニュー画面から開始

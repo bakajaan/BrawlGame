@@ -36,8 +36,11 @@ public class GameMap {
         height = TILE_SIZE * row;
         loadImage();
         panel.getGameP().setSize(iconb.getIconWidth(), iconb.getIconHeight());
-        panel.getMe().getZahyou().x=950;
-        panel.getTeki().getZahyou().x=950;
+        if (panel.getMe().getMode() == 'a') {
+            panel.getMe().getZahyou().x = 950;
+        } else {
+            panel.getMe().getZahyou().x = 1350;
+        }
     }
 
     /**

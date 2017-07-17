@@ -28,12 +28,16 @@ public class GameMap {
      * コンストラクタ
      *
      * @param filename
+     * @param panel
      */
-    public GameMap(String filename) {
+    public GameMap(String filename, GamePanel panel) {
         load(filename);
         width = TILE_SIZE * col;
         height = TILE_SIZE * row;
         loadImage();
+        panel.getGameP().setSize(iconb.getIconWidth(), iconb.getIconHeight());
+        panel.getMe().getZahyou().x=950;
+        panel.getTeki().getZahyou().x=950;
     }
 
     /**

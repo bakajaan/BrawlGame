@@ -84,10 +84,11 @@ public class GameChara {
             deathCount = 0;
             type = 0;
             if (mode == 'a') {
-                zahyou.x = 250;
+                zahyou.x = 950;
             } else {
-                zahyou.x = 2050;
+                zahyou.x = 1350;
             }
+            zahyou.y=380;
             return;
         }
 

@@ -141,38 +141,38 @@ public class GameChara {
                 huriageCount = 0;
             }
             if (GP.isAttkey() && AttCount < 20 && setti && syagamiCount < 20) {
-                if (AttCount < 4) {
-                    switch (head) {
-                        case 1:
-                            move.x += 8;
-                            break;
-                        case 2:
-                            move.x -= 8;
-                            break;
-                    }
-                }
-                if (AttCount > 15) {
-                    switch (head) {
-                        case 1:
-                            move.x -= 8;
-                            break;
-                        case 2:
-                            move.x += 8;
-                            break;
-                    }
-                }
                 AttCount++;
+                if (AttCount <= 4) {
+                    switch (head) {
+                        case 1:
+                            move.x += 8;
+                            break;
+                        case 2:
+                            move.x -= 8;
+                            break;
+                    }
+                }
+                if (AttCount > 16) {
+                    switch (head) {
+                        case 1:
+                            move.x -= 8;
+                            break;
+                        case 2:
+                            move.x += 8;
+                            break;
+                    }
+                }
             }
             if (!GP.isAttkey() && AttCount != 0 && syagamiCount < 20) {
                 if (AttCount == 20) {
                     AttCount = 0;
                 } else {
-                    if (AttCount >= 4) {
-                        AttCount = 3;
-                    } else {
-                        AttCount--;
+                    if (AttCount > 16) {
+                        AttCount = 20 - AttCount;
+                    } else if (AttCount > 4) {
+                        AttCount = 4;
                     }
-                    if (AttCount < 4) {
+                    if (AttCount <= 4) {
                         switch (head) {
                             case 1:
                                 move.x -= 8;
@@ -182,6 +182,7 @@ public class GameChara {
                                 break;
                         }
                     }
+                    AttCount--;
                 }
             }
         }

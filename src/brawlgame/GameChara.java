@@ -88,7 +88,7 @@ public class GameChara {
             } else {
                 zahyou.x = 1350;
             }
-            zahyou.y=380;
+            zahyou.y = 380;
             return;
         }
 
@@ -140,7 +140,7 @@ public class GameChara {
             } else {
                 huriageCount = 0;
             }
-            if (GP.isAttkey() && AttCount < 20 && setti) {
+            if (GP.isAttkey() && AttCount < 20 && setti && syagamiCount < 20) {
                 if (AttCount < 4) {
                     switch (head) {
                         case 1:
@@ -163,7 +163,7 @@ public class GameChara {
                 }
                 AttCount++;
             }
-            if (!GP.isAttkey() && AttCount != 0) {
+            if (!GP.isAttkey() && AttCount != 0 && syagamiCount < 20) {
                 if (AttCount == 20) {
                     AttCount = 0;
                 } else {

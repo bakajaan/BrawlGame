@@ -292,11 +292,11 @@ public final class GamePanel {
 
         if (me.getMode() == 'a') {
             if (teki.getZahyou().x == 0) {
-                map = new GameMap("map03.dat", this);
+                map = new GameMap("map04.dat", this);
             }
         } else {
             if (me.getZahyou().x == 0) {
-                map = new GameMap("map03.dat", this);
+                map = new GameMap("map04.dat", this);
             }
         }
         if (!fight && teki.getType() != 15) {

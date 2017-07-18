@@ -22,7 +22,7 @@ public class GameChara {
     private int standCount = 0;
     private int walkCount = 0;
     private int head = 1;
-    private int type = 0;
+    private int type = 15;
     private int sowdPosision = 0;
     private int deathCount = 0;
     private int huriageCount = 0;

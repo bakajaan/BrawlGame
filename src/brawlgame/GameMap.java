@@ -24,6 +24,7 @@ public class GameMap {
     private ImageIcon iconb;
     private ImageIcon icon;
 
+    GamePanel GP;
     /**
      * コンストラクタ
      *
@@ -31,6 +32,7 @@ public class GameMap {
      * @param panel
      */
     public GameMap(String filename, GamePanel panel) {
+        GP = panel;
         load(filename);
         width = TILE_SIZE * col;
         height = TILE_SIZE * row;
@@ -41,6 +43,67 @@ public class GameMap {
         } else {
             panel.getMe().getZahyou().x = 1350;
         }
+    }
+
+    public void reset(int mapno) {
+        System.out.println(mapno);
+        switch (mapno) {
+            case 0:
+                if (GP.getMe().getMode() == 'a') {
+                    GP.getMe().getZahyou().x = 950;
+                    GP.getMe().getZahyou().y = 380;
+                } else {
+                    GP.getMe().getZahyou().x = 1350;
+                    GP.getMe().getZahyou().y = 380;
+                }
+                break;
+            case 1:
+                if (GP.getMe().getMode() == 'a') {
+                    GP.getMe().getZahyou().x = 950;
+                    GP.getMe().getZahyou().y = 380;
+                } else {
+                    GP.getMe().getZahyou().x = 1350;
+                    GP.getMe().getZahyou().y = 380;
+                }
+                break;
+            case 2:
+                if (GP.getMe().getMode() == 'a') {
+                    GP.getMe().getZahyou().x = 950;
+                    GP.getMe().getZahyou().y = 380;
+                } else {
+                    GP.getMe().getZahyou().x = 1350;
+                    GP.getMe().getZahyou().y = 380;
+                }
+                break;
+            case 3:
+                if (GP.getMe().getMode() == 'a') {
+                    GP.getMe().getZahyou().x = 950;
+                    GP.getMe().getZahyou().y = 380;
+                } else {
+                    GP.getMe().getZahyou().x = 1350;
+                    GP.getMe().getZahyou().y = 380;
+                }
+                break;
+            case 4:
+                if (GP.getMe().getMode() == 'a') {
+                    GP.getMe().getZahyou().x = 950;
+                    GP.getMe().getZahyou().y = 380;
+                } else {
+                    GP.getMe().getZahyou().x = 1350;
+                    GP.getMe().getZahyou().y = 380;
+                }
+                break;
+            case 5:
+                if (GP.getMe().getMode() == 'a') {
+                    GP.getMe().getZahyou().x = 950;
+                    GP.getMe().getZahyou().y = 380;
+                } else {
+                    GP.getMe().getZahyou().x = 1350;
+                    GP.getMe().getZahyou().y = 380;
+                }
+                break;
+        }
+
     }
 
     /**
@@ -151,12 +214,19 @@ public class GameMap {
                 if (map[y][x] == 1) {
                     return new Point(x, y);
                 }
-                if (map[y][x] == 2) {
-                    player.setType(14);
-                }
             }
         }
 
         return null;
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+    
+    
 }

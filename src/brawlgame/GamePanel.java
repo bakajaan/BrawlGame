@@ -22,6 +22,10 @@ import javax.swing.border.BevelBorder;
 public final class GamePanel {
 
     //<editor-fold defaultstate="collapsed" desc="メンバ">
+    private static final long serialVersionUID = 1L;
+    //全マップの数
+    private static final int ALL_MAP = 5;
+
     /**
      * ゲーム表示用パネル
      */
@@ -94,11 +98,12 @@ public final class GamePanel {
     private GameChara me;
     private GameChara teki;
     private List otherChara;
-    private GameMap map;
+    private GameMap[] map;
+    private int mapno;
     private final ImageIcon connect[];
     private boolean fight = false;
-//</editor-fold>
 
+//</editor-fold>
     /**
      * ゲームパネル
      * ゲームの内部処理をもつ
@@ -113,13 +118,13 @@ public final class GamePanel {
 
         //パネルの作成 
         gameP = new JPanel() {
-            private static final long serialVersionUID = 1L;
+            //private static final long serialVersionUID = 1L;
 
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                if (map != null) {
-                    map.drow(g);
+                if (map[mapno] != null) {
+                    map[mapno].drow(g);
                 }
                 if (me != null) {
                     me.drow(g);
@@ -254,7 +259,14 @@ public final class GamePanel {
         //マップ読み込み
         me = new GameChara(this, mode);
         teki = new GameChara(this, 'b');
-        map = new GameMap("map02.dat", this);
+        map = new GameMap[ALL_MAP];
+        mapno = 2;//最初のステージ bのゴール←[4] [3] [2] [1] [0]→aのゴール
+        map[0] = new GameMap("map01.dat", this);
+        map[1] = new GameMap("map02.dat", this);
+        map[2] = new GameMap("map03.dat", this);
+        map[3] = new GameMap("map04.dat", this);
+        map[4] = new GameMap("map05.dat", this);
+
         otherChara = new ArrayList();
 
         //それぞれのスレッドを開始
@@ -290,19 +302,38 @@ public final class GamePanel {
      */
     private void update() {
 
-        if (me.getMode() == 'a') {
-            if (teki.getZahyou().x == 0) {
-                map = new GameMap("map04.dat", this);
+        try {
+            if (me.getMode() == 'a') {
+                if (teki.getZahyou().x == 0) {
+                    mapno ++;
+                    map[mapno].reset(mapno);
+                }
+                if (me.getZahyou().x == map[mapno].getWidth() - getCharSize()) {
+                    mapno --;
+                    map[mapno].reset(mapno);
+                }
+            } else {
+                if (teki.getZahyou().x == map[mapno].getWidth() - getCharSize()) {
+                    mapno --;
+                    map[mapno].reset(mapno);
+                }
+                if (me.getZahyou().x == 0) {
+                    mapno ++;
+                    map[mapno].reset(mapno);
+                }
             }
-        } else {
-            if (me.getZahyou().x == 0) {
-                map = new GameMap("map04.dat", this);
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            if (mapno == -1) {
+                System.out.println("aの勝利");
+                mapno++;
+            } else {
+                System.out.println("bの勝利");
+                mapno--;
             }
         }
         if (!fight && teki.getType() != 15) {
             fight = true;
         }
-
         //死亡処理
         if (me.getZahyou().y + charSize > teki.getZahyou().y
                 && me.getZahyou().y < teki.getZahyou().y + charSize
@@ -546,7 +577,7 @@ public final class GamePanel {
      * @return
      */
     public GameMap getMap() {
-        return map;
+        return map[mapno];
     }
 
     /**

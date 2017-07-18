@@ -108,6 +108,8 @@ public class DrawThread extends Thread {
                 }
                 if (GP.getGameP().getX() - move > 0) {
                     GP.getGameP().setLocation(0, 0);
+                } else if (GP.getGameP().getX() - move + GP.getMap().getWidth() < 980) {
+                    GP.getGameP().setLocation(GP.getGameP().getX(), 0);
                 } else {
                     GP.getGameP().setLocation(GP.getGameP().getX() - move, 0);
                 }

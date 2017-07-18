@@ -37,7 +37,6 @@ public class GameMap {
         width = TILE_SIZE * col;
         height = TILE_SIZE * row;
         loadImage();
-        panel.getGameP().setSize(iconb.getIconWidth(), iconb.getIconHeight());
         if (panel.getMe().getMode() == 'a') {
             panel.getMe().getZahyou().x = 950;
         } else {
@@ -110,8 +109,7 @@ public class GameMap {
      * 画像を読み込む
      */
     private void loadImage() {
-        iconb = new ImageIcon("./src/img/back2.jpg");
-        //ImageIcon iconb = new ImageIcon(new ImageIcon("./src/img/back2.jpg").getImage().getScaledInstance(2640, 1920, Image.SCALE_DEFAULT));
+        iconb = new ImageIcon("./src/img/back2.png");
         icon = new ImageIcon(new ImageIcon(
                 "./src/img/block.gif").
                 getImage().getScaledInstance(TILE_SIZE, TILE_SIZE,

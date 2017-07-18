@@ -3,6 +3,8 @@ package brawlgame;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -85,6 +87,13 @@ public class MainMenuPanel {
                                 end(mainF, menuP, this);
                                 break;
                             case 1:
+                                try {
+                                    File file = new File("./src/html/system.html");
+                                    String cmd = file.getAbsolutePath();
+                                    Runtime.getRuntime().exec("cmd /c start " + cmd);
+                                } catch (IOException ev) {
+                                    System.err.println(ev);
+                                }
                                 break;
                             case 2:
                                 System.exit(0);

@@ -2,8 +2,6 @@ package brawlgame;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
@@ -12,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
@@ -35,11 +32,6 @@ public final class GamePanel {
      */
     private int gra = 2;
     /**
-     * 死亡カウント
-     * 死亡して一定時間するとリスポーンする
-     */
-    private int deathCount = 0;
-    /**
      * Aキー押下カウント
      */
     private int AkeyCount = 0;
@@ -51,8 +43,8 @@ public final class GamePanel {
      * 攻撃時間カウント
      */
     private int AttkeyCount = 0;
-    private int syagamiCount = 0;
     private int WkeyCount = 0;
+    private int connectCount = 0;
     /**
      * キャラクターのサイズ
      */
@@ -61,11 +53,6 @@ public final class GamePanel {
      * キャラクターの画像の量
      */
     private int charType = 17;
-    /**
-     * 自分がどちらのチームかの判定
-     * 先にサーバーに入った方がaで後がb
-     */
-    private char mode;
     /**
      * 攻撃中チーム
      * 初期はaチームから攻撃開始
@@ -107,11 +94,10 @@ public final class GamePanel {
     private GameChara me;
     private GameChara teki;
     private List otherChara;
-//</editor-fold>
-
     private GameMap map;
-
-
+    private final ImageIcon connect[];
+    private boolean fight = false;
+//</editor-fold>
 
     /**
      * ゲームパネル
@@ -121,16 +107,9 @@ public final class GamePanel {
      */
     @SuppressWarnings("deprecation")
     public GamePanel(JFrame mainF) {
-
         //それぞれスレッドのインスタンス生成
         ServerAccessThread SThread = new ServerAccessThread(this);
         DrawThread DThread = new DrawThread(this);
-
-        //マップ読み込み
-        map = new GameMap("map01.dat");
-        me = new GameChara(this);
-        teki = new GameChara(this);
-        otherChara = new ArrayList();
 
         //パネルの作成 
         gameP = new JPanel() {
@@ -139,9 +118,19 @@ public final class GamePanel {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                map.drow(g);
-                me.drow(g);
-                teki.drow(g);
+                if (map != null) {
+                    map.drow(g);
+                }
+                if (me != null) {
+                    me.drow(g);
+                }
+                if (teki != null) {
+                    teki.drow(g);
+                }
+                if (!fight) {
+                    connectCount++;
+                    g.drawImage(connect[connectCount / 5 % 4].getImage(), -gameP.getX(), 0, null);
+                }
             }
         };
         gameP.setBounds(0, 0, 2400, 3304);
@@ -152,23 +141,28 @@ public final class GamePanel {
         gameP.setBorder(new BevelBorder(BevelBorder.RAISED));
         mainF.add(gameP);
 
-        //画像の読み込み
-        loadImage(gameP);
+        connect = new ImageIcon[4];
+        for (int i = 0; i < 4; i++) {
+            connect[i] = new ImageIcon("./src/img/c" + (i + 1) + ".png");
+        }
+        Graphics g = gameP.getGraphics();
+        ImageIcon load = new ImageIcon("./src/img/ml1.png");
+        g.drawImage(load.getImage(), 0, 0, null);
 
         //コンポーネントリスナーの追加
         ComponentListener cl = new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                if (e.getComponent().getWidth() / 4
-                        > e.getComponent().getHeight() / 3) {
-                    //横長の時縦の大きさのみ変更
-                    gameP.setSize((e.getComponent().getHeight() / 3) * 4,
-                            e.getComponent().getHeight());
-                } else {
-                    //縦長の時横の大きさのみ変更
-                    gameP.setSize(e.getComponent().getWidth(),
-                            (e.getComponent().getWidth() / 4) * 3);
-                }
+//                if (e.getComponent().getWidth() / 4
+//                        > e.getComponent().getHeight() / 3) {
+//                    //横長の時縦の大きさのみ変更
+//                    gameP.setSize((e.getComponent().getHeight() / 3) * 4,
+//                            e.getComponent().getHeight());
+//                } else {
+//                    //縦長の時横の大きさのみ変更
+//                    gameP.setSize(e.getComponent().getWidth(),
+//                            (e.getComponent().getWidth() / 4) * 3);
+//                }
             }
 
             @Override
@@ -227,7 +221,6 @@ public final class GamePanel {
                         break;
                     case "S":
                         Skey = false;
-                        syagamiCount = 0;
                         break;
                     case "A":
                         Akey = false;
@@ -252,12 +245,17 @@ public final class GamePanel {
         mainF.addKeyListener(kl);
 
         //自分のチームを取得
-        mode = SThread.getMode();
+        char mode = SThread.getMode();
         if (mode == 'N') {
             end(mainF, kl, cl, SThread, DThread);
             return;
         }
-        me.setMode(mode);
+
+        //マップ読み込み
+        me = new GameChara(this, mode);
+        teki = new GameChara(this, 'b');
+        map = new GameMap("map02.dat", this);
+        otherChara = new ArrayList();
 
         //それぞれのスレッドを開始
         SThread.start();
@@ -291,7 +289,20 @@ public final class GamePanel {
      * 座標を変更させる
      */
     private void update() {
-        
+
+        if (me.getMode() == 'a') {
+            if (teki.getZahyou().x == 0) {
+                map = new GameMap("map04.dat", this);
+            }
+        } else {
+            if (me.getZahyou().x == 0) {
+                map = new GameMap("map04.dat", this);
+            }
+        }
+        if (!fight && teki.getType() != 15) {
+            fight = true;
+        }
+
         //死亡処理
         if (me.getZahyou().y + charSize > teki.getZahyou().y
                 && me.getZahyou().y < teki.getZahyou().y + charSize
@@ -302,22 +313,22 @@ public final class GamePanel {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             me.setType(14);
             AttkeyCount = 0;
-            if (mode == 'a') {
+            if (me.getMode() == 'a') {
                 turnMode = 'b';
             } else {
                 turnMode = 'a';
             }
             return;
-        } else if (me.getZahyou().y + charSize > teki.getZahyou().y
+        } else if ((me.getZahyou().y + charSize > teki.getZahyou().y
                 && me.getZahyou().y < teki.getZahyou().y + charSize
                 && me.getZahyou().x + charSize > teki.getZahyou().x
                 && me.getZahyou().x < teki.getZahyou().x + charSize / 2
                 && (teki.getType() == 6 || teki.getType() == 9 || teki.getType() == 12)
-                && teki.getHead() == 2) {
+                && teki.getHead() == 2) || me.getZahyou().y > 600) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
             me.setType(14);
             AttkeyCount = 0;
-            if (mode == 'a') {
+            if (me.getMode() == 'a') {
                 turnMode = 'b';
             } else {
                 turnMode = 'a';
@@ -325,7 +336,7 @@ public final class GamePanel {
             return;
         }
         if (teki.getType() == 14) {
-            turnMode = mode;
+            turnMode = me.getMode();
         }
 
         //キーによるカウント
@@ -357,22 +368,12 @@ public final class GamePanel {
     }
 
     /**
-     * 画像を読み込む
-     *
-     * @param gameP
-     */
-    @SuppressWarnings("deprecation")
-    public void loadImage(JPanel gameP) {
-
-    }
-
-    /**
      * 終了処理
      */
     @SuppressWarnings("deprecation")
     private void end(JFrame mainF, KeyListener kl, ComponentListener cl,
             ServerAccessThread SThread, DrawThread DThread) {
-        if (mode != 'N') {
+        if (me.getMode() != 'N') {
             SThread.disconect();
         }
         DThread.stop();
@@ -383,6 +384,7 @@ public final class GamePanel {
         changePanel = true;
     }
 
+    //<editor-fold defaultstate="collapsed" desc="取得、設定メソッド">
     /**
      * @return the gameP
      */
@@ -402,20 +404,6 @@ public final class GamePanel {
      */
     public int getCharType() {
         return charType;
-    }
-
-    /**
-     * @return the mode
-     */
-    public char getMode() {
-        return mode;
-    }
-
-    /**
-     * @param mode the mode to set
-     */
-    public void setMode(char mode) {
-        this.mode = mode;
     }
 
     /**
@@ -447,13 +435,6 @@ public final class GamePanel {
     }
 
     /**
-     * @return the deathCount
-     */
-    public int getDeathCount() {
-        return deathCount;
-    }
-
-    /**
      * @return the AkeyCount
      */
     public int getAkeyCount() {
@@ -472,13 +453,6 @@ public final class GamePanel {
      */
     public int getAttkeyCount() {
         return AttkeyCount;
-    }
-
-    /**
-     * @return the syagamiCount
-     */
-    public int getSyagamiCount() {
-        return syagamiCount;
     }
 
     /**
@@ -537,14 +511,25 @@ public final class GamePanel {
         this.gra = gra;
     }
 
+    /**
+     *
+     * @return
+     */
     public GameChara getMe() {
         return me;
     }
 
+    /**
+     *
+     * @return
+     */
     public GameChara getTeki() {
         return teki;
     }
 
+    /**
+     *
+     */
     public void addOtherchara() {
 
     }
@@ -556,8 +541,19 @@ public final class GamePanel {
         return WkeyCount;
     }
 
+    /**
+     *
+     * @return
+     */
     public GameMap getMap() {
         return map;
     }
-    
+
+    /**
+     * @return the fight
+     */
+    public boolean isFight() {
+        return fight;
+    }
+//</editor-fold>
 }

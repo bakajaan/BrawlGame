@@ -17,7 +17,7 @@ public class GameChara {
     private Point zahyou;
     private boolean setti = true;
     private int junpPower = 0;
-    private Point junpPlace;
+    private final Point junpPlace;
     private int syagamiCount = 0;
     private int standCount = 0;
     private int walkCount = 0;
@@ -26,15 +26,24 @@ public class GameChara {
     private int sowdPosision = 0;
     private int deathCount = 0;
     private int huriageCount = 0;
+    private int AttCount = 0;
     private char mode;
 
-    int vx = 0;
-    int vy = 0;
-
-    public GameChara(GamePanel gameP) {
+    /**
+     * コンストラクタ
+     *
+     * @param gameP
+     * @param m
+     */
+    public GameChara(GamePanel gameP, char m) {
+        mode = m;
         GP = gameP;
-        zahyou = new Point(200, 300);
-        junpPlace = new Point(200, 300);
+        if (m == 'a') {
+            zahyou = new Point(950, 300);
+        } else {
+            zahyou = new Point(1350, 300);
+        }
+        junpPlace = new Point(250, 300);
         loadImage();
     }
 
@@ -59,6 +68,9 @@ public class GameChara {
         }
     }
 
+    /**
+     * 更新
+     */
     public void update() {
         Point move = new Point(0, 0);
 
@@ -72,159 +84,165 @@ public class GameChara {
             deathCount = 0;
             type = 0;
             if (mode == 'a') {
-                zahyou.x = 200;
+                zahyou.x = 950;
             } else {
-                zahyou.x = 200;
+                zahyou.x = 1350;
             }
+            zahyou.y = 380;
             return;
         }
-        //キーによる移動
-        if (!GP.isAkey() && !GP.isDkey()) {
-            walkCount = 0;
-        }
-        if (GP.isJunpkey() && setti == true && !GP.isAttkey() && !GP.isSkey()) {
-            junpPlace.y = zahyou.y;
-            setti = false;
-            junpPower = 28;
-        }
-        if (GP.isAkey() && !GP.isDkey() && !GP.isAttkey() && syagamiCount < 20) {
-            if (GP.getAkeyCount() < 10) {
-                move.x -= 5;
-            } else {
-                head = 2;
-                walkCount++;
-                move.x -= 10;
-            }
-        }
-        if (GP.isDkey() && !GP.isAkey() && !GP.isAttkey() && syagamiCount < 20) {
-            if (GP.getDkeyCount() < 10) {
-                move.x += 5;
-            } else {
-                head = 1;
-                walkCount++;
-                move.x += 10;
-            }
-        }
-        if (GP.isSkey()) {
-            if (syagamiCount == 0) {
-                if (sowdPosision > 0) {
-                    sowdPosision--;
-                }
-            }
-            syagamiCount++;
-        } else {
-            syagamiCount = 0;
-        }
-        if (GP.isWkey()) {
-            if (huriageCount == 0) {
-                if (sowdPosision < 2) {
-                    sowdPosision++;
-                }
-                huriageCount++;
-            }
-        } else {
-            huriageCount = 0;
-        }
-        if (GP.isAttkey() && GP.getAttkeyCount() < 20) {
-            if (GP.getAttkeyCount() < 4 && setti) {
-                switch (head) {
-                    case 1:
-                        move.x += 8;
-                        break;
-                    case 2:
-                        move.x -= 8;
-                        break;
-                }
-            }
-            if (GP.getAttkeyCount() > 17) {
-                switch (head) {
-                    case 1:
-                        move.x -= 8;
-                        break;
-                    case 2:
-                        move.x += 8;
-                        break;
-                }
-            }
-        }
-        if (!GP.isAttkey() && GP.getAttkeyCount() != 0 && GP.getAttkeyCount() != 20) {
-            if (GP.getAttkeyCount() < 3) {
-                switch (head) {
-                    case 1:
-                        move.x -= 8;
-                        break;
-                    case 2:
-                        move.x += 8;
-                        break;
-                }
-            }
-        }
 
-        //重力による移動
-        //if (setti == false) {
-            junpPower -= GP.getGra();
-            move.y -= junpPower;
-            if (GP.isAttkey()) {
-                switch (head) {
-                    case 1:
-                        move.x += 16;
-                        break;
-                    case 2:
-                        move.x -= 16;
-                        break;
+        //キーによる移動
+        if (GP.isFight()) {
+            if (!GP.isAkey() && !GP.isDkey()) {
+                walkCount = 0;
+            }
+            if (GP.isJunpkey() && setti && !GP.isAttkey() && syagamiCount < 20) {
+                junpPlace.y = zahyou.y;
+                setti = false;
+                junpPower = 28;
+            }
+            if (GP.isAkey() && !GP.isDkey() && !GP.isAttkey() && syagamiCount < 20) {
+                if (GP.getAkeyCount() < 10) {
+                    move.x -= 5;
+                } else {
+                    head = 2;
+                    walkCount++;
+                    move.x -= 10;
                 }
             }
-            //自分の座標がジャンプ地点より低くなったら着地状態に変更
-            /*if (zahyou.y + move.y >= junpPlace.y) {
+            if (GP.isDkey() && !GP.isAkey() && !GP.isAttkey() && syagamiCount < 20) {
+                if (GP.getDkeyCount() < 10) {
+                    move.x += 5;
+                } else {
+                    head = 1;
+                    walkCount++;
+                    move.x += 10;
+                }
+            }
+            if (GP.isSkey() && setti) {
+                if (syagamiCount == 0) {
+                    if (sowdPosision > 0) {
+                        sowdPosision--;
+                    }
+                }
+                syagamiCount++;
+            } else {
+                syagamiCount = 0;
+            }
+            if (GP.isWkey() && setti) {
+                if (huriageCount == 0) {
+                    if (sowdPosision < 2) {
+                        sowdPosision++;
+                    }
+                    huriageCount++;
+                }
+            } else {
+                huriageCount = 0;
+            }
+            if (GP.isAttkey() && AttCount < 20 && setti && syagamiCount < 20) {
+                AttCount++;
+                if (AttCount <= 4) {
+                    switch (head) {
+                        case 1:
+                            move.x += 8;
+                            break;
+                        case 2:
+                            move.x -= 8;
+                            break;
+                    }
+                }
+                if (AttCount > 16) {
+                    switch (head) {
+                        case 1:
+                            move.x -= 8;
+                            break;
+                        case 2:
+                            move.x += 8;
+                            break;
+                    }
+                }
+            }
+            if (!GP.isAttkey() && AttCount != 0 && syagamiCount < 20) {
+                if (AttCount == 20) {
+                    AttCount = 0;
+                } else {
+                    if (AttCount > 16) {
+                        AttCount = 20 - AttCount;
+                    } else if (AttCount > 4) {
+                        AttCount = 4;
+                    }
+                    if (AttCount <= 4) {
+                        switch (head) {
+                            case 1:
+                                move.x -= 8;
+                                break;
+                            case 2:
+                                move.x += 8;
+                                break;
+                        }
+                    }
+                    AttCount--;
+                }
+            }
+        }
+        //重力による移動
+        if (setti == true) {
+            junpPower = 0;
+        }
+        junpPower -= GP.getGra();
+        move.y -= junpPower;
+        if (GP.isAttkey() && !setti) {
+            AttCount = 20;
+            switch (head) {
+                case 1:
+                    move.x += 16;
+                    break;
+                case 2:
+                    move.x -= 16;
+                    break;
+            }
+        }
+        //自分の座標がジャンプ地点より低くなったら着地状態に変更
+        /*if (zahyou.y + move.y >= junpPlace.y) {
                 type = 0;
                 move.y = 0;
                 junpPower = 0;
                 zahyou.y = junpPlace.y;
                 setti = true;
             }*/
-        //}
 
         //ぶつかった時
         //左右
-        vx = move.x;
-        int nextAX = zahyou.x + vx;
+        int nextAX = zahyou.x + move.x;
         Point tile = GP.getMap().getTileCollision(this, nextAX, zahyou.y);
         if (tile == null) {
-            zahyou.x = zahyou.x + move.x;
+            zahyou.x += move.x;
         } else {
             //右へ進んでいる場合
-            if (head == 1) {
+            if (move.x > 0) {
                 zahyou.x = GP.getMap().tilePixel(tile.x) - GP.getCharSize();
                 //左に進んでいる場合
-            } else if (head == 2) {
+            } else if (move.x < 0) {
                 zahyou.x = GP.getMap().tilePixel(tile.x + 1);
             }
-            vx = 0;
         }
         //上下
-        vy = move.y;
-        int nextAY = zahyou.y + vy;
+        int nextAY = zahyou.y + move.y;
         tile = GP.getMap().getTileCollision(this, zahyou.x, nextAY);
         if (tile == null) {
-            zahyou.y = zahyou.y + move.y;
+            zahyou.y += move.y;
             setti = false;
         } else {
             //下にある場合
-            if (vy > 0) {
+            if (move.y > 0) {
                 zahyou.y = GP.getMap().tilePixel(tile.y) - GP.getCharSize();
                 setti = true;
-                vy = 0;
                 //上にある場合
-            } else if (vy < 0) {
+            } else if (move.y < 0) {
                 zahyou.y = GP.getMap().tilePixel(tile.y + 1);
-                vy = 0;
+                junpPower = 0;
             }
-            
-        }
-
-        //座標の最終チェック
-        if (zahyou.y < 0) {
-            zahyou.y = 0;
         }
 
         //向いてる方向の変更
@@ -329,6 +347,7 @@ public class GameChara {
         }
     }
 
+    //<editor-fold defaultstate="collapsed" desc="取得、設定メソッド">
     public Point getZahyou() {
         return zahyou;
     }
@@ -366,5 +385,5 @@ public class GameChara {
     public void setMode(char mode) {
         this.mode = mode;
     }
-
+//</editor-fold>
 }

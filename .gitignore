@@ -1,7 +1,5 @@
-<<<<<<< HEAD
-/build/
-=======
 /nbproject/private/
 /build/
 /dist/
->>>>>>> 26d926438c624c725bbd707868b8f6f0ef8bf4b4
+/.project
+/.classpath

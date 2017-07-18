@@ -25,8 +25,7 @@ public class MainMenuPanel {
      */
     private boolean changePanel = false;
     private ImageIcon title[];
-    private ImageIcon menu1;
-    private ImageIcon menu2;
+    private ImageIcon menu[];
     private ImageIcon back[];
     private JPanel menuP;
 //</editor-fold>
@@ -55,14 +54,7 @@ public class MainMenuPanel {
 //                    g.drawImage(title[2].getImage(), 0, 0, null);
 //                }
                 g.drawImage(title[0].getImage(), 0, 0, null);
-                switch (selectMenu) {
-                    case 0:
-                        g.drawImage(menu1.getImage(), 0, 0, null);
-                        break;
-                    case 1:
-                        g.drawImage(menu2.getImage(), 0, 0, null);
-                        break;
-                }
+                g.drawImage(menu[selectMenu].getImage(), 0, 0, null);
                 g.drawImage(back[backCount / 10 % 4].getImage(), 0, 0, null);
             }
         };
@@ -78,10 +70,14 @@ public class MainMenuPanel {
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyText(e.getKeyCode())) {
                     case "上":
-                        selectMenu = 0;
+                        if (selectMenu > 0) {
+                            selectMenu--;
+                        }
                         break;
                     case "下":
-                        selectMenu = 1;
+                        if (selectMenu < 2) {
+                            selectMenu++;
+                        }
                         break;
                     case "Enter":
                         switch (selectMenu) {
@@ -89,7 +85,10 @@ public class MainMenuPanel {
                                 end(mainF, menuP, this);
                                 break;
                             case 1:
+                                break;
+                            case 2:
                                 System.exit(0);
+                                break;
                         }
                         break;
                 }
@@ -130,8 +129,10 @@ public class MainMenuPanel {
         for (int i = 0; i < 4; i++) {
             title[i] = new ImageIcon("./src/img/mt" + (i + 1) + ".png");
         }
-        menu1 = new ImageIcon("./src/img/m1.png");
-        menu2 = new ImageIcon("./src/img/m2.png");
+        menu = new ImageIcon[3];
+        for (int i = 0; i < 3; i++) {
+            menu[i] = new ImageIcon("./src/img/m" + (i + 1) + ".png");
+        }
         back = new ImageIcon[4];
         for (int i = 0; i < 4; i++) {
             back[i] = new ImageIcon("./src/img/mb" + (i + 1) + ".png");

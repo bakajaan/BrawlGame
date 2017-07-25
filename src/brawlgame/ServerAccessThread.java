@@ -47,12 +47,6 @@ public class ServerAccessThread extends Thread {
         /**
          * サーバーアドレス
          */
-        //自宅Wi-Fi
-        //String server = "192.168.3.17";
-        //String server = "192.168.3.10";
-        //ポケットWi-Fi
-        //String server = "192.168.179.3";
-        //オフライン
         String server = "fue.jpn.ph";
         GP = gameP;
         //サーバーに接続
@@ -114,11 +108,11 @@ public class ServerAccessThread extends Thread {
                 GP.getTeki().setZahyou(zahyou);
                 long newTime = System.currentTimeMillis();//通信後時間の取得
                 //描画の半分の速さでループするようにスリープさせる
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    System.err.println(e);
-                }
+//                try {
+//                    Thread.sleep(1);
+//                } catch (InterruptedException e) {
+//                    System.err.println(e);
+//                }
                 if (newTime - oldTime > 16) {
                     System.out.println("ServerThreadが重くなっています");
                 }

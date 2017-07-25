@@ -53,7 +53,7 @@ public class ServerAccessThread extends Thread {
         //ポケットWi-Fi
         //String server = "192.168.179.3";
         //オフライン
-        String server = "localhost";
+        String server = "fue.jpn.ph";
         GP = gameP;
         //サーバーに接続
         try {

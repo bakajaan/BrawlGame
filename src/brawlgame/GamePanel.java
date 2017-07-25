@@ -22,7 +22,6 @@ import javax.swing.border.BevelBorder;
 public final class GamePanel {
 
     //<editor-fold defaultstate="collapsed" desc="メンバ">
-    private static final long serialVersionUID = 1L;
     //全マップの数
     private static final int ALL_MAP = 5;
 
@@ -101,7 +100,11 @@ public final class GamePanel {
     private GameMap[] map;
     private int mapno;
     private final ImageIcon connect[];
+    private final ImageIcon win[];
+    private final ImageIcon lose[];
     private boolean fight = false;
+    private boolean aWinFlag = false;
+    private boolean bWinFlag = false;
 
 //</editor-fold>
     /**
@@ -118,7 +121,7 @@ public final class GamePanel {
 
         //パネルの作成 
         gameP = new JPanel() {
-            //private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
             @Override
             protected void paintComponent(Graphics g) {
@@ -135,6 +138,26 @@ public final class GamePanel {
                 if (!fight) {
                     connectCount++;
                     g.drawImage(connect[connectCount / 5 % 4].getImage(), -gameP.getX(), 0, null);
+                }
+                if (aWinFlag) {
+                    switch (me.getMode()) {
+                        case 'a':
+                            g.drawImage(win[0].getImage(), -gameP.getX(), 0, null);
+                            break;
+                        case 'b':
+                            g.drawImage(lose[0].getImage(), -gameP.getX(), 0, null);
+                            break;
+                    }
+                }
+                if (bWinFlag) {
+                    switch (me.getMode()) {
+                        case 'a':
+                            g.drawImage(lose[0].getImage(), -gameP.getX(), 0, null);
+                            break;
+                        case 'b':
+                            g.drawImage(win[0].getImage(), -gameP.getX(), 0, null);
+                            break;
+                    }
                 }
             }
         };
@@ -153,6 +176,14 @@ public final class GamePanel {
         Graphics g = gameP.getGraphics();
         ImageIcon load = new ImageIcon("./src/img/ml1.png");
         g.drawImage(load.getImage(), 0, 0, null);
+        win = new ImageIcon[4];
+        for (int i = 0; i < 4; i++) {
+            win[i] = new ImageIcon("./src/img/w" + (i + 1) + ".png");
+        }
+        lose = new ImageIcon[4];
+        for (int i = 0; i < 4; i++) {
+            lose[i] = new ImageIcon("./src/img/l" + (i + 1) + ".png");
+        }
 
         //コンポーネントリスナーの追加
         ComponentListener cl = new ComponentListener() {
@@ -305,28 +336,30 @@ public final class GamePanel {
         try {
             if (me.getMode() == 'a') {
                 if (teki.getZahyou().x == 0) {
-                    mapno ++;
+                    mapno++;
                     map[mapno].reset(mapno);
                 }
                 if (me.getZahyou().x == map[mapno].getWidth() - getCharSize()) {
-                    mapno --;
+                    mapno--;
                     map[mapno].reset(mapno);
                 }
             } else {
                 if (teki.getZahyou().x == map[mapno].getWidth() - getCharSize()) {
-                    mapno --;
+                    mapno--;
                     map[mapno].reset(mapno);
                 }
                 if (me.getZahyou().x == 0) {
-                    mapno ++;
+                    mapno++;
                     map[mapno].reset(mapno);
                 }
             }
         } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
             if (mapno == -1) {
+                aWinFlag = true;
                 System.out.println("aの勝利");
                 mapno++;
             } else {
+                bWinFlag = true;
                 System.out.println("bの勝利");
                 mapno--;
             }
@@ -587,4 +620,18 @@ public final class GamePanel {
         return fight;
     }
 //</editor-fold>
+
+    /**
+     * @return the aWinFlag
+     */
+    public boolean isaWinFlag() {
+        return aWinFlag;
+    }
+
+    /**
+     * @return the bWinFlag
+     */
+    public boolean isbWinFlag() {
+        return bWinFlag;
+    }
 }

@@ -25,6 +25,7 @@ public class GameMap {
     private ImageIcon icon;
 
     GamePanel GP;
+
     /**
      * コンストラクタ
      *
@@ -225,6 +226,5 @@ public class GameMap {
     public int getHeight() {
         return height;
     }
-    
-    
+
 }

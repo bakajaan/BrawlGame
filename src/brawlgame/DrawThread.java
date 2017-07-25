@@ -1,64 +1,127 @@
 package brawlgame;
-//test02
-//test04
-//test03
+
 /**
+ * キャラクター描画スレッドクラス
  *
  * @author bakaj
  */
 public class DrawThread extends Thread {
 
-    GamePanel GP;
+    /**
+     * ゲームパネルクラス
+     */
+    private final GamePanel GP;
 
+    /**
+     * コンストラクタ
+     *
+     * @param gameP ゲームクラス
+     */
     public DrawThread(GamePanel gameP) {
         GP = gameP;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void run() {
         while (true) {
-            int AT = GP.AT;
-            int BT = GP.BT;
             long oldTime = System.currentTimeMillis();//描画前時間の取得
-            //処理速度を上げる為、位置情報が違うときのみアップデート
-            if (GP.back.getLocation().x != GP.stageX
-                    || GP.back.getLocation().y != GP.stageY) {
-                GP.back.setLocation(GP.stageX, GP.stageY);
-            }
-            if (GP.Achar[AT].getLocation().x != GP.AX + GP.stageX
-                    || GP.Achar[AT].getLocation().y != GP.AY) {
-                GP.Achar[AT].setLocation(GP.AX + GP.stageX, GP.AY);
-            }
-            if (GP.Bchar[BT].getLocation().x != GP.BX
-                    || GP.Bchar[BT].getLocation().y != GP.BY) {
-                GP.Bchar[BT].setLocation(GP.BX, GP.BY);
-            }
-            //対象の画像が表示されていない時は他を隠して対象を表示
-            if (GP.Achar[AT].isVisible() == false) {
-                for (int i = 0; i < 6; i++) {
-                    if (GP.Achar[i].isVisible()) {
-                        GP.Achar[i].hide();
+            //パネルの移動
+            if (GP.isDrawEnable()) {
+                int move = 0;
+                if (GP.getTurnMode() == GP.getMe().getMode()) {
+                    if (GP.getMe().getZahyou().x > GP.getTeki().getZahyou().x) {
+                        if (GP.getMe().getZahyou().x - GP.getTeki().getZahyou().x < 980) {
+                            move = GP.getGameP().getX() + (GP.getTeki().getZahyou().x + (GP.getMe().getZahyou().x - GP.getTeki().getZahyou().x) / 2) - 490 + GP.getCharSize() / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                        } else {
+                            move = GP.getGameP().getX() + GP.getMe().getZahyou().x - 200 + GP.getCharSize() / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                        }
+                    } else {
+                        if (GP.getTeki().getZahyou().x - GP.getMe().getZahyou().x < 980) {
+                            move = GP.getGameP().getX() + (GP.getMe().getZahyou().x + (GP.getTeki().getZahyou().x - GP.getMe().getZahyou().x) / 2) - 490 + GP.getCharSize() / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                        } else {
+                            move = GP.getGameP().getX() + GP.getMe().getZahyou().x - 200 + GP.getCharSize() / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                        }
+                    }
+                } else {
+                    if (GP.getMe().getZahyou().x > GP.getTeki().getZahyou().x) {
+                        if (GP.getMe().getZahyou().x - GP.getTeki().getZahyou().x < 980) {
+                            move = GP.getGameP().getX() + (GP.getTeki().getZahyou().x + (GP.getMe().getZahyou().x - GP.getTeki().getZahyou().x) / 2) - 490 + GP.getCharSize() / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                        } else {
+                            move = GP.getGameP().getX() + GP.getTeki().getZahyou().x - 200 + GP.getCharSize() / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                        }
+                    } else {
+                        if (GP.getTeki().getZahyou().x - GP.getMe().getZahyou().x < 980) {
+                            move = GP.getGameP().getX() + (GP.getMe().getZahyou().x + (GP.getTeki().getZahyou().x - GP.getMe().getZahyou().x) / 2) - 490 + GP.getCharSize() / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                        } else {
+                            move = GP.getGameP().getX() + GP.getTeki().getZahyou().x - 200 + GP.getCharSize() / 2;
+                            if (move > 32) {
+                                move = 32;
+                            }
+                            if (move < -32) {
+                                move = -32;
+                            }
+                        }
                     }
                 }
-                GP.Achar[AT].show();
-            }
-            if (GP.Bchar[BT].isVisible() == false) {
-                for (int i = 0; i < 6; i++) {
-                    if (GP.Bchar[i].isVisible()) {
-                        GP.Bchar[i].hide();
-                    }
+                if (GP.getGameP().getX() - move > 0) {
+                    GP.getGameP().setLocation(0, 0);
+                } else if (GP.getGameP().getX() - move + GP.getMap().getWidth() < 980) {
+                    GP.getGameP().setLocation(GP.getGameP().getX(), 0);
+                } else {
+                    GP.getGameP().setLocation(GP.getGameP().getX() - move, 0);
                 }
-                GP.Bchar[BT].show();
+                GP.getGameP().repaint();
+                GP.setDrawEnable(false);
             }
             long newTime = System.currentTimeMillis();//描画後時間の取得
-            //フレームレートを安定させるためスリープさせる
-            long sleepTime = 16 - (newTime - oldTime);
-            if (sleepTime > 0) {
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (InterruptedException e) {
-                    System.err.println(e);
-                }
+            //フレームレートを安定させるため1msスリープさせる
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                System.err.println(e);
             }
             if (newTime - oldTime > 16) {
                 System.out.println("DrawThreadが重くなっています");

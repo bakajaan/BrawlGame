@@ -1,14 +1,15 @@
 package brawlgame;
 
 import java.awt.Color;
-import java.awt.Image;
+import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
@@ -21,163 +22,146 @@ import javax.swing.border.BevelBorder;
 public final class GamePanel {
 
     //<editor-fold defaultstate="collapsed" desc="メンバ">
-    /**
-     * メインフレーム
-     * キーリスナーとパネルの追加削除に利用
-     */
-    JFrame SmainF;
+    //全マップの数
+    private static final int ALL_MAP = 5;
+
     /**
      * ゲーム表示用パネル
      */
-    JPanel gameP;
-    JLabel back;
-    /**
-     * 自分キャラクター用ラベル
-     * それぞれの動きのアイコンを格納
-     */
-    JLabel Achar[];
-    /**
-     * 敵キャラクター用ラベル
-     * それぞれの動きのアイコンを格納
-     */
-    JLabel Bchar[];
-    /**
-     * キー入力用キーリスナー
-     * 終了処理でフレームから削除
-     */
-    KeyListener kl;
-    /**
-     * 画面サイズ変更用コンポーネント
-     */
-    ComponentListener cl;
-    /**
-     * サーバーサクセス用のスレッド
-     * サーバーとデータの送受信を行う。
-     */
-    ServerAccessThread SThread;
-    /**
-     * 描画用のスレッド
-     * キャラクターの座標更新、描画を行う
-     */
-    DrawThread DThread;
-    /**
-     * ジャンプ時Y座標を格納
-     * Y座標が重なったときジャンプを終了(仮)
-     */
-    int junpPlace = 0;
+    private JPanel gameP;
     /**
      * 重力
      * 着地していない時座標から引かれる
      */
-    int gra = 0;
+    private int gra = 2;
     /**
-     * 自分X座標
-     * 左上が(0.0)
+     * Aキー押下カウント
      */
-    int AX = 200;
+    private int AkeyCount = 0;
     /**
-     * 自分Y座標
-     * 左上が(0.0)
+     * Dキー押下カウント
      */
-    int AY = 300;
+    private int DkeyCount = 0;
     /**
-     * 敵X座標
-     * 左上が(0.0)
+     * 攻撃時間カウント
      */
-    int BX;
-    /**
-     * 敵Y座標
-     * 左上が(0.0)
-     */
-    int BY;
-    /**
-     * 自分の動きのタイプ
-     */
-    int AT = 0;
-    /**
-     * 敵の動きのタイプ
-     */
-    int BT;
-    /**
-     * 自分の向き
-     */
-    int AH = 0;
-    /**
-     * 敵の向き
-     */
-    int BH;
-    int stageX=0;
-    int stageY=0;
-    /**
-     * 徒歩カウント
-     * この値を利用して歩く動きを実現する
-     */
-    int walkCount = 0;
-    /**
-     * 死亡カウント
-     * 死亡して一定時間するとリスポーンする
-     */
-    int deathCount = 0;
+    private int AttkeyCount = 0;
+    private int WkeyCount = 0;
+    private int connectCount = 0;
     /**
      * キャラクターのサイズ
      */
-    int setCharaSize = 60;
+    private int charSize = 100;
     /**
-     * 自分がどちらのチームかの判定
-     * 先にサーバーに入った方がaで後がb
+     * キャラクターの画像の量
      */
-    char mode;
+    private int charType = 17;
+    /**
+     * 攻撃中チーム
+     * 初期はaチームから攻撃開始
+     */
+    private char turnMode = 'a';
     /**
      * Wキー押下判定
      */
-    boolean Wkey = false;
+    private boolean Wkey = false;
     /**
      * Aキー押下判定
      */
-    boolean Akey = false;
+    private boolean Akey = false;
     /**
      * Sキー押下判定
      */
-    boolean Skey = false;
+    private boolean Skey = false;
     /**
      * Dキー押下判定
      */
-    boolean Dkey = false;
+    private boolean Dkey = false;
     /**
      * 攻撃キー押下判定
      */
-    boolean Attkey = false;
+    private boolean Attkey = false;
     /**
-     * 着地しているかの判定
+     * ジャンプキー押下判定
      */
-    boolean setti = true;
+    private boolean Junpkey = false;
     /**
      * パネルを変更していいかどうかの判定
      */
-    boolean changePanel = false;
+    private boolean changePanel = false;
     /**
-     * 左上にテストで表示するラベル
+     * 描画許可のフラグ
+     * 座標の処理中はそれぞれの座標に一時的なずれが生じるので描画しない
      */
-    JLabel onlyDebug;
-//</editor-fold>
+    private boolean drawEnable = false;
+    private GameChara me;
+    private GameChara teki;
+    private List otherChara;
+    private GameMap[] map;
+    private int mapno;
+    private final ImageIcon connect[];
+    private final ImageIcon win[];
+    private final ImageIcon lose[];
+    private boolean fight = false;
+    private boolean aWinFlag = false;
+    private boolean bWinFlag = false;
 
+//</editor-fold>
     /**
      * ゲームパネル
      * ゲームの内部処理をもつ
      *
-     * @param mainF
+     * @param mainF　パネル追加先フレーム
      */
+    @SuppressWarnings("deprecation")
     public GamePanel(JFrame mainF) {
-        //フレームの所持
-        SmainF = mainF;
-
         //それぞれスレッドのインスタンス生成
-        SThread = new ServerAccessThread(this);
-        DThread = new DrawThread(this);
+        ServerAccessThread SThread = new ServerAccessThread(this);
+        DrawThread DThread = new DrawThread(this);
 
-        //パネルの作成
-        gameP = new JPanel();
-        gameP.setBounds(0, 0, 1024, 768);
+        //パネルの作成 
+        gameP = new JPanel() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (map[mapno] != null) {
+                    map[mapno].drow(g);
+                }
+                if (me != null) {
+                    me.drow(g);
+                }
+                if (teki != null) {
+                    teki.drow(g);
+                }
+                if (!fight) {
+                    connectCount++;
+                    g.drawImage(connect[connectCount / 5 % 4].getImage(), -gameP.getX(), 0, null);
+                }
+                if (aWinFlag) {
+                    switch (me.getMode()) {
+                        case 'a':
+                            g.drawImage(win[0].getImage(), -gameP.getX(), 0, null);
+                            break;
+                        case 'b':
+                            g.drawImage(lose[0].getImage(), -gameP.getX(), 0, null);
+                            break;
+                    }
+                }
+                if (bWinFlag) {
+                    switch (me.getMode()) {
+                        case 'a':
+                            g.drawImage(lose[0].getImage(), -gameP.getX(), 0, null);
+                            break;
+                        case 'b':
+                            g.drawImage(win[0].getImage(), -gameP.getX(), 0, null);
+                            break;
+                    }
+                }
+            }
+        };
+        gameP.setBounds(0, 0, 2400, 3304);
         gameP.setLayout(null);
         gameP.setVisible(true);
         gameP.show();
@@ -185,16 +169,54 @@ public final class GamePanel {
         gameP.setBorder(new BevelBorder(BevelBorder.RAISED));
         mainF.add(gameP);
 
-        //画像の読み込み
-        loadImage();
+        connect = new ImageIcon[4];
+        for (int i = 0; i < 4; i++) {
+            connect[i] = new ImageIcon("./src/img/c" + (i + 1) + ".png");
+        }
+        Graphics g = gameP.getGraphics();
+        ImageIcon load = new ImageIcon("./src/img/ml1.png");
+        g.drawImage(load.getImage(), 0, 0, null);
+        win = new ImageIcon[4];
+        for (int i = 0; i < 4; i++) {
+            win[i] = new ImageIcon("./src/img/w" + (i + 1) + ".png");
+        }
+        lose = new ImageIcon[4];
+        for (int i = 0; i < 4; i++) {
+            lose[i] = new ImageIcon("./src/img/l" + (i + 1) + ".png");
+        }
 
-        //試験用ラベルの作成
-        onlyDebug = new JLabel();
-        onlyDebug.setBounds(0, 0, 1000, 16);
-        gameP.add(onlyDebug);
+        //コンポーネントリスナーの追加
+        ComponentListener cl = new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+//                if (e.getComponent().getWidth() / 4
+//                        > e.getComponent().getHeight() / 3) {
+//                    //横長の時縦の大きさのみ変更
+//                    gameP.setSize((e.getComponent().getHeight() / 3) * 4,
+//                            e.getComponent().getHeight());
+//                } else {
+//                    //縦長の時横の大きさのみ変更
+//                    gameP.setSize(e.getComponent().getWidth(),
+//                            (e.getComponent().getWidth() / 4) * 3);
+//                }
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+            }
+        };
+        mainF.addComponentListener(cl);
 
         //キーリスナーの追加
-        kl = new KeyListener() {
+        KeyListener kl = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
             }
@@ -214,11 +236,14 @@ public final class GamePanel {
                     case "D":
                         Dkey = true;
                         break;
+                    case "G":
+                        Junpkey = true;
+                        break;
                     case "F":
                         Attkey = true;
                         break;
                     case "Esc":
-                        end();
+                        end(mainF, this, cl, SThread, DThread);
                         break;
                 }
             }
@@ -228,22 +253,25 @@ public final class GamePanel {
                 switch (e.getKeyText(e.getKeyCode())) {
                     case "W":
                         Wkey = false;
+                        WkeyCount = 0;
                         break;
                     case "S":
                         Skey = false;
                         break;
                     case "A":
                         Akey = false;
-                        walkCount = 0;
-                        AH = 0;
+                        AkeyCount = 0;
                         break;
                     case "D":
                         Dkey = false;
-                        walkCount = 0;
-                        AH = 0;
+                        DkeyCount = 0;
+                        break;
+                    case "G":
+                        Junpkey = false;
                         break;
                     case "F":
                         Attkey = false;
+                        //AttkeyCount = 0;
                         break;
                     case "Escape":
                         break;
@@ -252,42 +280,25 @@ public final class GamePanel {
         };
         mainF.addKeyListener(kl);
 
-        //コンポーネントリスナーの追加
-        cl = new ComponentListener() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                if (e.getComponent().getWidth() / 4
-                        > e.getComponent().getHeight() / 3) {
-                    //横長の時縦の大きさのみ変更
-                    gameP.setSize((e.getComponent().getHeight() / 3) * 4,
-                            e.getComponent().getHeight());
-                } else {
-                    //縦長の時横の大きさのみ変更
-                    gameP.setSize(e.getComponent().getWidth(),
-                            (e.getComponent().getWidth() / 4) * 3);
-                }
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-            }
-        };
-        mainF.addComponentListener(cl);
-
         //自分のチームを取得
-        mode = SThread.getMode();
+        char mode = SThread.getMode();
         if (mode == 'N') {
-            end();
+            end(mainF, kl, cl, SThread, DThread);
             return;
         }
+
+        //マップ読み込み
+        me = new GameChara(this, mode);
+        teki = new GameChara(this, 'b');
+        map = new GameMap[ALL_MAP];
+        mapno = 2;//最初のステージ bのゴール←[4] [3] [2] [1] [0]→aのゴール
+        map[0] = new GameMap("map01.dat", this);
+        map[1] = new GameMap("map02.dat", this);
+        map[2] = new GameMap("map03.dat", this);
+        map[3] = new GameMap("map04.dat", this);
+        map[4] = new GameMap("map05.dat", this);
+
+        otherChara = new ArrayList();
 
         //それぞれのスレッドを開始
         SThread.start();
@@ -304,11 +315,10 @@ public final class GamePanel {
      * @return 画面遷移先
      */
     public String draw() {
-        myUpdate();//自分のアップデート
-        camera();
-
-        onlyDebug.setText("mode=" + mode + " AX=" + AX + " AY=" + AY
-                + " AT=" + AT + " JunpPlace=" + junpPlace);
+        drawEnable = false;
+        update();//キー操作
+        me.update();//自分の座標計算
+        drawEnable = true;
 
         //フラグがたっていたらmenuを戻す
         if (changePanel == true) {
@@ -318,159 +328,310 @@ public final class GamePanel {
     }
 
     /**
-     * キャラクターの処理
+     * キャラクター座標の処理
      * 座標を変更させる
      */
-    private void myUpdate() {
-        //死亡中の処理
-        if (AT == 5 && deathCount < 60) {
-            //死亡モーション中は1秒間そのまま
-            deathCount++;
-            return;
-        } else if (deathCount == 60) {
-            //死亡して１秒たったら座標とモーションタイプをリセット
-            deathCount = 0;
-            AT = 0;
-            if (mode == 'a') {
-                AX = 200;
+    private void update() {
+
+        try {
+            if (me.getMode() == 'a') {
+                if (teki.getZahyou().x == 0) {
+                    mapno++;
+                    map[mapno].reset(mapno);
+                }
+                if (me.getZahyou().x == map[mapno].getWidth() - getCharSize()) {
+                    mapno--;
+                    map[mapno].reset(mapno);
+                }
             } else {
-                AX = 200;
+                if (teki.getZahyou().x == map[mapno].getWidth() - getCharSize()) {
+                    mapno--;
+                    map[mapno].reset(mapno);
+                }
+                if (me.getZahyou().x == 0) {
+                    mapno++;
+                    map[mapno].reset(mapno);
+                }
             }
-            return;
-        } else if (AX + setCharaSize > BX && AX < BX + setCharaSize && BT == 3) {
+        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
+            if (mapno == -1) {
+                aWinFlag = true;
+                System.out.println("aの勝利");
+                mapno++;
+            } else {
+                bWinFlag = true;
+                System.out.println("bの勝利");
+                mapno--;
+            }
+        }
+        if (!fight && teki.getType() != 15) {
+            fight = true;
+        }
+        //死亡処理
+        if (me.getZahyou().y + charSize > teki.getZahyou().y
+                && me.getZahyou().y < teki.getZahyou().y + charSize
+                && me.getZahyou().x + charSize / 2 > teki.getZahyou().x
+                && me.getZahyou().x < teki.getZahyou().x + charSize
+                && (teki.getType() == 6 || teki.getType() == 9 || teki.getType() == 12)
+                && teki.getHead() == 1) {
             //相手と重なっていて相手が攻撃モーション中の時死亡させる
-            AT = 5;
+            me.setType(14);
+            AttkeyCount = 0;
+            if (me.getMode() == 'a') {
+                turnMode = 'b';
+            } else {
+                turnMode = 'a';
+            }
+            return;
+        } else if ((me.getZahyou().y + charSize > teki.getZahyou().y
+                && me.getZahyou().y < teki.getZahyou().y + charSize
+                && me.getZahyou().x + charSize > teki.getZahyou().x
+                && me.getZahyou().x < teki.getZahyou().x + charSize / 2
+                && (teki.getType() == 6 || teki.getType() == 9 || teki.getType() == 12)
+                && teki.getHead() == 2) || me.getZahyou().y > 600) {
+            //相手と重なっていて相手が攻撃モーション中の時死亡させる
+            me.setType(14);
+            AttkeyCount = 0;
+            if (me.getMode() == 'a') {
+                turnMode = 'b';
+            } else {
+                turnMode = 'a';
+            }
             return;
         }
-
-        //キーによって移動
-        if (Wkey && !Skey && setti && !Attkey) {
-            junpPlace = AY;
-            setti = false;
-            gra -= 32;
-        }
-        if (Skey && !Wkey && !setti && !Attkey) {
-            gra += 4;
-        }
-        if (Akey && !Dkey && !Attkey) {
-            AH = 2;
-            walkCount++;
-            AX -= 8;
-        }
-        if (Dkey && !Akey && !Attkey) {
-            AH = 1;
-            walkCount++;
-            AX += 8;
+        if (teki.getType() == 14) {
+            turnMode = me.getMode();
         }
 
-        //着地していない時は重力を座標に影響させる
-        if (setti == false) {
-            gra += 2;
-            AY += gra;
-            //自分の座標がジャンプ地点より低くなったら着地状態に変更
-            if (AY > junpPlace) {
-                AT = 0;
-                gra = 0;
-                AY = junpPlace;
-                setti = true;
+        //キーによるカウント
+        if (Akey) {
+            if (AkeyCount < 10) {
+                AkeyCount++;
             }
         }
-
-        //表示タイプの変更
-        if (setti == false) {
-            AT = 4;
-        } else if (Attkey) {
-            AT = 3;
-        } else if (walkCount > 0 && AT >= 0 && AT <= 2) {
-            switch ((walkCount / 5) % 4) {
-                case 0:
-                    AT = 0;
-                    break;
-                case 1:
-                    AT = 1;
-                    break;
-                case 2:
-                    AT = 2;
-                    break;
-                case 3:
-                    AT = 1;
-                    break;
+        if (Dkey) {
+            if (DkeyCount < 10) {
+                DkeyCount++;
             }
-        } else {
-            AT = 0;
         }
-    }
-    
-    /**
-     * カメラ操作
-     * 自分の座標に依存する。
-     */
-    private void camera(){
-        if(AX+stageX>600){
-            stageX=-(AX-600);
+        if (Wkey) {
+            WkeyCount++;
         }
-        if(AX+stageX<200){
-            stageX=-(AX-200);
+        if (Attkey && AttkeyCount < 20) {
+            AttkeyCount++;
         }
-    }
-
-    /**
-     * 画像を読み込む
-     */
-    public void loadImage() {
-        //イメージの読み込み
-        ImageIcon charactar[] = new ImageIcon[6];
-        for (int i = 0; i < 6; i++) {
-            charactar[i] = new ImageIcon(new ImageIcon(
-                    "./src/img/" + (i + 1) + ".png").
-                    getImage().getScaledInstance(setCharaSize, setCharaSize,
-                            Image.SCALE_DEFAULT));
+        if (!Attkey && AttkeyCount != 0 && AttkeyCount != 20) {
+            AttkeyCount--;
+            if (AttkeyCount >= 3) {
+                AttkeyCount = 2;
+            }
         }
-        ImageIcon backI = new ImageIcon();
-        backI = new ImageIcon(new ImageIcon(
-                "./src/img/paper.png").
-                getImage().getScaledInstance(1200, 1652,
-                        Image.SCALE_DEFAULT));
-
-        //自分用キャララベル作成
-        Achar = new JLabel[6];
-        for (int i = 0; i < 6; i++) {
-            Achar[i] = new JLabel(charactar[i]);
+        if (!Attkey && AttkeyCount == 20) {
+            AttkeyCount = 0;
         }
-        for (int i = 0; i < 6; i++) {
-            gameP.add(Achar[i]);
-            Achar[i].hide();
-            Achar[i].setBounds(AX, AY, setCharaSize, setCharaSize);
-        }
-
-        //敵用キャララベル作成
-        Bchar = new JLabel[6];
-        for (int i = 0; i < 6; i++) {
-            Bchar[i] = new JLabel(charactar[i]);
-        }
-        for (int i = 0; i < 6; i++) {
-            gameP.add(Bchar[i]);
-            Bchar[i].hide();
-            Bchar[i].setBounds(BX, BY, setCharaSize, setCharaSize);
-        }
-        
-        //背景用ラベルの作成
-        back=new JLabel(backI);
-        back.setBounds(0, 0, 1200, 1652);
-        gameP.add(back);
     }
 
     /**
      * 終了処理
      */
-    private void end() {
-        if (mode != 'N') {
+    @SuppressWarnings("deprecation")
+    private void end(JFrame mainF, KeyListener kl, ComponentListener cl,
+            ServerAccessThread SThread, DrawThread DThread) {
+        if (me.getMode() != 'N') {
             SThread.disconect();
         }
+        DThread.stop();
         gameP.hide();
-        SmainF.remove(gameP);
-        SmainF.removeComponentListener(cl);
-        SmainF.removeKeyListener(kl);
+        mainF.remove(gameP);
+        mainF.removeComponentListener(cl);
+        mainF.removeKeyListener(kl);
         changePanel = true;
+    }
+
+    //<editor-fold defaultstate="collapsed" desc="取得、設定メソッド">
+    /**
+     * @return the gameP
+     */
+    public JPanel getGameP() {
+        return gameP;
+    }
+
+    /**
+     * @return the charSize
+     */
+    public int getCharSize() {
+        return charSize;
+    }
+
+    /**
+     * @return the charType
+     */
+    public int getCharType() {
+        return charType;
+    }
+
+    /**
+     * @return the turnMode
+     */
+    public char getTurnMode() {
+        return turnMode;
+    }
+
+    /**
+     * @param turnMode the turnMode to set
+     */
+    public void setTurnMode(char turnMode) {
+        this.turnMode = turnMode;
+    }
+
+    /**
+     * @return the drawEnable
+     */
+    public boolean isDrawEnable() {
+        return drawEnable;
+    }
+
+    /**
+     * @param drawEnable the drawEnable to set
+     */
+    public void setDrawEnable(boolean drawEnable) {
+        this.drawEnable = drawEnable;
+    }
+
+    /**
+     * @return the AkeyCount
+     */
+    public int getAkeyCount() {
+        return AkeyCount;
+    }
+
+    /**
+     * @return the DkeyCount
+     */
+    public int getDkeyCount() {
+        return DkeyCount;
+    }
+
+    /**
+     * @return the AttkeyCount
+     */
+    public int getAttkeyCount() {
+        return AttkeyCount;
+    }
+
+    /**
+     * @return the Wkey
+     */
+    public boolean isWkey() {
+        return Wkey;
+    }
+
+    /**
+     * @return the Akey
+     */
+    public boolean isAkey() {
+        return Akey;
+    }
+
+    /**
+     * @return the Skey
+     */
+    public boolean isSkey() {
+        return Skey;
+    }
+
+    /**
+     * @return the Dkey
+     */
+    public boolean isDkey() {
+        return Dkey;
+    }
+
+    /**
+     * @return the Attkey
+     */
+    public boolean isAttkey() {
+        return Attkey;
+    }
+
+    /**
+     * @return the Junpkey
+     */
+    public boolean isJunpkey() {
+        return Junpkey;
+    }
+
+    /**
+     * @return the gra
+     */
+    public int getGra() {
+        return gra;
+    }
+
+    /**
+     * @param gra the gra to set
+     */
+    public void setGra(int gra) {
+        this.gra = gra;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public GameChara getMe() {
+        return me;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public GameChara getTeki() {
+        return teki;
+    }
+
+    /**
+     *
+     */
+    public void addOtherchara() {
+
+    }
+
+    /**
+     * @return the WkeyCount
+     */
+    public int getWkeyCount() {
+        return WkeyCount;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public GameMap getMap() {
+        return map[mapno];
+    }
+
+    /**
+     * @return the fight
+     */
+    public boolean isFight() {
+        return fight;
+    }
+//</editor-fold>
+
+    /**
+     * @return the aWinFlag
+     */
+    public boolean isaWinFlag() {
+        return aWinFlag;
+    }
+
+    /**
+     * @return the bWinFlag
+     */
+    public boolean isbWinFlag() {
+        return bWinFlag;
     }
 }

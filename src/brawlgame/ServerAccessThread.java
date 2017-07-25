@@ -1,5 +1,6 @@
 package brawlgame;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,6 +11,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 /**
+ * サーバー通信クラス
  *
  * @author bakaj
  */
@@ -19,39 +21,33 @@ public class ServerAccessThread extends Thread {
     /**
      * サーバー接続用ソケット
      */
-    Socket sock;
+    private Socket sock;
     /**
      * サーバー送信用
      */
-    PrintWriter out;
+    private PrintWriter out;
     /**
      * サーバー受信用
      */
-    BufferedReader in;
-    /**
-     * サーバーアドレス
-     */
-    //自宅Wi-Fi
-    //String server = "192.168.3.17";
-    //String server = "192.168.3.10";
-    //ポケットWi-Fi
-    //String server = "192.168.179.3";
-    //オフライン
-    String server = "localhost";
+    private BufferedReader in;
     /**
      * ゲームパネル
      * 座標を取得するのに利用
      */
-    GamePanel GP = null;
+    private GamePanel GP = null;
 //</editor-fold>
 
     /**
      * コンストラクタ
      * サーバーにアクセスしてルートを確立
      *
-     * @param gameP
+     * @param gameP　値取得用GamePanelクラス
      */
     public ServerAccessThread(GamePanel gameP) {
+        /**
+         * サーバーアドレス
+         */
+        String server = "fue.jpn.ph";
         GP = gameP;
         //サーバーに接続
         try {
@@ -93,33 +89,32 @@ public class ServerAccessThread extends Thread {
             while (true) {
                 long oldTime = System.currentTimeMillis();//通信前時間の取得
                 String sendT = ""
-                        + "T" + GP.AT + "t"
-                        + "H" + GP.AH + "h"
-                        + "X" + GP.AX + "x"
-                        + "Y" + GP.AY + "y";
+                        + "T" + GP.getMe().getType() + "t"
+                        + "H" + GP.getMe().getHead() + "h"
+                        + "X" + GP.getMe().getZahyou().x + "x"
+                        + "Y" + GP.getMe().getZahyou().y + "y";
                 out.println(sendT);
                 out.flush();
                 String receiveT = in.readLine();
-                GP.BT = Integer.parseInt(receiveT.substring(
-                        receiveT.indexOf("T") + 1, receiveT.indexOf("t")));
-                GP.BH = Integer.parseInt(receiveT.substring(
-                        receiveT.indexOf("H") + 1, receiveT.indexOf("h")));
-                GP.BX = Integer.parseInt(receiveT.substring(
+                GP.getTeki().setType(Integer.parseInt(receiveT.substring(
+                        receiveT.indexOf("T") + 1, receiveT.indexOf("t"))));
+                GP.getTeki().setHead(Integer.parseInt(receiveT.substring(
+                        receiveT.indexOf("H") + 1, receiveT.indexOf("h"))));
+                Point zahyou = new Point(0, 0);
+                zahyou.x = Integer.parseInt(receiveT.substring(
                         receiveT.indexOf("X") + 1, receiveT.indexOf("x")));
-                GP.BY = Integer.parseInt(receiveT.substring(
+                zahyou.y = Integer.parseInt(receiveT.substring(
                         receiveT.indexOf("Y") + 1, receiveT.indexOf("y")));
+                GP.getTeki().setZahyou(zahyou);
                 long newTime = System.currentTimeMillis();//通信後時間の取得
                 //描画の半分の速さでループするようにスリープさせる
-                long sleepTime = 8 - (newTime - oldTime);
+//                try {
+//                    Thread.sleep(1);
+//                } catch (InterruptedException e) {
+//                    System.err.println(e);
+//                }
                 if (newTime - oldTime > 16) {
                     System.out.println("ServerThreadが重くなっています");
-                }
-                if (sleepTime > 0) {
-                    try {
-                        Thread.sleep(sleepTime);
-                    } catch (InterruptedException e) {
-                        System.err.println(e);
-                    }
                 }
             }
         } catch (IOException | NumberFormatException e) {
@@ -127,8 +122,14 @@ public class ServerAccessThread extends Thread {
         }
     }
 
+    /**
+     * サーバー切断
+     * サーバーにCとメッセージを送り切断を要求する
+     */
+    @SuppressWarnings("deprecation")
     public void disconect() {
         out.println("C");
+        out.flush();
         this.stop();
     }
 }

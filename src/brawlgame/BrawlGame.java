@@ -14,19 +14,19 @@ public final class BrawlGame {
     /**
      * 現在のパネルの名前
      */
-    String panelName;
+    private String panelName;
     /**
      * メインフレーム
      */
-    JFrame mainF;
+    private final JFrame mainF;
     /**
      * メニュークラス
      */
-    MainMenuPanel Menu;
+    private MainMenuPanel Menu;
     /**
      * ゲームクラス
      */
-    GamePanel Game;
+    private GamePanel Game;
 //</editor-fold>
 
     /**
@@ -41,14 +41,15 @@ public final class BrawlGame {
 
     /**
      * コンストラクタ
-     * フレームの作成
+     * フレームの作成、初期パネルとしてメニュー画面に繊維
      */
     public BrawlGame() {
         //フレームの作成
         mainF = new JFrame();
-        mainF.setBounds(0, 0, 1024, 768);
+        mainF.setBounds(0, 0, 980, 680);
         mainF.setDefaultCloseOperation(EXIT_ON_CLOSE);
         mainF.setLayout(null);
+        mainF.setResizable(false);
         mainF.setVisible(true);
 
         //メニュー画面から開始
@@ -62,7 +63,6 @@ public final class BrawlGame {
     public void mainRoop() {
         while (true) {
             long oldTime = System.currentTimeMillis();//描画前時間の取得
-            
             String kekka = "";
             //選択中パネルの描画
             switch (panelName) {
@@ -73,7 +73,6 @@ public final class BrawlGame {
                     kekka = Game.draw();
                     break;
             }
-
             //戻り値がパネル名だったときパネルの変更
             switch (kekka) {
                 case "menu":
@@ -87,7 +86,6 @@ public final class BrawlGame {
                 default:
                     break;
             }
-
             long newTime = System.currentTimeMillis();//描画後時間の取得
             //フレームレートを安定させるためスリープさせる
             long sleepTime = 16 - (newTime - oldTime);
@@ -109,7 +107,7 @@ public final class BrawlGame {
      *
      * @param panel　変更先パネル名
      */
-    public void panelChange(String panel) {
+    private void panelChange(String panel) {
         //パネルのインスタンスを生成
         switch (panel) {
             case "menu":

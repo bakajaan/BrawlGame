@@ -1,13 +1,16 @@
 package brawlgame;
 
-import java.awt.Color;
-import java.awt.event.KeyAdapter;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
+ * メインメニュークラス
  *
  * @author bakaj
  */
@@ -15,107 +18,114 @@ public class MainMenuPanel {
 
     //<editor-fold defaultstate="collapsed" desc="メンバ">
     /**
-     * メインフレーム
-     */
-    JFrame SmainF;
-    /**
-     * メニュー用パネル
-     */
-    JPanel menuP;
-    /**
-     * スタートラベル
-     */
-    JLabel start;
-    /**
-     * 終了ラベル
-     */
-    JLabel end;
-    /**
      * 選択項目
      */
-    int selectMenu = 0;
+    private int selectMenu = 0;
+    private int backCount = 0;
     /**
      * パネルを変更するかどうか
      */
-    boolean changePanel = false;
-    /**
-     * リスナー用キーアダプター
-     */
-    KeyAdapter ka;
+    private boolean changePanel = false;
+    private ImageIcon title[];
+    private ImageIcon menu[];
+    private ImageIcon back[];
+    private JPanel menuP;
 //</editor-fold>
 
     /**
+     * コンストラクタ
+     * パネルの作成、ラベルやリスナーの追加
      *
      * @param mainF
      */
+    @SuppressWarnings("deprecation")
     public MainMenuPanel(JFrame mainF) {
-        //フレームの所持
-        SmainF = mainF;
+
+        loadImage();
 
         //パネルの作成
-        menuP = new JPanel();
+        menuP = new JPanel() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+//                if ((int) (Math.random() * 10) == 2) {
+//                    g.drawImage(title[1].getImage(), 0, 0, null);
+//                }else if ((int) (Math.random() * 10) == 3) {
+//                    g.drawImage(title[2].getImage(), 0, 0, null);
+//                }
+                g.drawImage(title[0].getImage(), 0, 0, null);
+                g.drawImage(menu[selectMenu].getImage(), 0, 0, null);
+                g.drawImage(back[backCount / 10 % 4].getImage(), 0, 0, null);
+            }
+        };
         menuP.setBounds(0, 0, 1024, 768);
         menuP.setLayout(null);
         mainF.add(menuP);
         menuP.setVisible(true);
         menuP.show();
 
-        //ラベルの作成
-        start = new JLabel("start");
-        start.setBounds(0, 0, 100, 50);
-        start.setForeground(Color.BLACK);
-        menuP.add(start);
-        end = new JLabel("end");
-        end.setBounds(0, 50, 100, 50);
-        end.setForeground(Color.GRAY);
-        menuP.add(end);
-
         //キーリスナーの追加
-        ka = new KeyAdapter() {
+        KeyListener ka = new KeyListener() {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyText(e.getKeyCode())) {
                     case "上":
-                        selectMenu = 0;
+                        if (selectMenu > 0) {
+                            selectMenu--;
+                        }
                         break;
                     case "下":
-                        selectMenu = 1;
+                        if (selectMenu < 2) {
+                            selectMenu++;
+                        }
                         break;
                     case "Enter":
                         switch (selectMenu) {
                             case 0:
-                                end();
+                                end(mainF, menuP, this);
                                 break;
                             case 1:
+                                try {
+                                    File file = new File("./src/html/system.html");
+                                    String cmd = file.getAbsolutePath();
+                                    Runtime.getRuntime().exec("cmd /c start " + cmd);
+                                } catch (IOException ev) {
+                                    System.err.println(ev);
+                                }
+                                break;
+                            case 2:
                                 System.exit(0);
+                                break;
                         }
                         break;
                 }
             }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
         };
         mainF.addKeyListener(ka);
 
-        //一応再描画
+        //再描画
         menuP.repaint();
         mainF.setVisible(true);
     }
 
     /**
+     * ループされる描画メソッド
      *
-     * @return
+     * @return　遷移先パネル名
      */
     public String draw() {
-        //選択項目によってラベルの色を変更
-        switch (selectMenu) {
-            case 0:
-                start.setForeground(Color.BLACK);
-                end.setForeground(Color.GRAY);
-                break;
-            case 1:
-                start.setForeground(Color.GRAY);
-                end.setForeground(Color.BLACK);
-                break;
-        }
+        backCount++;
+        menuP.repaint();
         //フラグがたっていたらgameを戻す
         if (changePanel == true) {
             return "game";
@@ -123,13 +133,29 @@ public class MainMenuPanel {
         return "";
     }
 
+    private void loadImage() {
+        title = new ImageIcon[4];
+        for (int i = 0; i < 4; i++) {
+            title[i] = new ImageIcon("./src/img/mt" + (i + 1) + ".png");
+        }
+        menu = new ImageIcon[3];
+        for (int i = 0; i < 3; i++) {
+            menu[i] = new ImageIcon("./src/img/m" + (i + 1) + ".png");
+        }
+        back = new ImageIcon[4];
+        for (int i = 0; i < 4; i++) {
+            back[i] = new ImageIcon("./src/img/mb" + (i + 1) + ".png");
+        }
+    }
+
     /**
      * 終了処理
      */
-    private void end() {
+    @SuppressWarnings("deprecation")
+    private void end(JFrame mainF, JPanel menuP, KeyListener kl) {
         menuP.hide();
-        SmainF.remove(menuP);
-        SmainF.removeKeyListener(ka);
+        mainF.remove(menuP);
+        mainF.removeKeyListener(kl);
         changePanel = true;
     }
 }
